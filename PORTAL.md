@@ -45,6 +45,12 @@ All set from the admin portal — no code changes:
 
 An item's own early price wins; otherwise the default % applies; after the early-bird date the regular price applies. The amount is fixed when someone first registers, so editing a registration later keeps the early-bird price. Registrations outside the open/close window are refused (existing unpaid registrations can still be edited).
 
+### Scoring with several evaluators
+Every evaluator scores independently (they only see their own marks). Per round, choose whether a team's score is the **average** or the **sum** of its evaluators (Rounds & evaluators → *Combine evaluators' scores*); the leaderboard, qualification, team view and `{{score}}` in emails all follow it. Scores & qualification → *Evaluations by evaluator* shows each evaluator's category marks, total and comments per team, and lets an admin remove a single evaluation.
+
+### Certificates from Excel
+Admin → *Certificates (Excel)*: create a batch, import an `.xlsx` or `.csv` (header row; name and email columns are detected and can be changed; rows with a missing name or invalid email are skipped and reported). Other columns become `{{placeholders}}` for custom certificate text; columns named team, position/rank/award and institution/college fill those fields automatically. Design the template, then **Release to recipients** — each certificate appears in the dashboard of whoever logs in with that email (including people who sign up later) — and/or **Queue certificate emails** (PDF attached; "only people not emailed yet" avoids duplicates). Bulk PDF/ZIP download works as for events.
+
 ### Automatic notices
 Sent the moment something happens (Admin → Email & SMTP → *Automatic notices* to edit wording or switch any off): conference registration received, TechNext booking received / approved / not approved, event registration, team created (with the team code), member joined (to the member and the lead), and payment received (with the invoice PDF attached).
 

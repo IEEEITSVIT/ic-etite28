@@ -12,6 +12,7 @@ const NAV = [
   { href: "/admin/technext", label: "TechNext stalls" },
   { href: "/admin/conference", label: "Conference registrations" },
   { href: "/admin/invoices", label: "Invoices" },
+  { href: "/admin/certificates", label: "Certificates (Excel)" },
   { href: "/admin/hotels", label: "Hotels" },
   { href: "/admin/users", label: "Users & evaluators" },
   { href: "/admin/email", label: "Email & SMTP" },

@@ -100,6 +100,35 @@ export async function certificateRecipients(scope: string, kind: CertKind, userI
     }));
   }
 
+  if (scope.startsWith("batch:")) {
+    const batchId = scope.slice(6);
+    const batch = await first<{ title: string; event_label: string | null; issue_date: string | null }>("SELECT title, event_label, issue_date FROM certificate_batches WHERE id = ?", [batchId]);
+    if (!batch) return [];
+    // For batches, `userId` is the recipient row id (recipients are matched to accounts by email).
+    const rows = await all<{ id: string; email: string; name: string; data: string }>(
+      `SELECT id, email, name, data FROM certificate_batch_recipients WHERE batch_id = ? ${userId ? "AND id = ?" : ""} ORDER BY name`,
+      [batchId, ...extra]
+    );
+    const pick = (d: Record<string, string>, keys: string[]) => keys.map((k) => d[k]).find((v) => v) ?? "";
+    return rows.map((r) => {
+      const d = parseJson<Record<string, string>>(r.data, {});
+      return {
+        userId: r.id,
+        email: r.email,
+        values: {
+          ...d,
+          name: r.name,
+          email: r.email,
+          team: pick(d, ["team", "team_name", "organisation", "organization", "company"]),
+          rank: pick(d, ["rank", "position", "award", "prize"]),
+          institution: pick(d, ["institution", "college", "university", "affiliation"]),
+          event: d.event || batch.event_label || batch.title,
+          date: d.date || formatDate(batch.issue_date),
+        },
+      };
+    });
+  }
+
   if (scope === "conference") {
     const rows = await all<{ user_id: string; name: string; email: string; affiliation: string; category_label: string }>(
       `SELECT c.user_id, u.name, u.email, c.affiliation, c.category_label

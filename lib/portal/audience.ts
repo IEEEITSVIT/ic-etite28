@@ -89,11 +89,13 @@ export async function resolveAudience(scope: string, audience: string): Promise<
       params
     );
 
-    // Average round score per team, for {{score}}.
+    // Team's round score (average or sum of evaluators, per the round setting), for {{score}}.
     const scoreByTeam = new Map<string, number>();
     if (roundId) {
-      const scores = await all<{ team_id: string; avg_total: number }>("SELECT team_id, AVG(total) AS avg_total FROM scores WHERE round_id = ? GROUP BY team_id", [roundId]);
-      for (const s of scores) scoreByTeam.set(s.team_id, Math.round(s.avg_total * 100) / 100);
+      const r = await first<{ aggregation: "average" | "sum" }>("SELECT aggregation FROM event_rounds WHERE id = ?", [roundId]);
+      const fn = r?.aggregation === "sum" ? "SUM" : "AVG";
+      const scores = await all<{ team_id: string; score: number }>(`SELECT team_id, ${fn}(total) AS score FROM scores WHERE round_id = ? GROUP BY team_id`, [roundId]);
+      for (const s of scores) scoreByTeam.set(s.team_id, Math.round(s.score * 100) / 100);
     }
 
     return rows.map((r) => ({

@@ -23,7 +23,8 @@ export interface CertLayout {
   fields: CertField[];
 }
 
-export type CertValues = Partial<Record<Exclude<CertFieldKey, "custom">, string>>;
+// Standard fields plus any extra keys (spreadsheet columns) usable as {{placeholders}} in custom text.
+export type CertValues = Partial<Record<Exclude<CertFieldKey, "custom">, string>> & Record<string, string | undefined>;
 
 export const PAGE_WIDTH = 842;
 
@@ -67,7 +68,7 @@ function hexToRgb(hex: string) {
 
 export function fieldText(field: CertField, values: CertValues): string {
   if (field.key === "custom") {
-    return (field.text ?? "").replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k: string) => values[k as keyof CertValues] ?? "");
+    return (field.text ?? "").replace(/\{\{\s*([\w.-]+)\s*\}\}/g, (_, k: string) => values[k] ?? values[k.toLowerCase()] ?? "");
   }
   return values[field.key] ?? "";
 }

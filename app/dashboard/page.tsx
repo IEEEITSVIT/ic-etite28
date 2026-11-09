@@ -40,6 +40,14 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
     ),
     all<{ scope: string; kind: string }>("SELECT scope, kind FROM certificate_templates WHERE released = 1 AND scope IN ('technext','conference')"),
   ]);
+  // Certificates from admin Excel batches, matched to this login's (verified) email.
+  const batchCerts = await all<{ id: string; batch_id: string; title: string; event_label: string | null }>(
+    `SELECT r.id, r.batch_id, b.title, b.event_label FROM certificate_batch_recipients r
+       JOIN certificate_batches b ON b.id = r.batch_id
+       JOIN certificate_templates t ON t.scope = 'batch:' || b.id AND t.released = 1
+      WHERE r.email = ? ORDER BY b.created_at DESC`,
+    [user.email]
+  );
   const invoices = await all<{ id: string; number: string; amount: number; currency: string; issued_at: string; items: string }>(
     "SELECT id, number, amount, currency, issued_at, items FROM invoices WHERE user_id = ? ORDER BY seq DESC",
     [user.id]
@@ -204,18 +212,24 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
           </Card>
         )}
 
-        {certLinks.length > 0 && (
-          <Card title={<span className="flex items-center gap-2"><Award className="h-5 w-5 text-[#B45309]" /> Certificates</span>} className="lg:col-span-2">
+        {(certLinks.length > 0 || batchCerts.length > 0) && (
+          <Card title={<span className="flex items-center gap-2"><Award className="h-5 w-5 text-[#B45309]" /> My certificates</span>} className="lg:col-span-2">
             <div className="flex flex-wrap gap-2">
               {certLinks.map((c) => (
                 <a key={`${c.scope}-${c.kind}`} href={`/api/certificates?scope=${c.scope}&kind=${c.kind}`} className={btnPrimary}>
                   {c.scope === "conference" ? "ic-ETITE'28" : "TechNext '28"} {c.kind} certificate
                 </a>
               ))}
+              {batchCerts.map((c) => (
+                <a key={c.id} href={`/api/certificates?scope=${encodeURIComponent(`batch:${c.batch_id}`)}&kind=participation&r=${c.id}`} className={btnPrimary}>
+                  {c.event_label || c.title}
+                </a>
+              ))}
             </div>
             <p className="mt-3 text-sm text-slate-500">Event certificates are on each event&apos;s page.</p>
           </Card>
         )}
+
       </div>
     </PortalPage>
   );

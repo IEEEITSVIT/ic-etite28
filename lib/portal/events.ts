@@ -57,6 +57,7 @@ export interface RoundRow {
   submissions_open: number;
   submission_deadline: string | null;
   scores_published: number;
+  aggregation: "average" | "sum";
 }
 
 export interface TeamRow {
@@ -339,7 +340,14 @@ export async function saveSubmission(e: EventRow, user: SessionUser, roundId: st
   );
 }
 
-// Per-team aggregates for a round: average of each criterion and of the total across evaluators.
+// Combines several evaluators' numbers: their average (default) or their sum, per round.
+export function combine(values: number[], aggregation: RoundRow["aggregation"]) {
+  if (values.length === 0) return null;
+  const total = values.reduce((a, b) => a + b, 0);
+  return Math.round((aggregation === "sum" ? total : total / values.length) * 100) / 100;
+}
+
+// Per-team aggregates for a round: each criterion and the total, combined across evaluators.
 export interface TeamRoundScore {
   team_id: string;
   team_name: string;
@@ -365,7 +373,7 @@ export async function roundLeaderboard(round: RoundRow): Promise<TeamRoundScore[
     for (const c of criteria) (entry.per[c.key] ??= []).push(Number(values[c.key] ?? 0));
     byTeam.set(s.team_id, entry);
   }
-  const avg = (xs: number[]) => Math.round((xs.reduce((a, b) => a + b, 0) / xs.length) * 100) / 100;
+  const agg = (xs: number[]) => combine(xs, round.aggregation) ?? 0;
   return teams
     .map((t) => {
       const e = byTeam.get(t.id);
@@ -373,8 +381,8 @@ export async function roundLeaderboard(round: RoundRow): Promise<TeamRoundScore[
         team_id: t.id,
         team_name: t.name,
         evaluations: e?.totals.length ?? 0,
-        avg_total: e ? avg(e.totals) : null,
-        criteria: e ? Object.fromEntries(Object.entries(e.per).map(([k, xs]) => [k, avg(xs)])) : {},
+        avg_total: e ? agg(e.totals) : null,
+        criteria: e ? Object.fromEntries(Object.entries(e.per).map(([k, xs]) => [k, agg(xs)])) : {},
         qualified: qualified.get(t.id) ?? null,
       };
     })

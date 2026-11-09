@@ -104,6 +104,8 @@ const STATUS_TONE: Record<string, keyof typeof BADGE_TONES> = {
   waived: "green",
   confirmed: "green",
   approved: "green",
+  released: "green",
+  draft: "amber",
   sent: "green",
   qualified: "green",
   public: "green",

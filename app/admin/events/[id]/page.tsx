@@ -14,6 +14,7 @@ import {
   adminSetEventPaymentAction,
   assignEvaluatorsAction,
   autoRankAction,
+  deleteEvaluationAction,
   deleteRoundAction,
   publishWinnersAction,
   purgeEventAction,
@@ -256,6 +257,12 @@ export default async function AdminEventPage({ params, searchParams }: { params:
             <Field label="Submission deadline (IST)" hint="Optional. Submissions also need to be opened.">
               <input name="deadline" type="datetime-local" defaultValue={isoToIstInput(r?.submission_deadline)} className={inputCls} />
             </Field>
+            <Field label="Combine evaluators' scores" hint="How several evaluators' marks for the same team become the team's score.">
+              <select name="aggregation" defaultValue={r?.aggregation ?? "average"} className={inputCls}>
+                <option value="average">Average of evaluators</option>
+                <option value="sum">Sum of evaluators</option>
+              </select>
+            </Field>
           </div>
           <div>
             <span className="mb-1.5 block text-sm font-semibold text-slate-700">Scoring categories</span>
@@ -344,14 +351,22 @@ export default async function AdminEventPage({ params, searchParams }: { params:
   async function ScoresTab({ eventId, rounds, roundId }: { eventId: string; rounds: Awaited<ReturnType<typeof getRounds>>; roundId?: string }) {
     const round = rounds.find((r) => r.id === roundId) ?? rounds[0];
     if (!round) return <Empty>Add a round first.</Empty>;
-    const [board, subs] = await Promise.all([
+    const [board, subs, evaluations] = await Promise.all([
       roundLeaderboard(round),
       all<{ team_id: string; data: string }>("SELECT team_id, data FROM submissions WHERE round_id = ?", [round.id]),
+      all<{ team_id: string; evaluator_id: string; evaluator: string; scores: string; total: number; comment: string | null; updated_at: string }>(
+        `SELECT s.team_id, s.evaluator_id, u.name AS evaluator, s.scores, s.total, s.comment, s.updated_at
+           FROM scores s JOIN users u ON u.id = s.evaluator_id WHERE s.round_id = ? ORDER BY u.name`,
+        [round.id]
+      ),
     ]);
+    const evalsByTeam = new Map<string, typeof evaluations>();
+    for (const ev of evaluations) evalsByTeam.set(ev.team_id, [...(evalsByTeam.get(ev.team_id) ?? []), ev]);
     const criteria = roundCriteria(round);
     const fields = submissionFields(event!);
     const subMap = new Map(subs.map((s) => [s.team_id, parseJson<Record<string, string>>(s.data, {})]));
     const maxTotal = criteria.reduce((a, c) => a + c.max, 0);
+    const isSum = round.aggregation === "sum";
     const qualifiedCount = board.filter((b) => b.qualified === 1).length;
 
     return (
@@ -395,7 +410,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
           {board.length === 0 ? (
             <Empty>No teams yet.</Empty>
           ) : (
-            <Table head={["#", "Team", ...criteria.map((c) => `${c.label} /${c.max}`), `Total /${maxTotal}`, "Evals", "Submission", "Qualified"]}>
+            <Table head={["#", "Team", ...criteria.map((c) => (isSum ? `${c.label} (sum)` : `${c.label} /${c.max}`)), isSum ? "Total (sum)" : `Total /${maxTotal}`, "Evals", "Submission", "Qualified"]}>
               {board.map((b, i) => {
                 const sub = subMap.get(b.team_id);
                 return (
@@ -439,12 +454,64 @@ export default async function AdminEventPage({ params, searchParams }: { params:
             </Table>
           )}
           <p className="mt-3 text-sm text-slate-500">
-            Next step: email qualified teams from the{" "}
+            Scores are the {isSum ? "sum" : "average"} of all evaluators&apos; marks (change under Rounds &amp; evaluators). Next step: email qualified teams from the{" "}
             <Link href={`${base}?tab=emails`} className="font-semibold text-[#004B87] underline">
               Emails
             </Link>{" "}
             tab (audience &quot;Qualified in round {round.seq}&quot;).
           </p>
+        </Card>
+        <Card title={`Evaluations by evaluator (${evaluations.length})`}>
+          {evaluations.length === 0 ? (
+            <Empty>No evaluations yet.</Empty>
+          ) : (
+            <div className="space-y-2">
+              {board
+                .filter((b) => evalsByTeam.has(b.team_id))
+                .map((b) => (
+                  <details key={b.team_id} className="rounded-xl border border-slate-200">
+                    <summary className="flex cursor-pointer flex-wrap items-center gap-3 px-4 py-2.5">
+                      <span className="font-semibold text-[#002147]">{b.team_name}</span>
+                      <Badge>{evalsByTeam.get(b.team_id)!.length} evaluator(s)</Badge>
+                      <span className="text-sm text-slate-600">
+                        {isSum ? "Sum" : "Average"}: <strong>{b.avg_total}</strong>
+                      </span>
+                    </summary>
+                    <div className="border-t border-slate-100 p-3">
+                      <Table head={["Evaluator", ...criteria.map((c) => `${c.label} /${c.max}`), `Total /${maxTotal}`, "Comment", ""]}>
+                        {evalsByTeam.get(b.team_id)!.map((ev) => {
+                          const v = parseJson<Record<string, number>>(ev.scores, {});
+                          return (
+                            <tr key={ev.evaluator_id}>
+                              <Td className="font-semibold">
+                                {ev.evaluator}
+                                <div className="text-xs font-normal text-slate-400">{fmtIst(ev.updated_at)}</div>
+                              </Td>
+                              {criteria.map((c) => (
+                                <Td key={c.key}>{v[c.key] ?? "—"}</Td>
+                              ))}
+                              <Td className="font-bold">{ev.total}</Td>
+                              <Td className="max-w-xs text-xs">{ev.comment ?? "—"}</Td>
+                              <Td className="text-right">
+                                <form action={deleteEvaluationAction}>
+                                  <input type="hidden" name="event_id" value={eventId} />
+                                  <input type="hidden" name="round_id" value={round.id} />
+                                  <input type="hidden" name="team_id" value={b.team_id} />
+                                  <input type="hidden" name="evaluator_id" value={ev.evaluator_id} />
+                                  <SubmitButton className={btnDanger} confirm={`Remove ${ev.evaluator}'s evaluation of ${b.team_name}?`}>
+                                    Remove
+                                  </SubmitButton>
+                                </form>
+                              </Td>
+                            </tr>
+                          );
+                        })}
+                      </Table>
+                    </div>
+                  </details>
+                ))}
+            </div>
+          )}
         </Card>
       </div>
     );

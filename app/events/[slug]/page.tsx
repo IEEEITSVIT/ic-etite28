@@ -6,6 +6,7 @@ import { all, first, parseJson } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth/session";
 import {
   canView,
+  combine,
   eligibleForRound,
   eventFeeNow,
   eventPrizes,
@@ -249,7 +250,8 @@ export default async function EventPage({ params, searchParams }: { params: Para
                   {roundData.map(({ round, submission, submittedAt, eligible, result, scoreRows }) => {
                     const open = roundAcceptsSubmissions(round);
                     const criteria = roundCriteria(round);
-                    const avg = (xs: number[]) => (xs.length ? Math.round((xs.reduce((a, b) => a + b, 0) / xs.length) * 100) / 100 : null);
+                    const avg = (xs: number[]) => combine(xs, round.aggregation);
+                    const isSum = round.aggregation === "sum";
                     const perCriterion = criteria.map((c) => ({
                       ...c,
                       value: avg(scoreRows.map((s) => Number(parseJson<Record<string, number>>(s.scores, {})[c.key] ?? 0))),
@@ -319,14 +321,18 @@ export default async function EventPage({ params, searchParams }: { params: Para
                                   <div key={c.key} className="flex justify-between rounded-lg bg-white px-3 py-2 text-sm">
                                     <span className="text-slate-600">{c.label}</span>
                                     <span className="font-bold text-[#002147]">
-                                      {c.value ?? "—"} / {c.max}
+                                      {c.value ?? "—"}
+                                      {!isSum && <> / {c.max}</>}
                                     </span>
                                   </div>
                                 ))}
                                 <div className="flex justify-between rounded-lg bg-[#002147] px-3 py-2 text-sm text-white sm:col-span-2">
-                                  <span>Total (average of {scoreRows.length} evaluator{scoreRows.length > 1 ? "s" : ""})</span>
+                                  <span>
+                                    Total ({isSum ? "sum" : "average"} of {scoreRows.length} evaluator{scoreRows.length > 1 ? "s" : ""})
+                                  </span>
                                   <span className="font-extrabold text-[#FFB81C]">
-                                    {total} / {criteria.reduce((a, c) => a + c.max, 0)}
+                                    {total}
+                                    {!isSum && <> / {criteria.reduce((a, c) => a + c.max, 0)}</>}
                                   </span>
                                 </div>
                               </div>

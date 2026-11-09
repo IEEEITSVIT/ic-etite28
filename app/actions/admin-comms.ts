@@ -11,7 +11,7 @@ import { PortalError } from "@/lib/portal/events";
 import { newId } from "@/lib/portal/ids";
 
 const validScope = (scope: string) => {
-  if (scope === "technext" || scope === "conference" || /^event:[\w-]+$/.test(scope)) return scope;
+  if (scope === "technext" || scope === "conference" || /^(event|batch):[\w-]+$/.test(scope)) return scope;
   throw new PortalError("Invalid scope.");
 };
 const backPath = (fd: FormData) => {

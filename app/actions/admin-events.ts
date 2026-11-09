@@ -149,17 +149,26 @@ export async function saveRoundAction(fd: FormData) {
     }
     if (criteria.length === 0) throw new PortalError("Add at least one scoring category.");
     const deadline = istToIso(str(fd, "deadline", 20));
+    const aggregation = str(fd, "aggregation", 10) === "sum" ? "sum" : "average";
     if (roundId) {
-      await run("UPDATE event_rounds SET name = ?, criteria = ?, submission_deadline = ? WHERE id = ? AND event_id = ?", [name, JSON.stringify(criteria), deadline, roundId, eventId]);
+      await run("UPDATE event_rounds SET name = ?, criteria = ?, submission_deadline = ?, aggregation = ? WHERE id = ? AND event_id = ?", [
+        name,
+        JSON.stringify(criteria),
+        deadline,
+        aggregation,
+        roundId,
+        eventId,
+      ]);
     } else {
       const last = await first<{ seq: number }>("SELECT MAX(seq) AS seq FROM event_rounds WHERE event_id = ?", [eventId]);
-      await run("INSERT INTO event_rounds (id, event_id, seq, name, criteria, submission_deadline) VALUES (?, ?, ?, ?, ?, ?)", [
+      await run("INSERT INTO event_rounds (id, event_id, seq, name, criteria, submission_deadline, aggregation) VALUES (?, ?, ?, ?, ?, ?, ?)", [
         newId(),
         eventId,
         (last?.seq ?? 0) + 1,
         name,
         JSON.stringify(criteria),
         deadline,
+        aggregation,
       ]);
     }
     return "Round saved.";
@@ -412,4 +421,17 @@ export async function purgeEventAction(fd: FormData) {
     revalidatePath("/events");
     return purgeMode === "all" ? "Event and all its data deleted." : "All participant data for this event was deleted. The event is archived.";
   }, purgeMode === "all" ? "/admin/events" : back);
+}
+
+// Removes one evaluator's scores for a team (e.g. a duplicate or mistaken evaluation).
+export async function deleteEvaluationAction(fd: FormData) {
+  await requireAdmin();
+  const eventId = str(fd, "event_id", 40);
+  const roundId = str(fd, "round_id", 40);
+  await guarded(`${base(eventId)}?tab=scores&round=${roundId}`, async () => {
+    const round = await first("SELECT 1 FROM event_rounds WHERE id = ? AND event_id = ?", [roundId, eventId]);
+    if (!round) throw new PortalError("Round not found.");
+    await run("DELETE FROM scores WHERE round_id = ? AND team_id = ? AND evaluator_id = ?", [roundId, str(fd, "team_id", 40), str(fd, "evaluator_id", 40)]);
+    return "Evaluation removed; the team's score was recalculated.";
+  });
 }
