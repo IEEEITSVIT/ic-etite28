@@ -133,7 +133,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (!sessionStorage.getItem("icetite28_intro_seen")) {
+                if (location.pathname === "/" && !sessionStorage.getItem("icetite28_intro_seen")) {
                   document.documentElement.classList.add("show-intro");
                 }
               } catch (e) {}

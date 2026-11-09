@@ -221,7 +221,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                 target="_blank"
                 rel="noopener noreferrer"
                 title="IEEE Information Theory Society"
-                className="hidden min-[360px]:flex items-center shrink-0 hover:opacity-90 transition-opacity"
+                className="hidden sm:flex items-center shrink-0 hover:opacity-90 transition-opacity"
               >
                 <div className="relative h-8 sm:h-9 md:h-10 w-8 sm:w-9 md:w-10 rounded-full overflow-hidden border border-white/20 shadow-xs bg-brand-primary-dark">
                   <Image
@@ -297,6 +297,16 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                     className="object-contain object-right"
                   />
                 </div>
+              </Link>
+
+              {/* Mobile / Tablet login shortcut (< lg); on phones it takes the IEEE emblem's place, and is hidden below 360px where it can't fit */}
+              <Link
+                href={loggedIn ? "/dashboard" : "/login"}
+                className="lg:hidden hidden min-[360px]:flex items-center justify-center p-2 rounded-xl bg-brand-accent text-brand-primary hover:bg-brand-accent-dark"
+                aria-label={loggedIn ? "My dashboard" : "Log in or register"}
+                title={loggedIn ? "My dashboard" : "Log in / Register"}
+              >
+                {loggedIn ? <LayoutDashboard className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
               </Link>
 
               {/* Mobile / Tablet Menu Trigger Button (< lg) */}
@@ -430,6 +440,16 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
             className="lg:hidden absolute inset-x-0 top-full h-[calc(100dvh-56px)] sm:h-[calc(100dvh-64px)] bg-brand-primary-dark border-t border-white/15 text-white shadow-2xl z-40 overflow-y-auto animate-in slide-in-from-top-2 duration-200"
           >
             <div className="container-x py-6 space-y-6 pb-24">
+              {/* Login first, so it is the first thing people see in the menu */}
+              <Link
+                href={loggedIn ? "/dashboard" : "/login"}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between p-4 rounded-xl bg-brand-accent text-brand-primary font-black hover:bg-brand-accent-dark transition-colors"
+              >
+                <span>{loggedIn ? "My dashboard" : "Login / Register"}</span>
+                {loggedIn ? <LayoutDashboard className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+              </Link>
+
               {/* Co-located Events Highlights in Mobile Drawer */}
               <div className="space-y-3">
                 {/* BOLT 3.0 Card */}
@@ -561,14 +581,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
 
               {/* Quick Actions */}
               <div className="pt-4 border-t border-white/10 space-y-3 text-sm">
-                <Link
-                  href={loggedIn ? "/dashboard" : "/login"}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between p-4 rounded-xl bg-brand-accent text-brand-primary font-black hover:bg-brand-accent-dark transition-colors"
-                >
-                  <span>{loggedIn ? "My dashboard" : "Login / Register"}</span>
-                  {loggedIn ? <LayoutDashboard className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
-                </Link>
+
                 <a
                   href="https://ieee-its-vit.vercel.app/"
                   target="_blank"
