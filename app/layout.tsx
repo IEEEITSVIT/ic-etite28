@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import StartupAnimation from "@/components/StartupAnimation";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import { getSettings } from "@/lib/settings";
 
 // Self-hosted at build time: Inter for body text, Plus Jakarta Sans for headings.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -84,11 +85,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { visibility } = await getSettings();
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
@@ -153,9 +155,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <StartupAnimation />
-        <AppNavbar />
+        <AppNavbar visibility={visibility} />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer visibility={visibility} />
         <BackToTop />
       </body>
     </html>

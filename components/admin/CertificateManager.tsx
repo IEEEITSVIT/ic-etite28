@@ -34,8 +34,11 @@ const MAX_B64 = 1_850_000;
 async function readImage(file: File): Promise<{ b64: string; mime: string; width: number; height: number; url: string }> {
   const url = URL.createObjectURL(file);
   const img = new Image();
-  img.src = url;
-  await img.decode();
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error("Could not read that image."));
+    img.src = url;
+  });
   let width = img.naturalWidth;
   let height = img.naturalHeight;
   const raw = new Uint8Array(await file.arrayBuffer());

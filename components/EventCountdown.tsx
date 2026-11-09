@@ -13,9 +13,15 @@ interface TimeLeft {
 }
 
 // Conference Start: 10 February 2028, 09:00:00 IST (Indian Standard Time UTC+5:30)
-const EVENT_TARGET_DATE = new Date("2028-02-10T09:00:00+05:30").getTime();
+const DEFAULT_TARGET = "2028-02-10T09:00:00+05:30";
 
-const MILESTONE_TIMELINE = [
+export interface CountdownMilestone {
+  date: string;
+  label: string;
+  isTarget: boolean;
+}
+
+const MILESTONE_TIMELINE: CountdownMilestone[] = [
   {
     date: "05 Oct 2027",
     label: "Paper Submission Last Date",
@@ -38,9 +44,9 @@ const MILESTONE_TIMELINE = [
   },
 ];
 
-function calculateTimeLeft(): TimeLeft {
+function calculateTimeLeft(targetMs: number): TimeLeft {
   const now = new Date().getTime();
-  const diff = EVENT_TARGET_DATE - now;
+  const diff = targetMs - now;
 
   if (diff <= 0) {
     return { days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true };
@@ -54,21 +60,29 @@ function calculateTimeLeft(): TimeLeft {
   return { days, hours, minutes, seconds, isExpired: false };
 }
 
-export default function EventCountdown() {
+// Milestones and the target date come from the CMS (admin → Site content) when provided.
+export default function EventCountdown({
+  milestones = MILESTONE_TIMELINE,
+  target = DEFAULT_TARGET,
+}: {
+  milestones?: CountdownMilestone[];
+  target?: string;
+}) {
+  const targetMs = new Date(target).getTime();
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setTimeLeft(calculateTimeLeft());
+    setTimeLeft(calculateTimeLeft(targetMs));
 
     const timer = setInterval(() => {
-      const remaining = calculateTimeLeft();
+      const remaining = calculateTimeLeft(targetMs);
       setTimeLeft(remaining);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [targetMs]);
 
   // Avoid hydration mismatch by waiting for client mount
   if (!mounted || !timeLeft) {
@@ -153,7 +167,7 @@ export default function EventCountdown() {
 
             {/* Timeline Milestones Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-              {MILESTONE_TIMELINE.map((item, idx) => (
+              {milestones.map((item, idx) => (
                 <div
                   key={item.label}
                   className={`group relative flex flex-col items-center text-center p-3 sm:p-3.5 rounded-2xl transition-all duration-300 ${

@@ -1,11 +1,33 @@
 import Link from "next/link";
 import { registrationFeesData, registrationGuidelines } from "@/data/registration";
+import { formatInr, formatUsd, type FeeTier } from "@/lib/settings";
 import { CreditCard, ShieldCheck, AlertCircle, ExternalLink } from "lucide-react";
 
-export default function RegistrationTable() {
+export default function RegistrationTable({ fees, registrationOpen = false }: { fees?: FeeTier[]; registrationOpen?: boolean }) {
+  const rows = fees?.length
+    ? fees.map((f) => ({ category: f.category, indianFee: formatInr(f.inr), foreignFee: formatUsd(f.usd), isIeeeDiscount: f.isIeeeDiscount }))
+    : registrationFeesData;
   return (
     <section id="registration" className="py-8 sm:py-12 bg-white border-b border-[#E4E7EC]">
       <div className="container-x">
+        {/* Online registration (opened from admin → Site content → Visibility) */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border-2 border-[#FFB81C]/60 bg-[#FFFBF0] p-5">
+          <div>
+            <p className="text-lg font-bold text-[#002147]">{registrationOpen ? "Online registration is open" : "Online registration opens soon"}</p>
+            <p className="text-sm text-slate-600">
+              {registrationOpen
+                ? "Create an account, choose your category and pay securely. Your fee is calculated from the table below."
+                : "Create an account now; you can register as soon as registration opens."}
+            </p>
+          </div>
+          <Link
+            href={registrationOpen ? "/registration/apply" : "/signup?next=/registration/apply"}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#002147] px-6 py-3 text-sm font-bold text-white hover:bg-[#003366] shrink-0"
+          >
+            {registrationOpen ? "Register now" : "Create account"}
+          </Link>
+        </div>
+
         {/* Academic Tariff Table */}
         <div className="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden mb-6">
           <div className="overflow-x-auto">
@@ -25,7 +47,7 @@ export default function RegistrationTable() {
               </thead>
 
               <tbody className="divide-y divide-slate-200 text-slate-900">
-                {registrationFeesData.map((tier, idx) => (
+                {rows.map((tier, idx) => (
                   <tr
                     key={tier.category}
                     className={`hover:bg-[#FFFDF7] transition-colors ${

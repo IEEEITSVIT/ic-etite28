@@ -69,7 +69,7 @@ export function fillTemplate(text: string, vars: TemplateVars): string {
 
 // Admin-written plain text → safe HTML (escaped, links clickable, paragraphs kept).
 export function textToHtml(text: string): string {
-  return esc(text)
+  return esc(text.replace(/\r\n?/g, "\n"))
     .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#004B87">$1</a>')
     .split(/\n{2,}/)
     .map((p) => `<p style="margin:0 0 14px;line-height:1.6">${p.replace(/\n/g, "<br>")}</p>`)

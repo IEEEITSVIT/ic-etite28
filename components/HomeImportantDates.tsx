@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Calendar, ArrowRight, Clock } from "lucide-react";
+import type { DateItem } from "@/lib/settings";
 
-export default function HomeImportantDates() {
-  const dates = [
+export default function HomeImportantDates({ items }: { items?: DateItem[] }) {
+  const fallback = [
     {
       date: "05 October 2027",
       title: "Full Paper Submission",
@@ -28,6 +29,10 @@ export default function HomeImportantDates() {
       highlight: true,
     },
   ];
+  // CMS dates when available; the last key milestone (conference days) is highlighted.
+  const dates = items?.length
+    ? items.map((d, i) => ({ date: d.date, title: d.title, note: d.description, highlight: i === items.length - 1 && d.isKeyMilestone }))
+    : fallback;
 
   return (
     <section id="important-dates" className="border-b border-[#E4E7EC] bg-[#F7F8FA] scroll-mt-20">

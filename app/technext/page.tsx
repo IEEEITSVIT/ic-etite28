@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { notFound } from "next/navigation";
+import { getSettings } from "@/lib/settings";
 import Link from "next/link";
 import Image from "next/image";
 import GallerySlideshow, { GalleryItem } from "@/components/GallerySlideshow";
@@ -278,7 +280,10 @@ const technextGalleryItems: GalleryItem[] = [
   },
 ];
 
-export default function TechNextPage() {
+export default async function TechNextPage() {
+  const settings = await getSettings();
+  if (!settings.visibility.technext) notFound();
+  const bookingOpen = settings.visibility.technextRegistration;
   const categories = [
     {
       icon: Cpu,
@@ -359,10 +364,10 @@ export default function TechNextPage() {
             {/* Hero CTA - Only registration button, no duplicate back button */}
             <div className="flex items-center justify-center pt-4">
               <a
-                href="#register"
+                href={bookingOpen ? "/technext/register" : "#register"}
                 className="bg-[#004B87] hover:bg-[#003366] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-xl inline-flex items-center gap-2.5 transition-all hover:scale-105 active:scale-95 shadow-lg border border-white/20"
               >
-                <span>Register Your Project / Stall (TBA)</span>
+                <span>{bookingOpen ? "Book Your Stall" : "Register Your Project / Stall (TBA)"}</span>
                 <ArrowRight className="w-4 h-4 text-[#84E320]" />
               </a>
             </div>
@@ -517,7 +522,7 @@ export default function TechNextPage() {
         <div className="container-x text-center max-w-3xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-3.5 py-1.5 rounded-full border border-amber-300">
             <Clock className="w-3.5 h-3.5 text-amber-700" />
-            <span>Registration: TBA (Opening Soon)</span>
+            <span>{bookingOpen ? "Stall Booking Open" : "Registration: TBA (Opening Soon)"}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#002147] tracking-tight leading-tight underline decoration-[#004B87] underline-offset-8">
@@ -525,8 +530,30 @@ export default function TechNextPage() {
           </h2>
 
           <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal pt-2">
-            Registration details, stall allocation, and project entry guidelines for VIT Vellore will be formally announced soon (TBA).
+            {bookingOpen
+              ? "Choose a stall, tell us what you will exhibit, and track approval and payment from your dashboard."
+              : "Registration details, stall allocation, and project entry guidelines for VIT Vellore will be formally announced soon (TBA)."}
           </p>
+
+          {bookingOpen && (
+            <div className="flex flex-wrap justify-center gap-3">
+              {settings.technext.stallTypes.map((st) => (
+                <div key={st.key} className="rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-left shadow-sm">
+                  <p className="font-bold text-[#002147]">{st.label}</p>
+                  <p className="text-xs text-slate-500">{st.size}</p>
+                  <p className="mt-1 font-black text-[#F37021]">{st.price > 0 ? `INR ${st.price.toLocaleString("en-IN")}` : "Free"}</p>
+                </div>
+              ))}
+              <div className="w-full">
+                <Link
+                  href="/technext/register"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#F37021] px-7 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-[#d85f15]"
+                >
+                  Book a stall <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="p-6 rounded-2xl bg-white border-2 border-slate-200 shadow-md max-w-md mx-auto text-left space-y-3">
             <p className="text-xs uppercase font-bold text-[#004B87] tracking-wider flex items-center gap-1.5">

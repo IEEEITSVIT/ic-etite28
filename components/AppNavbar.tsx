@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import BoltNavbar from "@/components/BoltNavbar";
 import TechNextNavbar from "@/components/TechNextNavbar";
 
-export default function AppNavbar() {
+export default function AppNavbar({ visibility }: { visibility?: { bolt: boolean; technext: boolean } }) {
   const pathname = usePathname();
 
   if (pathname.startsWith("/hackathon")) {
@@ -16,5 +16,5 @@ export default function AppNavbar() {
     return <TechNextNavbar />;
   }
 
-  return <Navbar />;
+  return <Navbar visibility={visibility} />;
 }

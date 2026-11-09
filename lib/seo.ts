@@ -24,6 +24,7 @@ export const SITE_ROUTES: { path: string; priority: number }[] = [
   { path: "/contact", priority: 0.7 },
   { path: "/hackathon", priority: 0.7 },
   { path: "/technext", priority: 0.7 },
+  { path: "/events", priority: 0.6 },
   { path: "/ic-ETITE24", priority: 0.5 },
   { path: "/ic-ETITE20", priority: 0.5 },
   { path: "/team", priority: 0.3 },

@@ -1,4 +1,5 @@
 import { importantDatesData } from "@/data/dates";
+import type { DateItem } from "@/lib/settings";
 import { Calendar, Clock, Sparkles, CheckCircle2, Award } from "lucide-react";
 
 interface MilestoneTheme {
@@ -74,7 +75,8 @@ const milestoneThemes: MilestoneTheme[] = [
   },
 ];
 
-export default function DatesTimeline() {
+export default function DatesTimeline({ items }: { items?: Pick<DateItem, "id" | "title" | "date" | "description" | "isKeyMilestone">[] }) {
+  const dates = items?.length ? items : importantDatesData;
   return (
     <section id="dates" className="py-8 sm:py-14 bg-white border-b border-[#E4E7EC]">
       <div className="container-x">
@@ -116,8 +118,8 @@ export default function DatesTimeline() {
 
         {/* Schedule Cards Stack with 4 Different Pastel Blue Shades */}
         <div className="max-w-4xl mx-auto space-y-4">
-          {importantDatesData.map((item, index) => {
-            const isConferenceDay = item.id === "conference-dates";
+          {dates.map((item, index) => {
+            const isConferenceDay = item.id === "conference-dates" || index === dates.length - 1;
             const theme = milestoneThemes[index] || milestoneThemes[0];
 
             return (

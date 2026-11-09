@@ -3,6 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import CFPSection from "@/components/CFPSection";
 import TracksSection from "@/components/TracksSection";
 import HomeImportantDates from "@/components/HomeImportantDates";
+import { getSettings } from "@/lib/settings";
 import { FileCheck, ShieldCheck, CheckCircle2, ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = pageMetadata("/call-for-papers", {
@@ -13,7 +14,8 @@ export const metadata: Metadata = pageMetadata("/call-for-papers", {
 
 import PageHeader from "@/components/PageHeader";
 
-export default function CallForPapersPage() {
+export default async function CallForPapersPage() {
+  const settings = await getSettings();
   return (
     <div className="bg-white min-h-screen text-[#002147]">
       <PageHeader
@@ -75,7 +77,7 @@ export default function CallForPapersPage() {
         </div>
       </section>
 
-      <HomeImportantDates />
+      <HomeImportantDates items={settings.dates} />
       <TracksSection isPreview={false} />
 
       {/* ── Final Submission CTA ── */}

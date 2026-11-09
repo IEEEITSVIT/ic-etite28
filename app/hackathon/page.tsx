@@ -5,6 +5,10 @@ import GallerySlideshow from "@/components/GallerySlideshow";
 import { boltGalleryItems } from "@/data/boltGalleryData";
 import BoltFloatingReturn from "@/components/BoltFloatingReturn";
 import { pageMetadata } from "@/lib/seo";
+import { notFound } from "next/navigation";
+import { getSettings } from "@/lib/settings";
+import { getEventBySlug, registrationWindow } from "@/lib/portal/events";
+import { isDbConfigured } from "@/lib/db";
 import {
   Zap,
   Calendar,
@@ -22,7 +26,14 @@ export const metadata: Metadata = pageMetadata("/hackathon", {
     "BOLT 3.0 (Breakthrough On Locked Technology), the national flagship 24-hour hackathon organized by the IEEE ITS Student Chapter and SCORE at VIT Vellore alongside ic-ETITE'28.",
 });
 
-export default function HackathonPage() {
+export default async function HackathonPage() {
+  const settings = await getSettings();
+  if (!settings.visibility.bolt) notFound();
+  // Register button points at the portal event chosen in admin → Site content.
+  const boltEvent = isDbConfigured() ? await getEventBySlug(settings.bolt.eventSlug).catch(() => null) : null;
+  const portalEvent = boltEvent && boltEvent.visibility !== "hidden" ? boltEvent : null;
+  const regState = portalEvent ? registrationWindow(portalEvent) : null;
+  const regLabel = regState === "open" ? "Registration Open" : regState === "closed" ? "Registration Closed" : "Registration: TBA (Opening Soon)";
   return (
     <div className="bg-[#FAFBFD] min-h-screen text-slate-900">
       {/* ── HERO SECTION ── */}
@@ -306,7 +317,7 @@ export default function HackathonPage() {
               <div className="p-6 sm:p-8 rounded-2xl border-2 border-slate-200 bg-white shadow-sm space-y-4">
                 <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-300">
                   <Clock className="w-3.5 h-3.5 text-amber-700" />
-                  <span>Registration: TBA (Opening Soon)</span>
+                  <span>{regLabel}</span>
                 </div>
 
                 <div>
@@ -334,6 +345,15 @@ export default function HackathonPage() {
                     </div>
                   </div>
                 </div>
+
+                {portalEvent && (
+                  <Link
+                    href={`/events/${portalEvent.slug}`}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#002147] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#003366]"
+                  >
+                    {regState === "open" ? "Register / Manage your team" : "Open BOLT portal"}
+                  </Link>
+                )}
 
                 <div className="p-3 rounded-lg bg-[#FAFBFD] border border-slate-200 text-center">
                   <p className="text-xs text-slate-600">

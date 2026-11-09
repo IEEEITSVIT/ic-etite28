@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import EventCountdown from "@/components/EventCountdown";
+import EventCountdown, { type CountdownMilestone } from "@/components/EventCountdown";
 import {
   Download,
   Calendar,
@@ -17,7 +17,15 @@ import {
 
 const HERO_VIDEO_SRC = "/videoplayback-2abc.mp4";
 
-export default function Hero() {
+export default function Hero({
+  milestones,
+  countdownTarget,
+  paperDeadline = "05 October 2027",
+}: {
+  milestones?: CountdownMilestone[];
+  countdownTarget?: string;
+  paperDeadline?: string;
+}) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [brochureModalOpen, setBrochureModalOpen] = useState(false);
 
@@ -214,7 +222,7 @@ export default function Hero() {
 
       {/* EVENT COUNTDOWN BANNER (PERFECTLY POSITIONED DIRECTLY BELOW VIDEO) */}
       <div className="w-full bg-[#00142E] py-6 sm:py-8 border-b border-white/10 relative z-10">
-        <EventCountdown />
+        <EventCountdown milestones={milestones} target={countdownTarget} />
       </div>
 
       {/* VIT INSTITUTIONAL CREDENTIAL STRIP ALIGNED WITH VIT.AC.IN */}
@@ -374,7 +382,7 @@ export default function Hero() {
               <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-[#002147]">Full Paper Submission Deadline</p>
-                  <p className="text-xs text-[#4A5568]">05 October 2027 via Microsoft (CMT)</p>
+                  <p className="text-xs text-[#4A5568]">{paperDeadline} via Microsoft (CMT)</p>
                 </div>
                 <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
                   Open for Submissions

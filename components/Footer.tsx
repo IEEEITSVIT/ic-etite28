@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink, MapPin, Mail, Award, Sparkles, ChevronRight } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({ visibility = { bolt: true, technext: true } }: { visibility?: { bolt: boolean; technext: boolean } }) {
   return (
     <footer className="bg-[#001733] text-white border-t border-white/10 select-none">
       {/* Top Branding Bar with Dual Official Logos */}
@@ -175,11 +175,13 @@ export default function Footer() {
                   Visa &amp; Clearances
                 </Link>
               </li>
-              <li>
-                <Link className="hover:text-white transition-colors block" href="/hackathon">
-                  BOLT 3.0 Hackathon
-                </Link>
-              </li>
+              {visibility.bolt && (
+                <li>
+                  <Link className="hover:text-white transition-colors block" href="/hackathon">
+                    BOLT 3.0 Hackathon
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   href="/call-for-papers#submit"
@@ -246,16 +248,20 @@ export default function Footer() {
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
                 <p className="text-[11px] text-[#FFB81C] font-bold uppercase tracking-wider">Co-Located Flagship Events</p>
                 <div className="flex items-center gap-3 pt-0.5">
+                  {visibility.technext && (
                   <Link href="/technext" title="TechNext '28 Industrial Expo" className="hover:opacity-85 transition-opacity">
                     <div className="relative h-6 w-24">
                       <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="100px" className="object-contain object-left" />
                     </div>
                   </Link>
+                  )}
+                  {visibility.bolt && (
                   <Link href="/hackathon" title="BOLT 3.0 National Hackathon" className="hover:opacity-85 transition-opacity">
                     <div className="relative h-6 w-20">
                       <Image src="/logos/bolt-logo-white.png" alt="BOLT 3.0" fill sizes="80px" className="object-contain object-left" />
                     </div>
                   </Link>
+                  )}
                 </div>
               </div>
             </div>

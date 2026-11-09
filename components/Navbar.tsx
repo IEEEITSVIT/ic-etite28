@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, ExternalLink, Zap } from "lucide-react";
+import { Menu, X, ChevronDown, ExternalLink, Zap, LogIn, LayoutDashboard } from "lucide-react";
 
 interface DropdownItem {
   label: string;
@@ -20,13 +20,18 @@ interface NavItem {
   alignRight?: boolean;
 }
 
-export default function Navbar() {
+export default function Navbar({ visibility = { bolt: true, technext: true } }: { visibility?: { bolt: boolean; technext: boolean } }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpandedDropdown, setMobileExpandedDropdown] = useState<string | null>(null);
   const [showSecondNav, setShowSecondNav] = useState(true);
   const pathname = usePathname();
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Set by the portal on login (non-httpOnly flag only), so static pages can show the right button.
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    setLoggedIn(/(?:^|;\s*)ic_logged_in=1/.test(document.cookie));
+  }, [pathname]);
 
   // Close mobile menu and reset nav on route change
   useEffect(() => {
@@ -243,6 +248,7 @@ export default function Navbar() {
                 (tags hidden below lg, where they would push the menu button off-screen; the drawer lists both) */}
             <div className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0">
               {/* TechNext '28 Tag */}
+              {visibility.technext && (
               <Link
                 href="/technext"
                 className="hidden lg:flex items-center justify-center h-8 sm:h-9 px-2.5 sm:px-3 rounded-full bg-white/10 hover:bg-white/20 border border-[#F37021]/80 shadow-[0_0_12px_rgba(243,112,33,0.28)] transition-all hover:scale-105 shrink-0"
@@ -258,8 +264,10 @@ export default function Navbar() {
                   />
                 </div>
               </Link>
+              )}
 
               {/* BOLT 3.0 Hackathon Tag */}
+              {visibility.bolt && (
               <Link
                 href="/hackathon"
                 className="hidden lg:flex items-center justify-center h-8 sm:h-9 px-2.5 sm:px-3 rounded-full bg-[#00142E] hover:bg-[#00244D] border border-[#CCFF00] shadow-[0_0_12px_rgba(204,255,0,0.28)] transition-all hover:scale-105 shrink-0"
@@ -275,6 +283,7 @@ export default function Navbar() {
                   />
                 </div>
               </Link>
+              )}
 
               {/* VIT Logo */}
               <Link
@@ -343,7 +352,7 @@ export default function Navbar() {
                     >
                       <Link
                         href={item.href}
-                        className={`relative inline-flex items-center gap-1 py-1.5 px-3 lg:px-3.5 xl:px-4 rounded-full text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold tracking-wide transition-all whitespace-nowrap shrink-0 ${
+                        className={`relative inline-flex items-center gap-1 py-1.5 px-3 lg:px-2.5 xl:px-4 rounded-full text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold tracking-wide transition-all whitespace-nowrap shrink-0 ${
                           active
                             ? "bg-[#002D5C] text-[#FFB81C] border border-[#FFB81C]/60 shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
                             : "text-white/95 hover:text-white hover:bg-white/10"
@@ -397,6 +406,20 @@ export default function Navbar() {
                     </li>
                   );
                 })}
+                <li className="shrink-0 pl-1 xl:pl-2">
+                  <Link
+                    href={loggedIn ? "/dashboard" : "/login"}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#FFB81C] px-3.5 xl:px-4 py-1.5 text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold text-[#002147] shadow-sm transition hover:bg-[#F5A623]"
+                  >
+                    {loggedIn ? <LayoutDashboard className="h-3.5 w-3.5" /> : <LogIn className="h-3.5 w-3.5" />}
+                    {loggedIn ? "Dashboard" : (
+                      <>
+                        <span className="xl:hidden">Login</span>
+                        <span className="hidden xl:inline">Login / Register</span>
+                      </>
+                    )}
+                  </Link>
+                </li>
               </ul>
             </div>
           </nav>
@@ -413,6 +436,7 @@ export default function Navbar() {
               {/* Co-located Events Highlights in Mobile Drawer */}
               <div className="space-y-3">
                 {/* BOLT 3.0 Card */}
+                {visibility.bolt && (
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00142E] to-[#002244] border border-[#CCFF00]/50 shadow-md flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-7 w-20 shrink-0">
@@ -437,8 +461,10 @@ export default function Navbar() {
                     Explore
                   </Link>
                 </div>
+                )}
 
                 {/* TechNext '28 Card */}
+                {visibility.technext && (
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#001733] to-[#002244] border border-[#F37021]/50 shadow-md flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-6 w-24 shrink-0">
@@ -463,6 +489,7 @@ export default function Navbar() {
                     Explore
                   </Link>
                 </div>
+                )}
               </div>
 
               {/* Navigation List with Accordions */}
@@ -541,6 +568,14 @@ export default function Navbar() {
 
               {/* Quick Actions */}
               <div className="pt-4 border-t border-white/10 space-y-3 text-sm">
+                <Link
+                  href={loggedIn ? "/dashboard" : "/login"}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between p-4 rounded-xl bg-[#FFB81C] text-[#002147] font-black hover:bg-[#F5A623] transition-colors"
+                >
+                  <span>{loggedIn ? "My dashboard" : "Login / Register"}</span>
+                  {loggedIn ? <LayoutDashboard className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                </Link>
                 <a
                   href="https://ieee-its-vit.vercel.app/"
                   target="_blank"

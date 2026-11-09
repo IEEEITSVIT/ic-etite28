@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getSettings } from "@/lib/settings";
 import RegistrationTable from "@/components/RegistrationTable";
 
 export const metadata: Metadata = pageMetadata("/registration", {
@@ -10,7 +11,8 @@ export const metadata: Metadata = pageMetadata("/registration", {
 
 import PageHeader from "@/components/PageHeader";
 
-export default function RegistrationPage() {
+export default async function RegistrationPage() {
+  const settings = await getSettings();
   return (
     <div className="bg-white min-h-screen text-[#002147]">
       <PageHeader
@@ -21,7 +23,7 @@ export default function RegistrationPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <RegistrationTable />
+      <RegistrationTable fees={settings.fees} registrationOpen={settings.visibility.conferenceRegistration} />
     </div>
   );
 }

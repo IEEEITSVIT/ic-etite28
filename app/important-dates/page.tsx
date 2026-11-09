@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getSettings } from "@/lib/settings";
 import DatesTimeline from "@/components/DatesTimeline";
 import PageHeader from "@/components/PageHeader";
 
@@ -9,7 +10,8 @@ export const metadata: Metadata = pageMetadata("/important-dates", {
     "Official schedule and milestone dates for ic-ETITE'28 at Vellore Institute of Technology (VIT), Vellore.",
 });
 
-export default function ImportantDatesPage() {
+export default async function ImportantDatesPage() {
+  const settings = await getSettings();
   return (
     <div className="bg-white min-h-screen text-[#002147]">
       <PageHeader
@@ -20,7 +22,7 @@ export default function ImportantDatesPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <DatesTimeline />
+      <DatesTimeline items={settings.dates} />
     </div>
   );
 }
