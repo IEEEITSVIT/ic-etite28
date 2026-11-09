@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import CollectionsBoundary from "@/components/cms/CollectionsBoundary";
 
 export const metadata: Metadata = pageMetadata("/team", {
   title: "Web Development Team | ic-ETITE'28",
@@ -8,5 +9,5 @@ export const metadata: Metadata = pageMetadata("/team", {
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <CollectionsBoundary keys={["team.members"]}>{children}</CollectionsBoundary>;
 }

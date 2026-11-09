@@ -140,6 +140,7 @@ export interface Settings {
   appearance: Appearance;
   texts: TextOverrides; // inline page edits
   images: ImageOverrides;
+  collections: Record<string, unknown[]>; // edited lists (Admin → Lists)
 }
 
 const shortTitles: Record<string, string> = {
@@ -228,6 +229,7 @@ export const DEFAULT_SETTINGS: Settings = {
   },
   texts: {},
   images: {},
+  collections: {},
   ticker: {
     enabled: true,
     label: "Announcements",

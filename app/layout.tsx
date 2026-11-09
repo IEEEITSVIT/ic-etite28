@@ -5,7 +5,6 @@ import "./globals.css";
 import AppNavbar from "@/components/AppNavbar";
 import TickerBar from "@/components/TickerBar";
 import CmsProvider from "@/components/cms/CmsProvider";
-import EditBar from "@/components/cms/EditBar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import StartupAnimation from "@/components/StartupAnimation";
@@ -133,7 +132,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (location.pathname === "/" && !sessionStorage.getItem("icetite28_intro_seen")) {
+                if (location.pathname === "/" && location.search.indexOf("cms_preview") < 0 && !sessionStorage.getItem("icetite28_intro_seen")) {
                   document.documentElement.classList.add("show-intro");
                 }
               } catch (e) {}
@@ -196,7 +195,6 @@ export default async function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer visibility={visibility} />
           <BackToTop />
-          <EditBar />
         </CmsProvider>
       </body>
     </html>

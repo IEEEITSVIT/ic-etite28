@@ -15,7 +15,7 @@ export default function StartupAnimation() {
       const alreadyShown = sessionStorage.getItem("icetite28_intro_seen");
 
       // Only the home page plays the intro; login and every other page open straight away.
-      if (!alreadyShown && window.location.pathname === "/") {
+      if (!alreadyShown && window.location.pathname === "/" && !window.location.search.includes("cms_preview")) {
         // First page opening in this session: trigger animation!
         sessionStorage.setItem("icetite28_intro_seen", "1");
         setActive(true);

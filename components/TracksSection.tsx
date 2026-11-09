@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { conferenceTracksData, ResearchTrack } from "@/data/tracks";
+import { conferenceTracksData as defaultTracks, ResearchTrack } from "@/data/tracks";
+import { useCollection } from "@/components/cms/useCollection";
 import {
   Search,
   Database,
@@ -14,6 +15,12 @@ import {
   Layers,
   BookOpen,
   X,
+  Network,
+  Brain,
+  Shield,
+  Cloud,
+  Globe,
+  Code,
 } from "lucide-react";
 import E from "@/components/cms/E";
 
@@ -126,7 +133,12 @@ const trackThemeConfig: Record<string, TrackTheme> = {
   },
 };
 
+// Icon chosen in Admin → Lists (falls back to the track's colour theme icon).
+const ICONS: Record<string, typeof Database> = { Database, Radio, Cpu, Zap, Network, Brain, Shield, Cloud, Globe, Code };
+
 export default function TracksSection({ isPreview = false }: { isPreview?: boolean }) {
+  const savedTracks = useCollection<ResearchTrack>("tracks", defaultTracks);
+  const conferenceTracksData = useMemo(() => savedTracks.map((t, i) => ({ ...t, id: t.id || `track-${i + 1}`, number: t.number ?? "", title: t.title ?? "", description: t.description ?? "", topics: t.topics ?? [] })), [savedTracks]);
   const [activeTrackId, setActiveTrackId] = useState<string>("it");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedTrackFilter, setSelectedTrackFilter] = useState<string>("all");
@@ -165,7 +177,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
         isMatch,
       };
     });
-  }, [searchQuery]);
+  }, [searchQuery, conferenceTracksData]);
 
   const totalMatchingTopics = useMemo(() => {
     if (!searchQuery.trim()) return 0;
@@ -180,17 +192,17 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
         ...r.track,
         topics: r.matchedTopics,
       }));
-  }, [searchQuery, searchResults]);
+  }, [searchQuery, searchResults, conferenceTracksData]);
 
   const activeTrack = useMemo(() => {
     const foundInFiltered = filteredTracks.find((t) => t.id === activeTrackId);
     if (foundInFiltered) return foundInFiltered;
     return filteredTracks[0] || conferenceTracksData[0];
-  }, [filteredTracks, activeTrackId]);
+  }, [filteredTracks, activeTrackId, conferenceTracksData]);
 
   const totalTopicsCount = useMemo(() => {
     return conferenceTracksData.reduce((acc, t) => acc + t.topics.length, 0);
-  }, []);
+  }, [conferenceTracksData]);
 
   const handleScrollToSubmit = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const target = document.getElementById("submit");
@@ -278,7 +290,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           {conferenceTracksData.map((track) => {
             const theme = trackThemeConfig[track.id] || trackThemeConfig.it;
-            const Icon = theme.icon;
+            const Icon = ICONS[track.icon] ?? theme.icon;
             const isActive = activeTrack?.id === track.id;
             const matchInfo = searchResults.find((r) => r.track.id === track.id);
             const matchesCount = searchQuery.trim() ? (matchInfo?.isMatch ? matchInfo.totalMatches : 0) : track.topics.length;
@@ -387,7 +399,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
         ========================================================================= */}
         {viewMode === "focused" && activeTrack && (() => {
           const theme = trackThemeConfig[activeTrack.id] || trackThemeConfig.it;
-          const Icon = theme.icon;
+          const Icon = ICONS[activeTrack.icon] ?? theme.icon;
 
           return (
             <div className={`rounded-3xl border-2 shadow-lg overflow-hidden ${theme.cardBorder}`}>
@@ -469,7 +481,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
           <div className="space-y-10">
             {filteredTracks.map((track) => {
               const theme = trackThemeConfig[track.id] || trackThemeConfig.it;
-              const Icon = theme.icon;
+              const Icon = ICONS[track.icon] ?? theme.icon;
 
               return (
                 <div

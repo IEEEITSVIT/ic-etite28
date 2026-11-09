@@ -4,37 +4,21 @@ import { useEffect, useState } from "react";
 import Image from "@/components/cms/EImage";
 import { Award, Globe, Building2, Cpu, Users } from "lucide-react";
 import {
-  chiefPatron,
-  patrons,
-  organizingChairs,
-  technicalProgrammeChairs,
-  executiveAdvisoryCommittee,
-  publicationCommittee,
-  sponsorshipCommittee,
-  publicityAndMediaCommittee,
-  registrationCommittee,
-  boltHackathonCommittee,
-  technextExpoCommittee,
-  eventManagementCommittee,
-  guestCareCommittee,
-  conferenceCoordinatingCommittee,
-} from "@/data/committees";
-import {
-  internationalAdvisoryData,
-  nationalAdvisoryData,
-  technicalCommitteeData,
+  internationalAdvisoryData as defaultInternational,
+  nationalAdvisoryData as defaultNational,
+  technicalCommitteeData as defaultTechnical,
+  type AdvisoryMember,
 } from "@/data/advisory";
+import {
+  executiveLeadershipLeft as defaultLeadershipLeft,
+  executiveLeadershipRight as defaultLeadershipRight,
+  functionalCommittees as defaultFunctional,
+  studentLeads as defaultStudents,
+  type CommitteeSection,
+  type TextMember,
+} from "@/data/committeeSections";
+import { useCollection } from "@/components/cms/useCollection";
 import E from "@/components/cms/E";
-
-interface TextMember {
-  name: string;
-  affiliation?: string;
-}
-
-interface CommitteeSection {
-  title: string;
-  members: TextMember[];
-}
 
 type TabType = "organizing" | "international" | "national" | "technical" | "student";
 
@@ -56,177 +40,14 @@ export default function CommitteesPage() {
     };
   }, []);
 
-  // Organizing Committee: Executive Leadership Sections
-  const executiveLeadershipLeft: CommitteeSection[] = [
-    {
-      title: "Chief Patron",
-      members: [
-        {
-          name: chiefPatron.name,
-          affiliation: chiefPatron.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Patrons",
-      members: patrons.map((p) => ({
-        name: p.name,
-        affiliation: p.affiliation,
-      })),
-    },
-    {
-      title: "Organizing Chair",
-      members: [
-        {
-          name: organizingChairs.organizingChair.name,
-          affiliation: organizingChairs.organizingChair.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Organizing Co-chair",
-      members: [
-        {
-          name: organizingChairs.organizingCoChair.name,
-          affiliation: organizingChairs.organizingCoChair.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Conference Chair",
-      members: [
-        {
-          name: organizingChairs.conferenceChair.name,
-          affiliation: organizingChairs.conferenceChair.affiliation,
-        },
-      ],
-    },
-  ];
-
-  const executiveLeadershipRight: CommitteeSection[] = [
-    {
-      title: "Publication Chair",
-      members: [
-        {
-          name: organizingChairs.publicationChair.name,
-          affiliation: organizingChairs.publicationChair.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Publication Co-chairs",
-      members: organizingChairs.publicationCoChairs.map((p) => ({
-        name: p.name,
-        affiliation: p.affiliation,
-      })),
-    },
-    {
-      title: "Finance Chair",
-      members: [
-        {
-          name: organizingChairs.financeChair.name,
-          affiliation: organizingChairs.financeChair.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Finance Co-chair",
-      members: [
-        {
-          name: organizingChairs.financeCoChair.name,
-          affiliation: organizingChairs.financeCoChair.affiliation,
-        },
-      ],
-    },
-    {
-      title: "Technical Programme Chairs",
-      members: technicalProgrammeChairs.map((m) => ({
-        name: m.name,
-        affiliation: m.affiliation,
-      })),
-    },
-  ];
-
-  // Specific Functional Committees from Official Directory
-  const functionalCommittees: CommitteeSection[] = [
-    {
-      title: "Executive Advisory Committee",
-      members: executiveAdvisoryCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Publication Committee",
-      members: publicationCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Sponsorship Committee",
-      members: sponsorshipCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Publicity and Media Committee",
-      members: publicityAndMediaCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Registration Committee",
-      members: registrationCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "BOLT 3.0 Hackathon Committee",
-      members: boltHackathonCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Technext’28 Expo Committee",
-      members: technextExpoCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Event Management Committee",
-      members: eventManagementCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Guest Care Committee",
-      members: guestCareCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-    {
-      title: "Conference Coordinating Committee",
-      members: conferenceCoordinatingCommittee.map((m) => ({
-        name: m.name,
-        affiliation: `${m.role}, ${m.affiliation}`,
-      })),
-    },
-  ];
-
-  // Student Committee Members
-  const studentLeads: TextMember[] = [
-    { name: "Likhith Medarametla", affiliation: "SCORE, VIT Vellore" },
-    { name: "Judson Daniel", affiliation: "SCORE, VIT Vellore" },
-    { name: "M.J.V.Maheswara Reddy", affiliation: "SCORE, VIT Vellore" },
-  ];
+  // Sections are CMS lists (Admin → Lists); defaults come from data/committeeSections.ts.
+  const executiveLeadershipLeft = useCollection<CommitteeSection>("committees.leadershipLeft", defaultLeadershipLeft);
+  const executiveLeadershipRight = useCollection<CommitteeSection>("committees.leadershipRight", defaultLeadershipRight);
+  const functionalCommittees = useCollection<CommitteeSection>("committees.functional", defaultFunctional);
+  const studentLeads = useCollection<TextMember>("committees.students", defaultStudents);
+  const internationalAdvisoryData = useCollection<AdvisoryMember>("advisory.international", defaultInternational);
+  const nationalAdvisoryData = useCollection<AdvisoryMember>("advisory.national", defaultNational);
+  const technicalCommitteeData = useCollection<AdvisoryMember>("advisory.technical", defaultTechnical);
 
   // Helper to deduplicate committee members by normalized name
   const dedupe = <T extends { name: string }>(list: T[], excludeSet?: Set<string>): T[] => {

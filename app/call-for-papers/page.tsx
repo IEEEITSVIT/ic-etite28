@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import CFPSection from "@/components/CFPSection";
 import TracksSection from "@/components/TracksSection";
+import CollectionsBoundary from "@/components/cms/CollectionsBoundary";
 import HomeImportantDates from "@/components/HomeImportantDates";
 import { getSettings } from "@/lib/settings";
 import { FileCheck, ShieldCheck, CheckCircle2, ExternalLink } from "lucide-react";
@@ -60,7 +61,9 @@ export default async function CallForPapersPage() {
       </section>
 
       <HomeImportantDates items={settings.dates} />
-      <TracksSection isPreview={false} />
+      <CollectionsBoundary keys={["tracks"]}>
+        <TracksSection isPreview={false} />
+      </CollectionsBoundary>
 
       {/* ── Final Submission CTA ── */}
       <section

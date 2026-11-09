@@ -401,18 +401,3 @@ export async function saveAppearanceAction(fd: FormData) {
     return "Appearance updated across the website.";
   });
 }
-
-// Resets one inline page edit (text or image) from Admin → Page content.
-export async function resetContentAction(fd: FormData) {
-  const admin = await requireAdmin("/admin/content");
-  await guarded("/admin/content", async () => {
-    const type = str(fd, "type", 10) === "image" ? "images" : "texts";
-    const key = str(fd, "key", 300);
-    const current = (await getSettings())[type] as Record<string, unknown>;
-    const next = { ...current };
-    delete next[key];
-    await saveSetting(type, next as never, admin.id);
-    revalidatePath("/", "layout");
-    return type === "images" ? "Original image restored." : "Text restored to the original.";
-  });
-}

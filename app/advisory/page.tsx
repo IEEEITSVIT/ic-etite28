@@ -2,13 +2,19 @@
 
 
 import {
-  internationalAdvisoryData,
-  nationalAdvisoryData,
-  technicalCommitteeData,
+  internationalAdvisoryData as defaultInternational,
+  nationalAdvisoryData as defaultNational,
+  technicalCommitteeData as defaultTechnical,
+  type AdvisoryMember,
 } from "@/data/advisory";
+import { useCollection } from "@/components/cms/useCollection";
 import E from "@/components/cms/E";
 
 export default function AdvisoryPage() {
+  // CMS lists (Admin → Lists); defaults from data/advisory.ts.
+  const internationalAdvisoryData = useCollection<AdvisoryMember>("advisory.international", defaultInternational);
+  const nationalAdvisoryData = useCollection<AdvisoryMember>("advisory.national", defaultNational);
+  const technicalCommitteeData = useCollection<AdvisoryMember>("advisory.technical", defaultTechnical);
   // Helper to deduplicate committee members by normalized name
   const dedupe = <T extends { name: string }>(list: T[], excludeSet?: Set<string>): T[] => {
     const seen = new Set<string>();

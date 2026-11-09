@@ -9,6 +9,7 @@ const NAV = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/settings", label: "Site content (CMS)" },
   { href: "/admin/content", label: "Page content" },
+  { href: "/admin/lists", label: "Lists" },
   { href: "/admin/events", label: "Events & BOLT" },
   { href: "/admin/technext", label: "TechNext stalls" },
   { href: "/admin/conference", label: "Conference registrations" },

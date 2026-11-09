@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import TracksSection from "@/components/TracksSection";
+import CollectionsBoundary from "@/components/cms/CollectionsBoundary";
 
 export const metadata: Metadata = pageMetadata("/tracks", {
   title: "Conference Research Tracks & Indicative Topics | ic-ETITE'28",
@@ -21,7 +22,9 @@ export default function TracksPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <TracksSection isPreview={false} />
+      <CollectionsBoundary keys={["tracks"]}>
+        <TracksSection isPreview={false} />
+      </CollectionsBoundary>
     </div>
   );
 }

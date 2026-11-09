@@ -18,11 +18,12 @@ Schema: `db/migrations/0001_init.sql`.
 
 Everything public is editable by admins, without code:
 
-- **Any text or image, in place** — log in as admin, open any page and click **Edit page** (bottom-left). Click a text to rewrite it (Enter saves, Esc cancels); the toolbar changes its size, colour or boldness, hides it, or restores the original. Click an image to upload a replacement. Edits are live immediately for everyone. Admin → *Page content* lists every edit with reset buttons.
+- **Page content** (Admin → *Page content*) — pick a page; every text on it appears as a form field (with colour, size, bold and hide options) and every image with *Replace* / *Restore*. A live preview of the page sits beside the form (desktop / tablet / phone): click any text in the preview to jump to its field. Nothing changes on the website until you click **Publish**; *Discard* drops unsaved edits. Only admins can reach this; the public site has no editing controls.
+- **Lists** (Admin → *Lists*) — organizing committee sections and members, functional committees, student committee, international / national advisory boards, technical programme committee, web team and research tracks. Add, remove, duplicate, reorder and edit entries (photos can be uploaded) with the same live preview and Publish / Discard. *Restore* (↺) brings back the original list from the code.
 - **Appearance** — Site content → *Appearance*: the ten theme colours (primary, accent, text, backgrounds, borders…), heading and body fonts (9 Google fonts) and overall text size, with a live preview and “Reset to original”.
 - **Structured content** — Site content: important dates and countdown, fees and early bird, deadlines, prizes, visibility of BOLT/TechNext, the announcement bar, sponsorship packages, invoice template, payment links; Admin → *Hotels*; events, rounds and certificates in their own sections.
 
-How it works: `scripts/cms-codemod.mjs` wraps page text in `<E>` and swaps `next/image` for `components/cms/EImage`, which read overrides (`texts`, `images` settings) and become editable in edit mode. Run it again after adding new pages or components (`node scripts/cms-codemod.mjs`). Theme colours are CSS variables used through Tailwind `brand-*` classes.
+How it works: `scripts/cms-codemod.mjs` wraps page text in `<E>` and swaps `next/image` for `components/cms/EImage`, which read overrides (`texts`, `images` settings). Lists are defined in `lib/collections.ts` and read with `useCollection()` (saved copies in the `collections` setting). The admin preview loads the page in an iframe with `?cms_preview=1`; only when framed by the admin (same origin) does the page report its fields and show unsaved drafts sent by `postMessage`. Run it again after adding new pages or components (`node scripts/cms-codemod.mjs`). Theme colours are CSS variables used through Tailwind `brand-*` classes.
 
 ## Roles and URLs
 

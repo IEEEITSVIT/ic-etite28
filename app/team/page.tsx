@@ -1,10 +1,12 @@
 "use client";
 
 
-import { ieeeItsLeadership } from "@/data/team";
+import { ieeeItsLeadership as defaultTeam } from "@/data/team";
+import { useCollection } from "@/components/cms/useCollection";
 import E from "@/components/cms/E";
 
 export default function TeamPage() {
+  const ieeeItsLeadership = useCollection<(typeof defaultTeam)[number]>("team.members", defaultTeam);
   const facultyMembers = ieeeItsLeadership.filter((m) => m.badge === "Faculty Advisor");
   const studentMembers = ieeeItsLeadership.filter((m) => m.badge !== "Faculty Advisor");
 
