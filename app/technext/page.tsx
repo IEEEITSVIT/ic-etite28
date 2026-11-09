@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getSettings } from "@/lib/settings";
+import { formatDeadline, isEarlyBird, priceNow, windowState } from "@/lib/pricing";
+import PrizePool from "@/components/portal/PrizePool";
 import Link from "next/link";
 import Image from "next/image";
 import GallerySlideshow, { GalleryItem } from "@/components/GallerySlideshow";
@@ -283,7 +285,9 @@ const technextGalleryItems: GalleryItem[] = [
 export default async function TechNextPage() {
   const settings = await getSettings();
   if (!settings.visibility.technext) notFound();
-  const bookingOpen = settings.visibility.technextRegistration;
+  const tn = settings.technext;
+  const bookingOpen = settings.visibility.technextRegistration && windowState(tn.opensAt, tn.closesAt) === "open";
+  const early = isEarlyBird(tn.earlyBird);
   const categories = [
     {
       icon: Cpu,
@@ -535,15 +539,31 @@ export default async function TechNextPage() {
               : "Registration details, stall allocation, and project entry guidelines for VIT Vellore will be formally announced soon (TBA)."}
           </p>
 
+          {(tn.prizes.length > 0 || tn.prizePool) && (
+            <div className="mx-auto max-w-2xl text-left">
+              <PrizePool prizes={tn.prizes} pool={tn.prizePool} title="TechNext awards" />
+            </div>
+          )}
+
           {bookingOpen && (
             <div className="flex flex-wrap justify-center gap-3">
-              {settings.technext.stallTypes.map((st) => (
-                <div key={st.key} className="rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-left shadow-sm">
-                  <p className="font-bold text-[#002147]">{st.label}</p>
-                  <p className="text-xs text-slate-500">{st.size}</p>
-                  <p className="mt-1 font-black text-[#F37021]">{st.price > 0 ? `INR ${st.price.toLocaleString("en-IN")}` : "Free"}</p>
+              {(early || tn.closesAt) && (
+                <div className="flex w-full flex-wrap justify-center gap-2 text-xs font-bold">
+                  {early && <span className="rounded-full bg-emerald-600 px-3 py-1.5 text-white">Early-bird prices until {formatDeadline(tn.earlyBird.endsAt)}</span>}
+                  {tn.closesAt && <span className="rounded-full bg-[#002147] px-3 py-1.5 text-white">Booking deadline: {formatDeadline(tn.closesAt)}</span>}
                 </div>
-              ))}
+              )}
+              {tn.stallTypes.map((st) => {
+                const p = priceNow(st.price, st.earlyPrice, tn.earlyBird);
+                return (
+                  <div key={st.key} className="rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-left shadow-sm">
+                    <p className="font-bold text-[#002147]">{st.label}</p>
+                    <p className="text-xs text-slate-500">{st.size}</p>
+                    {p.early && <p className="mt-1 text-xs font-semibold text-slate-400 line-through">INR {st.price.toLocaleString("en-IN")}</p>}
+                    <p className={`font-black ${p.early ? "text-emerald-700" : "text-[#F37021]"}`}>{p.amount ? `INR ${p.amount.toLocaleString("en-IN")}` : "Free"}</p>
+                  </div>
+                );
+              })}
               <div className="w-full">
                 <Link
                   href="/technext/register"

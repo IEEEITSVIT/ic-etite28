@@ -2,6 +2,7 @@ import Link from "next/link";
 import { first } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { formatInr, formatUsd, getSettings } from "@/lib/settings";
+import { formatDeadline, isEarlyBird, priceNow, windowState } from "@/lib/pricing";
 import { saveConferenceRegistrationAction } from "@/app/actions/registrations";
 import SubmitButton from "@/components/portal/SubmitButton";
 import PaymentCard from "@/components/portal/PaymentCard";
@@ -34,7 +35,11 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
   const settings = await getSettings();
   const reg = await first<Reg>("SELECT * FROM conference_registrations WHERE user_id = ?", [user.id]);
   const locked = reg ? reg.status === "confirmed" || reg.payment_status === "paid" || reg.payment_status === "waived" : false;
-  const open = settings.visibility.conferenceRegistration;
+  const win = windowState(settings.conference.opensAt, settings.conference.closesAt);
+  // Existing registrations stay editable after the deadline until they are paid/confirmed.
+  const open = settings.visibility.conferenceRegistration && (win === "open" || Boolean(reg));
+  const eb = settings.conference.earlyBird;
+  const early = isEarlyBird(eb);
 
   return (
     <PortalPage
@@ -48,6 +53,12 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
       }
     >
       <Flash ok={ok} error={error} />
+      {!reg && settings.visibility.conferenceRegistration && (early || settings.conference.closesAt) && (
+        <div className="mb-6 flex flex-wrap gap-2 text-xs font-bold">
+          {early && <span className="rounded-full bg-emerald-600 px-3 py-1.5 text-white">Early-bird pricing until {formatDeadline(eb.endsAt)}</span>}
+          {settings.conference.closesAt && <span className="rounded-full bg-[#002147] px-3 py-1.5 text-white">Registration deadline: {formatDeadline(settings.conference.closesAt)}</span>}
+        </div>
+      )}
       {reg && (
         <Card className="mb-6">
           <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -58,7 +69,13 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
         </Card>
       )}
       {!open && !reg ? (
-        <Empty>Conference registration will open soon. Please check the Important Dates page.</Empty>
+        <Empty>
+          {settings.visibility.conferenceRegistration && win === "closed"
+            ? "The registration deadline has passed. Please contact the secretariat."
+            : settings.visibility.conferenceRegistration && win === "not_open"
+              ? `Registration opens on ${formatDeadline(settings.conference.opensAt)}.`
+              : "Conference registration will open soon. Please check the Important Dates page."}
+        </Empty>
       ) : (
         <Card title={reg ? "Registration details" : "Register"}>
           <form action={saveConferenceRegistrationAction} className="space-y-6">
@@ -83,8 +100,20 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
                         <input type="radio" name="category" value={f.key} required defaultChecked={reg ? reg.category_key === f.key : i === 0} className="accent-[#002147]" />
                         <span className="font-semibold text-slate-800">{f.category}</span>
                       </span>
-                      <span className="text-sm font-bold text-[#002147]">
-                        {formatInr(f.inr)} · {formatUsd(f.usd)}
+                      <span className="text-right text-sm font-bold text-[#002147]">
+                        {(() => {
+                          const inr = priceNow(f.inr, f.earlyInr, eb);
+                          const usd = priceNow(f.usd, f.earlyUsd, eb);
+                          return (
+                            <>
+                              {inr.early && <span className="mr-1 text-xs text-slate-400 line-through">{formatInr(f.inr)}</span>}
+                              <span className={inr.early ? "text-emerald-700" : ""}>{formatInr(inr.amount)}</span>
+                              {" · "}
+                              {usd.early && <span className="mr-1 text-xs text-slate-400 line-through">{formatUsd(f.usd)}</span>}
+                              <span className={usd.early ? "text-emerald-700" : ""}>{formatUsd(usd.amount)}</span>
+                            </>
+                          );
+                        })()}
                       </span>
                     </label>
                   ))}

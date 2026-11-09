@@ -7,7 +7,9 @@ import BoltFloatingReturn from "@/components/BoltFloatingReturn";
 import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getSettings } from "@/lib/settings";
-import { getEventBySlug, registrationWindow } from "@/lib/portal/events";
+import { eventFeeNow, eventPrizes, getEventBySlug, registrationWindow } from "@/lib/portal/events";
+import PrizePool from "@/components/portal/PrizePool";
+import { formatDeadline } from "@/lib/pricing";
 import { isDbConfigured } from "@/lib/db";
 import {
   Zap,
@@ -346,6 +348,17 @@ export default async function HackathonPage() {
                   </div>
                 </div>
 
+                {portalEvent && (eventPrizes(portalEvent).length > 0 || portalEvent.prize_pool) && (
+                  <PrizePool prizes={eventPrizes(portalEvent)} pool={portalEvent.prize_pool} compact />
+                )}
+                {portalEvent && regState === "open" && (portalEvent.reg_closes_at || eventFeeNow(portalEvent).early) && (
+                  <div className="flex flex-wrap gap-1.5 text-[11px] font-bold">
+                    {eventFeeNow(portalEvent).early && (
+                      <span className="rounded-full bg-emerald-600 px-2.5 py-1 text-white">Early bird until {formatDeadline(portalEvent.early_bird_ends_at)}</span>
+                    )}
+                    {portalEvent.reg_closes_at && <span className="rounded-full bg-[#002147] px-2.5 py-1 text-white">Deadline: {formatDeadline(portalEvent.reg_closes_at)}</span>}
+                  </div>
+                )}
                 {portalEvent && (
                   <Link
                     href={`/events/${portalEvent.slug}`}

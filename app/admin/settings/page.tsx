@@ -1,5 +1,6 @@
 import { getSettings } from "@/lib/settings";
-import { saveDatesAction, saveFeesAction, savePaymentsAction, saveTechnextAction, saveVisibilityAction } from "@/app/actions/admin-settings";
+import { saveConferenceAction, saveDatesAction, saveFeesAction, savePaymentsAction, saveTechnextAction, saveVisibilityAction } from "@/app/actions/admin-settings";
+import { EarlyBirdFields, PrizeFields } from "@/components/admin/CmsFields";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Card, Field, Flash, PortalPage, inputCls } from "@/components/portal/ui";
 
@@ -91,20 +92,27 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
         <Card title="Conference registration fees">
           <form id="fees" action={saveFeesAction} className="space-y-4 scroll-mt-28">
             <input type="hidden" name="fee_count" value={feeRows.length} />
-            <p className="text-sm text-slate-500">Shown on the Registration page and used to calculate the amount payable when delegates register. Leave an amount blank if the category does not apply.</p>
+            <p className="text-sm text-slate-500">
+              Shown on the Registration page and used to calculate the amount payable when delegates register. Leave an amount blank if the category does not apply. Early columns are optional: during the early-bird period
+              (set under Conference registration below) they replace the regular price; tiers without one get the default early-bird %.
+            </p>
             <div className="space-y-2">
               <div className="hidden gap-2 px-3 text-xs font-bold uppercase tracking-wide text-slate-500 md:grid md:grid-cols-12">
-                <span className="md:col-span-6">Category</span>
+                <span className="md:col-span-4">Category</span>
                 <span className="md:col-span-2">Indian (INR)</span>
                 <span className="md:col-span-2">Foreign (USD)</span>
+                <span className="md:col-span-1 text-emerald-700">Early INR</span>
+                <span className="md:col-span-1 text-emerald-700">Early USD</span>
                 <span className="md:col-span-2" />
               </div>
               {feeRows.map((f, i) => (
                 <div key={i} className="grid gap-2 rounded-xl border border-slate-200 p-3 md:grid-cols-12 md:items-center">
                   <input type="hidden" name={`fee_key_${i}`} defaultValue={f?.key ?? ""} />
-                  <input name={`fee_category_${i}`} defaultValue={f?.category ?? ""} placeholder="Category" className={`${small} md:col-span-6`} />
+                  <input name={`fee_category_${i}`} defaultValue={f?.category ?? ""} placeholder="Category" className={`${small} md:col-span-4`} />
                   <input name={`fee_inr_${i}`} inputMode="numeric" defaultValue={f?.inr ?? ""} placeholder="15000" className={`${small} md:col-span-2`} />
                   <input name={`fee_usd_${i}`} inputMode="numeric" defaultValue={f?.usd ?? ""} placeholder="400" className={`${small} md:col-span-2`} />
+                  <input name={`fee_einr_${i}`} inputMode="numeric" defaultValue={f?.earlyInr ?? ""} placeholder="—" title="Early-bird INR" className={`${small} md:col-span-1`} />
+                  <input name={`fee_eusd_${i}`} inputMode="numeric" defaultValue={f?.earlyUsd ?? ""} placeholder="—" title="Early-bird USD" className={`${small} md:col-span-1`} />
                   <div className="flex flex-wrap gap-3 md:col-span-2">
                     <label className="flex items-center gap-1.5 text-sm text-slate-600">
                       <input type="checkbox" name={`fee_ieee_${i}`} defaultChecked={f?.isIeeeDiscount ?? false} className="accent-[#002147]" /> IEEE
@@ -122,6 +130,22 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
           </form>
         </Card>
 
+        <Card title="Conference registration: deadlines, early bird & awards">
+          <form id="conference" action={saveConferenceAction} className="space-y-4 scroll-mt-28">
+            <div className="grid gap-4 sm:grid-cols-2 max-w-2xl">
+              <Field label="Registration opens on" hint="Empty = open as soon as it is switched on under Visibility.">
+                <input name="opens_at" type="date" defaultValue={s.conference.opensAt} className={small} />
+              </Field>
+              <Field label="Registration closes on (deadline)">
+                <input name="closes_at" type="date" defaultValue={s.conference.closesAt} className={small} />
+              </Field>
+            </div>
+            <EarlyBirdFields prefix="conf" value={s.conference.earlyBird} note="Fee tiers with Early INR / USD prices use them; others get the default %." />
+            <PrizeFields prefix="conf" prizes={s.conference.prizes} pool={s.conference.prizePool} poolName="conf_prize_pool" label="Best paper awards" />
+            <SubmitButton pendingText="Saving…">Save conference settings</SubmitButton>
+          </form>
+        </Card>
+
         <Card title="TechNext stalls">
           <form id="technext" action={saveTechnextAction} className="space-y-4 scroll-mt-28">
             <input type="hidden" name="stall_count" value={stallRows.length} />
@@ -131,8 +155,9 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                   <input type="hidden" name={`stall_key_${i}`} defaultValue={st?.key ?? ""} />
                   <input name={`stall_label_${i}`} defaultValue={st?.label ?? ""} placeholder="Stall type" className={`${small} md:col-span-3`} />
                   <input name={`stall_size_${i}`} defaultValue={st?.size ?? ""} placeholder="3m × 3m" className={`${small} md:col-span-2`} />
-                  <input name={`stall_desc_${i}`} defaultValue={st?.description ?? ""} placeholder="What's included" className={`${small} md:col-span-4`} />
-                  <input name={`stall_price_${i}`} inputMode="numeric" defaultValue={st?.price ?? ""} placeholder="Price (INR)" className={`${small} md:col-span-2`} />
+                  <input name={`stall_desc_${i}`} defaultValue={st?.description ?? ""} placeholder="What's included" className={`${small} md:col-span-3`} />
+                  <input name={`stall_price_${i}`} inputMode="numeric" defaultValue={st?.price ?? ""} placeholder="Price (INR)" className={`${small} md:col-span-1`} />
+                  <input name={`stall_eprice_${i}`} inputMode="numeric" defaultValue={st?.earlyPrice ?? ""} placeholder="Early ₹" title="Early-bird price (INR)" className={`${small} md:col-span-2`} />
                   {st && (
                     <label className="flex items-center gap-1.5 text-sm text-red-600 md:col-span-1">
                       <input type="checkbox" name={`stall_delete_${i}`} className="accent-red-600" /> Delete
@@ -141,14 +166,19 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                 </div>
               ))}
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 max-w-xl">
-              <Field label="Bookings close on">
+            <div className="grid gap-4 sm:grid-cols-3 max-w-3xl">
+              <Field label="Bookings open on" hint="Empty = open as soon as booking is switched on.">
+                <input name="opens_at" type="date" defaultValue={s.technext.opensAt} className={small} />
+              </Field>
+              <Field label="Bookings close on (deadline)">
                 <input name="closes_at" type="date" defaultValue={s.technext.closesAt} className={small} />
               </Field>
               <Field label="Max representatives per stall">
                 <input name="max_reps" type="number" min={1} max={20} defaultValue={s.technext.maxRepresentatives} className={small} />
               </Field>
             </div>
+            <EarlyBirdFields prefix="tn" value={s.technext.earlyBird} note="Stall types with an Early ₹ price use it; others get the default %." />
+            <PrizeFields prefix="tn" prizes={s.technext.prizes} pool={s.technext.prizePool} poolName="tn_prize_pool" label="TechNext awards & prize pool" />
             <SubmitButton pendingText="Saving…">Save TechNext options</SubmitButton>
           </form>
         </Card>

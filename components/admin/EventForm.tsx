@@ -2,7 +2,7 @@ import { saveEventAction } from "@/app/actions/admin-events";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Field, inputCls } from "@/components/portal/ui";
 import { isoToIstInput } from "@/lib/portal/actions";
-import { submissionFields, type EventRow } from "@/lib/portal/events";
+import { eventPrizes, submissionFields, type EventRow } from "@/lib/portal/events";
 
 const DEFAULT_FIELDS = [
   { key: "github", label: "GitHub repository", required: true },
@@ -12,6 +12,8 @@ const DEFAULT_FIELDS = [
 ];
 
 export default function EventForm({ event }: { event?: EventRow }) {
+  const prizes = event ? eventPrizes(event) : [];
+  const prizeRows = [...prizes, ...Array.from({ length: Math.max(3, 6 - prizes.length) }, () => null)].slice(0, 10);
   const fields = event ? submissionFields(event) : DEFAULT_FIELDS;
   const rows = [...fields, ...Array.from({ length: Math.max(0, 6 - fields.length) }, () => null)].slice(0, 6);
   return (
@@ -119,9 +121,31 @@ export default function EventForm({ event }: { event?: EventRow }) {
         <Field label="Winners to announce">
           <input name="winners_count" type="number" min={1} max={20} defaultValue={event?.winners_count ?? 3} className={inputCls} />
         </Field>
+        <Field label="Early-bird fee" hint="Optional. Charged instead of the fee until the date on the right.">
+          <input name="early_fee_amount" type="number" min={0} defaultValue={event?.early_fee_amount ?? ""} className={inputCls} />
+        </Field>
+        <Field label="Early bird ends (IST)">
+          <input name="early_bird_ends_at" type="datetime-local" defaultValue={isoToIstInput(event?.early_bird_ends_at)} className={inputCls} />
+        </Field>
+        <div className="md:col-span-2" />
         <Field label="Payment link / API URL" className="md:col-span-4" hint="Participants are sent here with ?ref=<payment id>. Leave empty to use the global payment settings.">
           <input name="payment_link" type="url" defaultValue={event?.payment_link ?? ""} placeholder="https://" className={inputCls} />
         </Field>
+      </fieldset>
+
+      <fieldset className="space-y-3 rounded-2xl border border-amber-200 bg-amber-50/40 p-4">
+        <legend className="px-2 text-sm font-bold text-amber-900">Prize pool</legend>
+        <Field label="Prize pool headline" hint="e.g. ₹4,00,000+. Leave empty to show the total of the prizes below.">
+          <input name="prize_pool" defaultValue={event?.prize_pool ?? ""} placeholder="₹4,00,000+" className={`${inputCls} max-w-xs`} />
+        </Field>
+        {prizeRows.map((p, i) => (
+          <div key={i} className="grid gap-2 md:grid-cols-12">
+            <input name={`prize_title_${i}`} defaultValue={p?.title ?? ""} placeholder="Prize (e.g. Winner, Best UI/UX)" className={`${inputCls} md:col-span-4`} />
+            <input name={`prize_amount_${i}`} inputMode="numeric" defaultValue={p?.amount ?? ""} placeholder="Amount ₹" className={`${inputCls} md:col-span-2`} />
+            <input name={`prize_desc_${i}`} defaultValue={p?.description ?? ""} placeholder="Details (cash, trophy, internship…)" className={`${inputCls} md:col-span-6`} />
+          </div>
+        ))}
+        <p className="text-xs text-slate-500">Leave a prize title empty to remove it.</p>
       </fieldset>
 
       <SubmitButton pendingText="Saving…">{event ? "Save event" : "Create event"}</SubmitButton>

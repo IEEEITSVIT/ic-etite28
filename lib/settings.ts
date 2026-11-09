@@ -3,6 +3,9 @@ import { unstable_cache, revalidateTag } from "next/cache";
 import { all, isDbConfigured, now, run } from "@/lib/db";
 import { importantDatesData } from "@/data/dates";
 import { registrationFeesData } from "@/data/registration";
+import { NO_EARLY_BIRD, type EarlyBird, type Prize } from "@/lib/pricing";
+
+export type { EarlyBird, Prize };
 
 // ─── CMS-managed content ───────────────────────────────────────────────
 // Only these parts of the public site are editable from /admin/settings; everything
@@ -24,6 +27,8 @@ export interface FeeTier {
   category: string;
   inr: number | null; // Indian delegates, rupees
   usd: number | null; // Foreign delegates, dollars
+  earlyInr?: number | null; // early-bird price (overrides the % discount)
+  earlyUsd?: number | null;
   isIeeeDiscount: boolean;
 }
 
@@ -33,6 +38,7 @@ export interface StallType {
   size: string;
   description: string;
   price: number; // INR
+  earlyPrice?: number | null; // early-bird price (overrides the % discount)
 }
 
 export interface Visibility {
@@ -54,7 +60,16 @@ export interface Settings {
   conferenceStart: string; // ISO date-time for the countdown
   fees: FeeTier[];
   visibility: Visibility;
-  technext: { stallTypes: StallType[]; closesAt: string; maxRepresentatives: number };
+  technext: {
+    stallTypes: StallType[];
+    opensAt: string;
+    closesAt: string;
+    maxRepresentatives: number;
+    earlyBird: EarlyBird;
+    prizePool: string;
+    prizes: Prize[];
+  };
+  conference: { opensAt: string; closesAt: string; earlyBird: EarlyBird; prizePool: string; prizes: Prize[] };
   payments: PaymentSettings;
   bolt: { eventSlug: string };
 }
@@ -97,8 +112,19 @@ export const DEFAULT_SETTINGS: Settings = {
       { key: "premium", label: "Premium Stall", size: "3m × 6m", description: "Corner position, display panel, extra power points", price: 30000 },
       { key: "startup", label: "Startup / Student Pod", size: "2m × 2m", description: "Shared zone for startups and student projects", price: 5000 },
     ],
+    opensAt: "",
     closesAt: "2028-01-31",
     maxRepresentatives: 4,
+    earlyBird: NO_EARLY_BIRD,
+    prizePool: "",
+    prizes: [],
+  },
+  conference: {
+    opensAt: "",
+    closesAt: "2027-12-12",
+    earlyBird: NO_EARLY_BIRD,
+    prizePool: "",
+    prizes: [],
   },
   payments: {
     provider: "manual",

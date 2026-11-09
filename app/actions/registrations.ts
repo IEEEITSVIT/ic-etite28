@@ -2,7 +2,8 @@
 
 import { requireUser } from "@/lib/auth/session";
 import { batch, first, now, run } from "@/lib/db";
-import { getSettings, isDatePassed } from "@/lib/settings";
+import { getSettings } from "@/lib/settings";
+import { priceNow, windowState } from "@/lib/pricing";
 import { bool, guarded, isEmail, str } from "@/lib/portal/actions";
 import { ORG_TYPES } from "@/lib/portal/technext";
 import { PortalError } from "@/lib/portal/events";
@@ -19,15 +20,19 @@ export async function saveTechnextBookingAction(fd: FormData) {
   await guarded(back, async () => {
     const settings = await getSettings();
     if (!settings.visibility.technext || !settings.visibility.technextRegistration) throw new PortalError("Stall bookings are not open.");
-    const existing = await first<{ id: string; status: string; payment_status: string }>(
-      "SELECT id, status, payment_status FROM technext_bookings WHERE user_id = ? AND status != 'cancelled' ORDER BY created_at DESC LIMIT 1",
+    const existing = await first<{ id: string; status: string; payment_status: string; created_at: string }>(
+      "SELECT id, status, payment_status, created_at FROM technext_bookings WHERE user_id = ? AND status != 'cancelled' ORDER BY created_at DESC LIMIT 1",
       [user.id]
     );
-    if (!existing && settings.technext.closesAt && isDatePassed(settings.technext.closesAt)) throw new PortalError("Stall bookings have closed.");
+    const tw = windowState(settings.technext.opensAt, settings.technext.closesAt);
+    if (!existing && tw !== "open") throw new PortalError(tw === "not_open" ? "Stall bookings have not opened yet." : "Stall bookings have closed.");
     if (existing && existing.status !== "pending") throw new PortalError("Your booking has been reviewed; contact the organisers to change it.");
 
     const stall = settings.technext.stallTypes.find((s) => s.key === str(fd, "stall_type", 40));
     if (!stall) throw new PortalError("Choose a stall type.");
+    // Price is fixed by when the booking was first made, so editing later keeps an early-bird price.
+    const pricedAt = existing ? new Date(existing.created_at).getTime() : Date.now();
+    const stallPrice = priceNow(stall.price, stall.earlyPrice, settings.technext.earlyBird, pricedAt).amount ?? stall.price;
     const orgType = str(fd, "organization_type", 40);
     if (!ORG_TYPES.includes(orgType)) throw new PortalError("Choose an organisation type.");
     const email = str(fd, "email", 200).toLowerCase();
@@ -62,8 +67,8 @@ export async function saveTechnextBookingAction(fd: FormData) {
       bool(fd, "power_required") ? 1 : 0,
       str(fd, "special_requirements", 1000) || null,
       str(fd, "gst_number", 20).toUpperCase() || null,
-      stall.price,
-      stall.price > 0 ? "unpaid" : "not_required",
+      stallPrice,
+      stallPrice > 0 ? "unpaid" : "not_required",
       now(),
     ];
     if (existing) {
@@ -123,14 +128,24 @@ export async function saveConferenceRegistrationAction(fd: FormData) {
   await guarded(back, async () => {
     const settings = await getSettings();
     if (!settings.visibility.conferenceRegistration) throw new PortalError("Conference registration is not open yet.");
-    const existing = await first<{ id: string; payment_status: string; status: string }>("SELECT id, payment_status, status FROM conference_registrations WHERE user_id = ?", [user.id]);
+    const existing = await first<{ id: string; payment_status: string; status: string; created_at: string }>(
+      "SELECT id, payment_status, status, created_at FROM conference_registrations WHERE user_id = ?",
+      [user.id]
+    );
+    const cw = windowState(settings.conference.opensAt, settings.conference.closesAt);
+    if (cw !== "open" && !existing) throw new PortalError(cw === "not_open" ? "Conference registration has not opened yet." : "Conference registration has closed.");
     if (existing && (existing.payment_status === "paid" || existing.payment_status === "waived" || existing.status === "confirmed")) {
       throw new PortalError("Your registration is confirmed. Contact the organisers to make changes.");
     }
     const tier = settings.fees.find((f) => f.key === str(fd, "category", 60));
     if (!tier) throw new PortalError("Choose a registration category.");
     const residency = str(fd, "residency", 10) === "foreign" ? "foreign" : "indian";
-    const amount = residency === "foreign" ? tier.usd : tier.inr;
+    // Price is fixed by when the delegate first registered, so edits keep an early-bird price.
+    const pricedAt = existing ? new Date(existing.created_at).getTime() : Date.now();
+    const amount =
+      residency === "foreign"
+        ? priceNow(tier.usd, tier.earlyUsd, settings.conference.earlyBird, pricedAt).amount
+        : priceNow(tier.inr, tier.earlyInr, settings.conference.earlyBird, pricedAt).amount;
     if (amount == null) throw new PortalError(`"${tier.category}" is not available for ${residency === "foreign" ? "foreign" : "Indian"} delegates.`);
     const ieee = bool(fd, "ieee_member");
     const ieeeNumber = str(fd, "ieee_number", 20);

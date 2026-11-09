@@ -7,6 +7,8 @@ import { getCurrentUser } from "@/lib/auth/session";
 import {
   canView,
   eligibleForRound,
+  eventFeeNow,
+  eventPrizes,
   getEventBySlug,
   getRegistration,
   getRounds,
@@ -21,6 +23,8 @@ import {
 import { fmtIst } from "@/lib/portal/actions";
 import { formatMoney } from "@/lib/settings";
 import { rankLabel } from "@/lib/certificates/render";
+import { formatDeadline } from "@/lib/pricing";
+import PrizePool from "@/components/portal/PrizePool";
 import {
   createTeamAction,
   joinTeamAction,
@@ -382,13 +386,30 @@ export default async function EventPage({ params, searchParams }: { params: Para
                 <StatusBadge status={regWindow === "open" ? "registration open" : regWindow === "not_open" ? "opens soon" : "registration closed"} />
                 {event.reg_closes_at && regWindow !== "closed" && <span className="text-xs text-slate-500">closes {fmtIst(event.reg_closes_at)}</span>}
               </li>
-              {event.fee_amount > 0 && (
-                <li className="font-semibold text-[#002147]">
-                  Fee: {formatMoney(event.fee_amount, event.fee_currency)} {event.fee_scope === "per_team" ? "per team" : "per person"}
-                </li>
-              )}
+              {event.fee_amount > 0 &&
+                (() => {
+                  const fee = eventFeeNow(event);
+                  const per = event.fee_scope === "per_team" ? "per team" : "per person";
+                  return (
+                    <li className="font-semibold text-[#002147]">
+                      Fee:{" "}
+                      {fee.early ? (
+                        <>
+                          <span className="text-xs text-slate-400 line-through">{formatMoney(event.fee_amount, event.fee_currency)}</span>{" "}
+                          <span className="text-emerald-700">{formatMoney(fee.amount ?? 0, event.fee_currency)}</span> {per}
+                          <span className="mt-1 block text-xs font-bold text-emerald-700">Early bird until {formatDeadline(event.early_bird_ends_at)}</span>
+                        </>
+                      ) : (
+                        <>
+                          {formatMoney(event.fee_amount, event.fee_currency)} {per}
+                        </>
+                      )}
+                    </li>
+                  );
+                })()}
             </ul>
           </Card>
+          <PrizePool prizes={eventPrizes(event)} pool={event.prize_pool} compact />
           {winners.length > 0 && (
             <Card title={<span className="flex items-center gap-2"><Trophy className="h-5 w-5 text-[#B45309]" /> Results</span>}>
               <ol className="space-y-2">

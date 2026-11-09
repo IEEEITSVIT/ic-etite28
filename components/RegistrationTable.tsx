@@ -1,11 +1,63 @@
 import Link from "next/link";
 import { registrationFeesData, registrationGuidelines } from "@/data/registration";
 import { formatInr, formatUsd, type FeeTier } from "@/lib/settings";
+import { formatDeadline, isEarlyBird, priceNow, windowState, type EarlyBird, type Prize } from "@/lib/pricing";
+import PrizePool from "@/components/portal/PrizePool";
 import { CreditCard, ShieldCheck, AlertCircle, ExternalLink } from "lucide-react";
 
-export default function RegistrationTable({ fees, registrationOpen = false }: { fees?: FeeTier[]; registrationOpen?: boolean }) {
-  const rows = fees?.length
-    ? fees.map((f) => ({ category: f.category, indianFee: formatInr(f.inr), foreignFee: formatUsd(f.usd), isIeeeDiscount: f.isIeeeDiscount }))
+interface Row {
+  category: string;
+  indianFee: string;
+  foreignFee: string;
+  indianEarly?: string;
+  foreignEarly?: string;
+  isIeeeDiscount?: boolean;
+}
+
+// Regular price, or early-bird price with the regular one struck through.
+function FeeCell({ regular, early }: { regular: string; early?: string }) {
+  if (!early) return <>{regular}</>;
+  return (
+    <span className="inline-flex flex-col items-center leading-tight">
+      <span className="text-xs font-semibold text-slate-400 line-through">{regular}</span>
+      <span className="text-emerald-700">{early}</span>
+    </span>
+  );
+}
+
+export default function RegistrationTable({
+  fees,
+  registrationEnabled = false,
+  opensAt = "",
+  closesAt = "",
+  earlyBird,
+  prizes = [],
+  prizePool = "",
+}: {
+  fees?: FeeTier[];
+  registrationEnabled?: boolean;
+  opensAt?: string;
+  closesAt?: string;
+  earlyBird?: EarlyBird;
+  prizes?: Prize[];
+  prizePool?: string;
+}) {
+  const early = isEarlyBird(earlyBird);
+  const win = windowState(opensAt, closesAt);
+  const registrationOpen = registrationEnabled && win === "open";
+  const rows: Row[] = fees?.length
+    ? fees.map((f) => {
+        const inr = priceNow(f.inr, f.earlyInr, earlyBird);
+        const usd = priceNow(f.usd, f.earlyUsd, earlyBird);
+        return {
+          category: f.category,
+          indianFee: formatInr(f.inr),
+          foreignFee: formatUsd(f.usd),
+          indianEarly: inr.early ? formatInr(inr.amount) : undefined,
+          foreignEarly: usd.early ? formatUsd(usd.amount) : undefined,
+          isIeeeDiscount: f.isIeeeDiscount,
+        };
+      })
     : registrationFeesData;
   return (
     <section id="registration" className="py-8 sm:py-12 bg-white border-b border-[#E4E7EC]">
@@ -13,12 +65,26 @@ export default function RegistrationTable({ fees, registrationOpen = false }: { 
         {/* Online registration (opened from admin → Site content → Visibility) */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border-2 border-[#FFB81C]/60 bg-[#FFFBF0] p-5">
           <div>
-            <p className="text-lg font-bold text-[#002147]">{registrationOpen ? "Online registration is open" : "Online registration opens soon"}</p>
+            <p className="text-lg font-bold text-[#002147]">
+              {registrationOpen ? "Online registration is open" : registrationEnabled && win === "closed" ? "Registration has closed" : "Online registration opens soon"}
+            </p>
             <p className="text-sm text-slate-600">
               {registrationOpen
                 ? "Create an account, choose your category and pay securely. Your fee is calculated from the table below."
-                : "Create an account now; you can register as soon as registration opens."}
+                : registrationEnabled && win === "not_open" && opensAt
+                  ? `Registration opens on ${formatDeadline(opensAt)}. Create an account now so you're ready.`
+                  : registrationEnabled && win === "closed"
+                    ? "The registration deadline has passed. Contact the secretariat for late registration."
+                    : "Create an account now; you can register as soon as registration opens."}
             </p>
+            {registrationOpen && (closesAt || early) && (
+              <div className="mt-2 flex flex-wrap gap-2 text-xs font-bold">
+                {early && earlyBird && (
+                  <span className="rounded-full bg-emerald-600 px-3 py-1 text-white">Early-bird pricing until {formatDeadline(earlyBird.endsAt)}</span>
+                )}
+                {closesAt && <span className="rounded-full bg-[#002147] px-3 py-1 text-white">Deadline: {formatDeadline(closesAt)}</span>}
+              </div>
+            )}
           </div>
           <Link
             href={registrationOpen ? "/registration/apply" : "/signup?next=/registration/apply"}
@@ -27,6 +93,12 @@ export default function RegistrationTable({ fees, registrationOpen = false }: { 
             {registrationOpen ? "Register now" : "Create account"}
           </Link>
         </div>
+
+        {prizes.length > 0 || prizePool ? (
+          <div className="mb-6">
+            <PrizePool prizes={prizes} pool={prizePool} title="Best paper awards" />
+          </div>
+        ) : null}
 
         {/* Academic Tariff Table */}
         <div className="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden mb-6">
@@ -65,10 +137,10 @@ export default function RegistrationTable({ fees, registrationOpen = false }: { 
                       </div>
                     </td>
                     <td className="py-4 px-5 sm:px-6 text-center font-sans font-bold text-[#002147] border-l border-slate-200 text-sm sm:text-base tracking-tight tabular-nums">
-                      {tier.indianFee}
+                      <FeeCell regular={tier.indianFee} early={tier.indianEarly} />
                     </td>
                     <td className="py-4 px-5 sm:px-6 text-center font-sans font-bold text-[#004B87] border-l border-slate-200 text-sm sm:text-base tracking-tight tabular-nums">
-                      {tier.foreignFee}
+                      <FeeCell regular={tier.foreignFee} early={tier.foreignEarly} />
                     </td>
                   </tr>
                 ))}

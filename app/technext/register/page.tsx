@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { first, parseJson } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
-import { formatInr, getSettings, isDatePassed } from "@/lib/settings";
+import { formatInr, getSettings } from "@/lib/settings";
+import { formatDeadline, isEarlyBird, priceNow, windowState } from "@/lib/pricing";
 import { ORG_TYPES } from "@/lib/portal/technext";
 import { cancelTechnextBookingAction, saveTechnextBookingAction } from "@/app/actions/registrations";
 import SubmitButton from "@/components/portal/SubmitButton";
@@ -40,7 +41,9 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
   const settings = await getSettings();
   if (!settings.visibility.technext) notFound();
   const booking = await first<Booking>("SELECT * FROM technext_bookings WHERE user_id = ? AND status != 'cancelled' ORDER BY created_at DESC LIMIT 1", [user.id]);
-  const open = settings.visibility.technextRegistration && !(settings.technext.closesAt && isDatePassed(settings.technext.closesAt));
+  const tw = windowState(settings.technext.opensAt, settings.technext.closesAt);
+  const open = settings.visibility.technextRegistration && tw === "open";
+  const eb = settings.technext.earlyBird;
   const editable = booking ? booking.status === "pending" && settings.visibility.technextRegistration : open;
   const b = booking;
 
@@ -68,8 +71,20 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
         </Card>
       )}
 
+      {!b && open && (isEarlyBird(eb) || settings.technext.closesAt) && (
+        <div className="mb-6 flex flex-wrap gap-2 text-xs font-bold">
+          {isEarlyBird(eb) && <span className="rounded-full bg-emerald-600 px-3 py-1.5 text-white">Early-bird prices until {formatDeadline(eb.endsAt)}</span>}
+          {settings.technext.closesAt && <span className="rounded-full bg-[#002147] px-3 py-1.5 text-white">Booking deadline: {formatDeadline(settings.technext.closesAt)}</span>}
+        </div>
+      )}
       {!editable && !b ? (
-        <Empty>Stall bookings are closed right now.</Empty>
+        <Empty>
+          {settings.visibility.technextRegistration && tw === "not_open"
+            ? `Stall bookings open on ${formatDeadline(settings.technext.opensAt)}.`
+            : settings.visibility.technextRegistration && tw === "closed"
+              ? "The stall booking deadline has passed. Contact the organisers for late bookings."
+              : "Stall bookings are closed right now."}
+        </Empty>
       ) : (
         <Card title={b ? "Booking details" : "Book a stall"}>
           <form action={saveTechnextBookingAction} className="space-y-6">
@@ -86,7 +101,15 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
                       <span className="text-xs text-slate-500">
                         {s.size} · {s.description}
                       </span>
-                      <span className="mt-1 font-extrabold text-[#F37021]">{s.price > 0 ? formatInr(s.price) : "Free"}</span>
+                      {(() => {
+                        const p = priceNow(s.price, s.earlyPrice, eb);
+                        return (
+                          <span className="mt-1 font-extrabold">
+                            {p.early && <span className="mr-1.5 text-xs font-semibold text-slate-400 line-through">{formatInr(s.price)}</span>}
+                            <span className={p.early ? "text-emerald-700" : "text-[#F37021]"}>{p.amount ? formatInr(p.amount) : "Free"}</span>
+                          </span>
+                        );
+                      })()}
                     </label>
                   ))}
                 </div>

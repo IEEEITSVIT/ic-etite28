@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/session";
-import { getSettings, saveSetting, type DateItem, type FeeTier, type StallType } from "@/lib/settings";
+import { getSettings, saveSetting, type DateItem, type EarlyBird, type FeeTier, type Prize, type StallType } from "@/lib/settings";
 import { bool, guarded, num, str } from "@/lib/portal/actions";
 import { PortalError } from "@/lib/portal/events";
 import { slugify } from "@/lib/portal/ids";
@@ -26,6 +26,24 @@ const money = (v: string) => {
   if (!Number.isFinite(n) || n < 0) throw new PortalError(`"${v}" is not a valid amount.`);
   return Math.round(n);
 };
+
+const dateOnly = (fd: FormData, key: string, label: string) => {
+  const v = str(fd, key, 10);
+  if (v && !/^\d{4}-\d{2}-\d{2}$/.test(v)) throw new PortalError(`${label} must be a date.`);
+  return v;
+};
+
+function earlyBird(fd: FormData, prefix: string): EarlyBird {
+  const percent = num(fd, `${prefix}_eb_percent`, 0);
+  if (percent < 0 || percent > 90) throw new PortalError("Early-bird discount must be between 0% and 90%.");
+  return { endsAt: dateOnly(fd, `${prefix}_eb_ends`, "Early-bird deadline"), percent: Math.round(percent * 100) / 100 };
+}
+
+function prizes(fd: FormData, prefix: string): Prize[] {
+  return rows(fd, `${prefix}_prize`)
+    .filter((r) => r.get("title"))
+    .map((r) => ({ title: r.get("title", 100), amount: money(r.get("amount", 20)), description: r.get("desc", 300) }));
+}
 
 // Public pages read settings through a cached getter; refresh the pages that show them.
 function refreshPublic() {
@@ -73,6 +91,8 @@ export async function saveFeesAction(fd: FormData) {
         category: r.get("category", 120),
         inr: money(r.get("inr", 20)),
         usd: money(r.get("usd", 20)),
+        earlyInr: money(r.get("einr", 20)),
+        earlyUsd: money(r.get("eusd", 20)),
         isIeeeDiscount: r.on("ieee"),
       }));
     if (fees.length === 0) throw new PortalError("Add at least one fee category.");
@@ -118,6 +138,7 @@ export async function saveTechnextAction(fd: FormData) {
         size: r.get("size", 40),
         description: r.get("desc", 200),
         price: money(r.get("price", 20)) ?? 0,
+        earlyPrice: money(r.get("eprice", 20)),
       }));
     if (stallTypes.length === 0) throw new PortalError("Add at least one stall type.");
     const current = (await getSettings()).technext;
@@ -125,8 +146,12 @@ export async function saveTechnextAction(fd: FormData) {
       "technext",
       {
         stallTypes,
-        closesAt: str(fd, "closes_at", 10) || current.closesAt,
+        opensAt: dateOnly(fd, "opens_at", "Opening date"),
+        closesAt: dateOnly(fd, "closes_at", "Closing date"),
         maxRepresentatives: Math.max(1, Math.min(20, num(fd, "max_reps", current.maxRepresentatives))),
+        earlyBird: earlyBird(fd, "tn"),
+        prizePool: str(fd, "tn_prize_pool", 60),
+        prizes: prizes(fd, "tn"),
       },
       admin.id
     );
@@ -150,5 +175,21 @@ export async function savePaymentsAction(fd: FormData) {
       admin.id
     );
     return "Payment settings saved.";
+  });
+}
+
+export async function saveConferenceAction(fd: FormData) {
+  const admin = await requireAdmin(BACK);
+  await guarded(BACK + "#conference", async () => {
+    const opensAt = dateOnly(fd, "opens_at", "Opening date");
+    const closesAt = dateOnly(fd, "closes_at", "Closing date");
+    if (opensAt && closesAt && opensAt > closesAt) throw new PortalError("Registration must open before it closes.");
+    await saveSetting(
+      "conference",
+      { opensAt, closesAt, earlyBird: earlyBird(fd, "conf"), prizePool: str(fd, "conf_prize_pool", 60), prizes: prizes(fd, "conf") },
+      admin.id
+    );
+    refreshPublic();
+    return "Conference registration window, early bird and awards saved.";
   });
 }

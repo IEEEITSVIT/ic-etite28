@@ -2,6 +2,7 @@ import "server-only";
 import { all, batch, first, now, parseJson, run } from "@/lib/db";
 import { newCode, newId } from "@/lib/portal/ids";
 import type { SessionUser } from "@/lib/auth/session";
+import { priceNow, type Prize } from "@/lib/pricing";
 
 export interface SubmissionField {
   key: string;
@@ -39,6 +40,10 @@ export interface EventRow {
   payment_link: string | null;
   winners_count: number;
   winners_published: number;
+  prizes: string;
+  prize_pool: string | null;
+  early_fee_amount: number | null;
+  early_bird_ends_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -87,6 +92,11 @@ export interface RegistrationRow {
 }
 
 export const submissionFields = (e: Pick<EventRow, "submission_fields">) => parseJson<SubmissionField[]>(e.submission_fields, []);
+export const eventPrizes = (e: Pick<EventRow, "prizes">) => parseJson<Prize[]>(e.prizes, []);
+
+// Fee charged if someone registers now (early-bird price until early_bird_ends_at).
+export const eventFeeNow = (e: Pick<EventRow, "fee_amount" | "early_fee_amount" | "early_bird_ends_at">) =>
+  priceNow(e.fee_amount, e.early_fee_amount, e.early_bird_ends_at ? { endsAt: e.early_bird_ends_at, percent: 0 } : null);
 export const roundCriteria = (r: Pick<RoundRow, "criteria">) => parseJson<Criterion[]>(r.criteria, []);
 
 export const getEventBySlug = (slug: string) => first<EventRow>("SELECT * FROM events WHERE slug = ?", [slug]);
@@ -127,8 +137,9 @@ export const getTeamMembers = (teamId: string) =>
 
 // Fee rules: per-member → every registrant pays; per-team → the team lead pays.
 function paymentFor(e: EventRow, payer: boolean) {
-  if (e.fee_amount <= 0 || !payer) return { status: "not_required", amount: 0 };
-  return { status: "unpaid", amount: e.fee_amount };
+  const fee = eventFeeNow(e).amount ?? 0;
+  if (fee <= 0 || !payer) return { status: "not_required", amount: 0 };
+  return { status: "unpaid", amount: fee };
 }
 
 export class PortalError extends Error {}

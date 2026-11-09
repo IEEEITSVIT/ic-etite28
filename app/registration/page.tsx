@@ -23,7 +23,15 @@ export default async function RegistrationPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <RegistrationTable fees={settings.fees} registrationOpen={settings.visibility.conferenceRegistration} />
+      <RegistrationTable
+        fees={settings.fees}
+        registrationEnabled={settings.visibility.conferenceRegistration}
+        opensAt={settings.conference.opensAt}
+        closesAt={settings.conference.closesAt}
+        earlyBird={settings.conference.earlyBird}
+        prizes={settings.conference.prizes}
+        prizePool={settings.conference.prizePool}
+      />
     </div>
   );
 }

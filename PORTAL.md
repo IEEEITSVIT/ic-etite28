@@ -34,6 +34,17 @@ Schema: `db/migrations/0001_init.sql`.
 - **Conference registrations** — confirm delegates, reconcile payments; emails, certificates, export.
 - **Email & SMTP** — SMTP settings (password stored encrypted), test email, send queue (respects the daily limit), retry / cancel.
 
+### Prize pools, deadlines and early-bird pricing
+All set from the admin portal — no code changes:
+
+| | Deadlines | Early bird | Prizes |
+| --- | --- | --- | --- |
+| Conference | CMS → *Conference registration*: opens / closes dates | Early-bird end date + default % · per-tier *Early INR / Early USD* in the fee table | *Best paper awards* (headline + list) on the Registration page |
+| TechNext | CMS → *TechNext stalls*: opens / closes dates | Early-bird end date + default % · per-stall *Early ₹* | *TechNext awards* on the TechNext page |
+| BOLT / events | Event settings: registration opens / closes | *Early-bird fee* + end date/time | *Prize pool* headline + up to 10 prizes on the event and BOLT pages |
+
+An item's own early price wins; otherwise the default % applies; after the early-bird date the regular price applies. The amount is fixed when someone first registers, so editing a registration later keeps the early-bird price. Registrations outside the open/close window are refused (existing unpaid registrations can still be edited).
+
 ### Emails
 Compose in an event / TechNext / conference page, choose an audience (all, no team, payment due, qualified / not qualified in round N, winners, approved exhibitors, confirmed delegates…), use placeholders like `{{name}}`, `{{team}}`, `{{score}}`, `{{rank}}`, `{{portalUrl}}`, optionally attach a certificate, save as a draft, and queue. Then **Email & SMTP → Send queued emails**. Verification codes and password resets go out immediately.
 

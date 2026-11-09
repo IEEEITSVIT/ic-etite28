@@ -41,6 +41,17 @@ export async function saveEventAction(fd: FormData) {
       if (!label) continue;
       fields.push({ key: str(fd, `field_key_${i}`, 40) || slugify(label).replace(/-/g, "_") || `link_${i + 1}`, label, required: bool(fd, `field_required_${i}`) });
     }
+    const prizes = [];
+    for (let i = 0; i < 10; i++) {
+      const title = str(fd, `prize_title_${i}`, 100);
+      if (!title) continue;
+      const raw = str(fd, `prize_amount_${i}`, 20).replace(/[^\d]/g, "");
+      prizes.push({ title, amount: raw ? Number(raw) : null, description: str(fd, `prize_desc_${i}`, 300) });
+    }
+    const earlyRaw = str(fd, "early_fee_amount", 12);
+    const earlyFee = earlyRaw === "" ? null : Math.max(0, Math.round(Number(earlyRaw) || 0));
+    const earlyEnds = istToIso(str(fd, "early_bird_ends_at", 20));
+    if (earlyFee != null && !earlyEnds) throw new PortalError("Set when the early-bird fee ends.");
     const paymentLink = str(fd, "payment_link", 500);
     if (paymentLink && !/^https?:\/\//i.test(paymentLink)) throw new PortalError("Payment link must start with http:// or https://");
 
@@ -66,6 +77,10 @@ export async function saveEventAction(fd: FormData) {
       oneOf(str(fd, "fee_scope"), ["per_team", "per_member"] as const, "per_team"),
       paymentLink || null,
       Math.max(1, Math.min(20, num(fd, "winners_count", 3))),
+      JSON.stringify(prizes),
+      str(fd, "prize_pool", 60) || null,
+      earlyFee,
+      earlyEnds,
       now(),
     ];
 
@@ -73,7 +88,7 @@ export async function saveEventAction(fd: FormData) {
       await run(
         `UPDATE events SET slug=?, title=?, tagline=?, description=?, venue=?, starts_at=?, ends_at=?, visibility=?, status=?, registration_mode=?,
            participation=?, min_team_size=?, max_team_size=?, reg_opens_at=?, reg_closes_at=?, submission_fields=?, fee_amount=?, fee_currency=?,
-           fee_scope=?, payment_link=?, winners_count=?, updated_at=? WHERE id=?`,
+           fee_scope=?, payment_link=?, winners_count=?, prizes=?, prize_pool=?, early_fee_amount=?, early_bird_ends_at=?, updated_at=? WHERE id=?`,
         [...values, existingId]
       );
     } else {
@@ -82,8 +97,8 @@ export async function saveEventAction(fd: FormData) {
         {
           sql: `INSERT INTO events (slug, title, tagline, description, venue, starts_at, ends_at, visibility, status, registration_mode,
                   participation, min_team_size, max_team_size, reg_opens_at, reg_closes_at, submission_fields, fee_amount, fee_currency,
-                  fee_scope, payment_link, winners_count, updated_at, id, created_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                  fee_scope, payment_link, winners_count, prizes, prize_pool, early_fee_amount, early_bird_ends_at, updated_at, id, created_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
           params: [...values, savedId, now()],
         },
         // Every event starts with one round so submissions work out of the box.
