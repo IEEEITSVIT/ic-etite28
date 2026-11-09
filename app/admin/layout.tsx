@@ -11,6 +11,8 @@ const NAV = [
   { href: "/admin/events", label: "Events & BOLT" },
   { href: "/admin/technext", label: "TechNext stalls" },
   { href: "/admin/conference", label: "Conference registrations" },
+  { href: "/admin/invoices", label: "Invoices" },
+  { href: "/admin/hotels", label: "Hotels" },
   { href: "/admin/users", label: "Users & evaluators" },
   { href: "/admin/email", label: "Email & SMTP" },
 ];

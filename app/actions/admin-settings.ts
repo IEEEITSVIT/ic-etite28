@@ -6,6 +6,9 @@ import { getSettings, saveSetting, type DateItem, type EarlyBird, type FeeTier, 
 import { bool, guarded, num, str } from "@/lib/portal/actions";
 import { PortalError } from "@/lib/portal/events";
 import { slugify } from "@/lib/portal/ids";
+import type { Hotel } from "@/data/hotels";
+import type { SponsorPackage, SponsorStyle } from "@/data/sponsorship";
+import { NOTIFICATION_KEYS, saveNotificationTemplates, type NotificationKey, type NotificationTemplate } from "@/lib/notifications";
 
 const BACK = "/admin/settings";
 
@@ -191,5 +194,182 @@ export async function saveConferenceAction(fd: FormData) {
     );
     refreshPublic();
     return "Conference registration window, early bird and awards saved.";
+  });
+}
+
+export async function saveInvoiceTemplateAction(fd: FormData) {
+  const admin = await requireAdmin(BACK);
+  await guarded(BACK + "#invoice", async () => {
+    const prefix = str(fd, "prefix", 20).replace(/[^\w-]/g, "");
+    if (!prefix) throw new PortalError("Invoice prefix is required (letters, numbers, dashes).");
+    const gst = num(fd, "gstPercent", 0);
+    if (gst < 0 || gst > 50) throw new PortalError("GST % must be between 0 and 50.");
+    await saveSetting(
+      "invoice",
+      {
+        prefix,
+        title: str(fd, "title", 60) || "Invoice",
+        orgName: str(fd, "orgName", 150),
+        orgAddress: str(fd, "orgAddress", 400),
+        gstin: str(fd, "gstin", 15).toUpperCase(),
+        pan: str(fd, "pan", 10).toUpperCase(),
+        email: str(fd, "email", 120),
+        phone: str(fd, "phone", 40),
+        gstPercent: gst,
+        notes: str(fd, "notes", 800),
+        signatory: str(fd, "signatory", 100),
+      },
+      admin.id
+    );
+    return "Invoice template saved. New invoices and downloads use it.";
+  });
+}
+
+const STYLES: SponsorStyle[] = ["platinum", "gold", "silver", "bronze"];
+
+export async function saveSponsorshipAction(fd: FormData) {
+  const admin = await requireAdmin(BACK);
+  await guarded(BACK + "#sponsorship", async () => {
+    const packages: SponsorPackage[] = rows(fd, "pkg")
+      .filter((r) => r.get("name"))
+      .map((r) => ({
+        name: r.get("name", 80),
+        price: r.get("price", 40),
+        badge: r.get("badge", 100),
+        tagline: r.get("tagline", 300),
+        style: (STYLES.includes(r.get("style", 10) as SponsorStyle) ? r.get("style", 10) : "silver") as SponsorStyle,
+        popular: r.on("popular"),
+        benefits: r
+          .get("benefits", 5000)
+          .split("\n")
+          .map((b) => b.trim())
+          .filter(Boolean),
+      }));
+    if (packages.length === 0) throw new PortalError("Add at least one sponsorship package.");
+    await saveSetting("sponsorship", { packages }, admin.id);
+    revalidatePath("/sponsorship");
+    return "Sponsorship packages updated.";
+  });
+}
+
+// ─── Hotels (/admin/hotels) ───────────────────────────────────────────
+
+const HOTELS = "/admin/hotels";
+const CATEGORY_LABELS: Record<Hotel["category"], string> = {
+  closest: "Closest to VIT",
+  luxury: "Luxury & Star Rating",
+  city: "City Center & Heritage",
+  transit: "Green Circle & Transit Hubs",
+};
+const BOOKING_TYPES: Hotel["bookingType"][] = ["Official website", "Official booking", "Booking.com", "Find booking options"];
+
+export async function saveHotelsPageAction(fd: FormData) {
+  const admin = await requireAdmin(HOTELS);
+  await guarded(HOTELS, async () => {
+    const current = (await getSettings()).hotels;
+    await saveSetting("hotels", { ...current, published: bool(fd, "published"), intro: str(fd, "intro", 800) }, admin.id);
+    revalidatePath("/hotels");
+    return bool(fd, "published") ? "Hotels page is live." : "Hotels page shows the 'coming soon' notice.";
+  });
+}
+
+export async function saveHotelAction(fd: FormData) {
+  const admin = await requireAdmin(HOTELS);
+  const originalId = str(fd, "original_id", 80);
+  await guarded(`${HOTELS}${originalId ? `#h-${originalId}` : ""}`, async () => {
+    const name = str(fd, "name", 120);
+    if (!name) throw new PortalError("Hotel name is required.");
+    const category = (Object.keys(CATEGORY_LABELS).includes(str(fd, "category", 20)) ? str(fd, "category", 20) : "city") as Hotel["category"];
+    const bookingUrl = str(fd, "bookingUrl", 500);
+    if (bookingUrl && !/^https?:\/\//i.test(bookingUrl)) throw new PortalError("Booking link must start with http:// or https://");
+    const rating = Math.min(5, Math.max(0, num(fd, "rating", 0)));
+    const hotel: Hotel = {
+      id: originalId || slugify(name) || `hotel-${Date.now()}`,
+      name,
+      category,
+      categoryLabel: CATEGORY_LABELS[category],
+      address: str(fd, "address", 300),
+      area: str(fd, "area", 100),
+      distanceFromVit: str(fd, "distanceFromVit", 120),
+      distanceKm: Math.max(0, num(fd, "distanceKm", 0)),
+      rating,
+      ratingText: str(fd, "ratingText", 30) || (rating >= 4.5 ? "Excellent" : rating >= 4 ? "Very Good" : rating >= 3.5 ? "Good" : "Rated"),
+      reviewCount: Math.max(0, Math.round(num(fd, "reviewCount", 0))),
+      phone: str(fd, "phone", 40),
+      phoneAlt: str(fd, "phoneAlt", 40) || undefined,
+      bookingUrl: bookingUrl || "#",
+      bookingType: (BOOKING_TYPES.includes(str(fd, "bookingType", 30) as Hotel["bookingType"]) ? str(fd, "bookingType", 30) : "Official website") as Hotel["bookingType"],
+      verifiedByVit: bool(fd, "verifiedByVit"),
+      priceRange: (["₹", "₹₹", "₹₹₹"].includes(str(fd, "priceRange", 5)) ? str(fd, "priceRange", 5) : "₹₹") as Hotel["priceRange"],
+      estPrice: str(fd, "estPrice", 60),
+      amenities: str(fd, "amenities", 500).split(",").map((a) => a.trim()).filter(Boolean),
+      badge: str(fd, "badge", 40) || undefined,
+    };
+    const current = (await getSettings()).hotels;
+    const items = [...current.items];
+    const idx = items.findIndex((h) => h.id === originalId);
+    if (idx >= 0) items[idx] = hotel;
+    else {
+      if (items.some((h) => h.id === hotel.id)) hotel.id = `${hotel.id}-${items.length + 1}`;
+      items.push(hotel);
+    }
+    await saveSetting("hotels", { ...current, items }, admin.id);
+    revalidatePath("/hotels");
+    return idx >= 0 ? `${name} updated.` : `${name} added.`;
+  });
+}
+
+export async function deleteHotelAction(fd: FormData) {
+  const admin = await requireAdmin(HOTELS);
+  await guarded(HOTELS, async () => {
+    const id = str(fd, "id", 80);
+    const current = (await getSettings()).hotels;
+    await saveSetting("hotels", { ...current, items: current.items.filter((h) => h.id !== id) }, admin.id);
+    revalidatePath("/hotels");
+    return "Hotel removed.";
+  });
+}
+
+// ─── Automatic notices (/admin/email) ─────────────────────────────────
+
+export async function saveNotificationsAction(fd: FormData) {
+  const admin = await requireAdmin("/admin/email");
+  await guarded("/admin/email#notices", async () => {
+    const value = {} as Record<NotificationKey, NotificationTemplate>;
+    for (const k of NOTIFICATION_KEYS) {
+      const subject = str(fd, `${k}_subject`, 200);
+      const body = str(fd, `${k}_body`, 5000);
+      if (!subject || !body) throw new PortalError("Every notice needs a subject and a message.");
+      value[k] = { enabled: bool(fd, `${k}_enabled`), subject, body };
+    }
+    await saveNotificationTemplates(value, admin.id);
+    return "Automatic notices saved.";
+  });
+}
+
+export async function saveTickerAction(fd: FormData) {
+  const admin = await requireAdmin(BACK);
+  await guarded(BACK + "#ticker", async () => {
+    const items = rows(fd, "tick")
+      .filter((r) => r.get("text"))
+      .map((r) => {
+        const url = r.get("url", 300);
+        if (url && !/^(https?:\/\/|\/)/i.test(url)) throw new PortalError(`Link "${url}" must start with / (a page on this site) or https://`);
+        return { text: r.get("text", 200), url, isNew: r.on("new") };
+      });
+    const speed = str(fd, "speed", 10);
+    await saveSetting(
+      "ticker",
+      {
+        enabled: bool(fd, "enabled"),
+        label: str(fd, "label", 40),
+        speed: speed === "slow" || speed === "fast" ? speed : "normal",
+        dismissible: bool(fd, "dismissible"),
+        items,
+      },
+      admin.id
+    );
+    refreshPublic();
+    return bool(fd, "enabled") && items.length ? "Scrolling announcement bar updated." : "Announcement bar hidden.";
   });
 }

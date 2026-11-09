@@ -130,3 +130,34 @@ export function setPaymentStatusStatements(purpose: PaymentPurpose, ref: string,
     },
   ];
 }
+
+// Applies a payment status change; on the transition to "paid" it issues the invoice,
+// confirms conference registrations, and emails the payer the invoice.
+export async function applyPaymentStatus(purpose: PaymentPurpose, ref: string, status: PaymentStatus, providerRef?: string | null) {
+  const before = await getPayable(purpose, ref);
+  if (!before) return;
+  await batch(setPaymentStatusStatements(purpose, ref, status, providerRef));
+  if (status !== "paid" || before.status === "paid") return;
+
+  if (purpose === "conference") {
+    await batch([{ sql: "UPDATE conference_registrations SET status = 'confirmed', updated_at = ? WHERE id = ? AND status = 'pending'", params: [now(), ref] }]);
+  }
+  const { issueInvoice } = await import("@/lib/invoices");
+  const invoice = await issueInvoice(purpose, ref);
+  if (!invoice) return;
+  const { notify } = await import("@/lib/notifications");
+  const { formatMoney } = await import("@/lib/settings");
+  const items = JSON.parse(invoice.items) as { description: string }[];
+  await notify("payment_received", {
+    to: invoice.bill_email,
+    name: invoice.bill_name,
+    scope: purpose === "event" ? `event:${ref.split(":")[0]}` : purpose,
+    vars: {
+      item: items.map((i) => i.description).join("; "),
+      amount: formatMoney(invoice.amount, invoice.currency),
+      invoiceNumber: invoice.number,
+      paymentRef: invoice.payment_ref ?? "—",
+    },
+    attachment: { type: "invoice", invoiceId: invoice.id },
+  });
+}

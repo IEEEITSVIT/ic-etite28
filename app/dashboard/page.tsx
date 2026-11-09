@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Award, ClipboardCheck, Settings2, Store, Ticket, Trophy } from "lucide-react";
 import { all, first } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
-import { getSettings } from "@/lib/settings";
+import { formatMoney, getSettings } from "@/lib/settings";
 import { registrationWindow, type EventRow } from "@/lib/portal/events";
 import { logoutAction } from "@/app/actions/auth";
 import PaymentCard from "@/components/portal/PaymentCard";
@@ -40,6 +40,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
     ),
     all<{ scope: string; kind: string }>("SELECT scope, kind FROM certificate_templates WHERE released = 1 AND scope IN ('technext','conference')"),
   ]);
+  const invoices = await all<{ id: string; number: string; amount: number; currency: string; issued_at: string; items: string }>(
+    "SELECT id, number, amount, currency, issued_at, items FROM invoices WHERE user_id = ? ORDER BY seq DESC",
+    [user.id]
+  );
 
   const certLinks = releasedCerts.filter(
     (c) => (c.scope === "conference" && conference?.status === "confirmed") || (c.scope === "technext" && booking?.status === "approved")
@@ -179,6 +183,26 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
             </div>
           )}
         </Card>
+
+        {invoices.length > 0 && (
+          <Card title="Invoices" className="lg:col-span-2">
+            <ul className="divide-y divide-slate-100">
+              {invoices.map((inv) => (
+                <li key={inv.id} className="flex flex-wrap items-center justify-between gap-3 py-2.5">
+                  <div>
+                    <div className="font-mono text-sm font-bold text-[#002147]">{inv.number}</div>
+                    <div className="text-xs text-slate-500">
+                      {(JSON.parse(inv.items) as { description: string }[]).map((i) => i.description).join("; ")} · {formatMoney(inv.amount, inv.currency)}
+                    </div>
+                  </div>
+                  <a href={`/api/invoices?id=${inv.id}`} className={btnSecondary}>
+                    Download PDF
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
 
         {certLinks.length > 0 && (
           <Card title={<span className="flex items-center gap-2"><Award className="h-5 w-5 text-[#B45309]" /> Certificates</span>} className="lg:col-span-2">

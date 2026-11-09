@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import AppNavbar from "@/components/AppNavbar";
+import TickerBar from "@/components/TickerBar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import StartupAnimation from "@/components/StartupAnimation";
@@ -90,7 +91,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { visibility } = await getSettings();
+  const { visibility, ticker } = await getSettings();
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
@@ -155,6 +156,7 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <StartupAnimation />
+        <TickerBar ticker={ticker} />
         <AppNavbar visibility={visibility} />
         <main className="flex-1">{children}</main>
         <Footer visibility={visibility} />

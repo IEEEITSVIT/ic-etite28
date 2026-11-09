@@ -6,7 +6,7 @@ import { all, batch, batchChunked, first, now, run, type Statement } from "@/lib
 import { bool, guarded, isEmail, istToIso, num, str } from "@/lib/portal/actions";
 import { PortalError, getEventById, getRounds, roundLeaderboard, type Criterion, type RoundRow, type SubmissionField } from "@/lib/portal/events";
 import { newId, slugify } from "@/lib/portal/ids";
-import { PAYMENT_STATUSES, setPaymentStatusStatements, type PaymentStatus } from "@/lib/payments";
+import { PAYMENT_STATUSES, applyPaymentStatus, type PaymentStatus } from "@/lib/payments";
 import { emailLayout, fillTemplate, outboxInsert, textToHtml } from "@/lib/email/mailer";
 import { resolveAudience } from "@/lib/portal/audience";
 
@@ -330,8 +330,8 @@ export async function adminSetEventPaymentAction(fd: FormData) {
   await guarded(`${base(eventId)}?tab=participants`, async () => {
     const status = str(fd, "status", 20) as PaymentStatus;
     if (!PAYMENT_STATUSES.includes(status)) throw new PortalError("Invalid payment status.");
-    await batch(setPaymentStatusStatements("event", `${eventId}:${str(fd, "user_id", 40)}`, status, str(fd, "payment_ref", 120) || null));
-    return "Payment status updated.";
+    await applyPaymentStatus("event", `${eventId}:${str(fd, "user_id", 40)}`, status, str(fd, "payment_ref", 120) || null);
+    return status === "paid" ? "Marked paid — invoice issued and emailed." : "Payment status updated.";
   });
 }
 

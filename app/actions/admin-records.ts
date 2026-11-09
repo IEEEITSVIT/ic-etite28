@@ -4,7 +4,9 @@ import { requireAdmin } from "@/lib/auth/session";
 import { batch, first, now, run } from "@/lib/db";
 import { guarded, isEmail, str } from "@/lib/portal/actions";
 import { PortalError } from "@/lib/portal/events";
-import { PAYMENT_STATUSES, setPaymentStatusStatements, type PaymentStatus } from "@/lib/payments";
+import { PAYMENT_STATUSES, applyPaymentStatus, type PaymentStatus } from "@/lib/payments";
+import { notify } from "@/lib/notifications";
+import { formatInr, getSettings } from "@/lib/settings";
 import { emailLayout, outboxInsert, textToHtml } from "@/lib/email/mailer";
 import { newId } from "@/lib/portal/ids";
 import { hashPassword } from "@/lib/auth/password";
@@ -33,40 +35,32 @@ export async function updateTechnextBookingAction(fd: FormData) {
   await guarded(back, async () => {
     const status = str(fd, "status", 20);
     if (!["pending", "approved", "rejected", "cancelled"].includes(status)) throw new PortalError("Invalid status.");
-    const before = await first<{ status: string; email: string; contact_name: string; organization_name: string }>(
-      "SELECT status, email, contact_name, organization_name FROM technext_bookings WHERE id = ?",
+    const before = await first<{ status: string; email: string; contact_name: string; organization_name: string; stall_type: string }>(
+      "SELECT status, email, contact_name, organization_name, stall_type FROM technext_bookings WHERE id = ?",
       [id]
     );
     if (!before) throw new PortalError("Booking not found.");
-    const stmts = [
-      {
-        sql: "UPDATE technext_bookings SET status = ?, admin_notes = ?, payment_link = ?, payment_amount = ?, updated_at = ? WHERE id = ?",
-        params: [status, str(fd, "admin_notes", 1000) || null, link(fd), Math.max(0, Math.round(Number(fd.get("payment_amount")) || 0)), now(), id],
-      },
-      ...setPaymentStatusStatements("technext", id, payment(fd), str(fd, "payment_ref", 120) || null),
-    ];
+    const amount = Math.max(0, Math.round(Number(fd.get("payment_amount")) || 0));
+    const notes = str(fd, "admin_notes", 1000);
+    await run("UPDATE technext_bookings SET status = ?, admin_notes = ?, payment_link = ?, payment_amount = ?, updated_at = ? WHERE id = ?", [
+      status,
+      notes || null,
+      link(fd),
+      amount,
+      now(),
+      id,
+    ]);
+    await applyPaymentStatus("technext", id, payment(fd), str(fd, "payment_ref", 120) || null);
     // Let the exhibitor know when the decision changes.
     if (before.status !== status && (status === "approved" || status === "rejected")) {
-      const approved = status === "approved";
-      stmts.push(
-        outboxInsert({
-          to: before.email,
-          toName: before.contact_name,
-          subject: approved ? "Your TechNext '28 stall is approved" : "Update on your TechNext '28 stall booking",
-          html: emailLayout(
-            approved ? "Stall approved" : "Booking update",
-            textToHtml(
-              approved
-                ? `Dear ${before.contact_name},\n\nYour stall booking for ${before.organization_name} has been approved. Please complete the payment from your dashboard to confirm your stall:\n${SITE_URL}/dashboard`
-                : `Dear ${before.contact_name},\n\nWe are unable to confirm the stall booking for ${before.organization_name} at this time.${str(fd, "admin_notes", 1000) ? `\n\nNote: ${str(fd, "admin_notes", 1000)}` : ""}\n\nFor questions, reply to this email.`
-            )
-          ),
-          scope: "technext",
-          priority: 3,
-        })
-      );
+      const stall = (await getSettings()).technext.stallTypes.find((s) => s.key === before.stall_type);
+      await notify(status === "approved" ? "technext_approved" : "technext_rejected", {
+        to: before.email,
+        name: before.contact_name,
+        scope: "technext",
+        vars: { organisation: before.organization_name, stall: stall?.label ?? before.stall_type, amount: formatInr(amount), notes: notes ? `Note: ${notes}` : "" },
+      });
     }
-    await batch(stmts);
     return "Booking updated.";
   });
 }
@@ -80,11 +74,16 @@ export async function updateConferenceRegistrationAction(fd: FormData) {
   await guarded(back, async () => {
     const status = str(fd, "status", 20);
     if (!["pending", "confirmed", "cancelled"].includes(status)) throw new PortalError("Invalid status.");
-    await batch([
-      { sql: "UPDATE conference_registrations SET status = ?, admin_notes = ?, payment_link = ?, updated_at = ? WHERE id = ?", params: [status, str(fd, "admin_notes", 1000) || null, link(fd), now(), id] },
-      ...setPaymentStatusStatements("conference", id, payment(fd), str(fd, "payment_ref", 120) || null),
+    await run("UPDATE conference_registrations SET status = ?, admin_notes = ?, payment_link = ?, updated_at = ? WHERE id = ?", [
+      status,
+      str(fd, "admin_notes", 1000) || null,
+      link(fd),
+      now(),
+      id,
     ]);
-    return "Registration updated.";
+    const pay = payment(fd);
+    await applyPaymentStatus("conference", id, pay, str(fd, "payment_ref", 120) || null);
+    return pay === "paid" ? "Saved. If this was a new payment, the invoice was issued and emailed." : "Registration updated.";
   });
 }
 
@@ -151,5 +150,30 @@ export async function inviteUserAction(fd: FormData) {
       }),
     ]);
     return `Invitation queued for ${email}. Send it from Email & SMTP.`;
+  });
+}
+
+export async function resendInvoiceAction(fd: FormData) {
+  await requireAdmin();
+  await guarded("/admin/invoices", async () => {
+    const inv = await first<{ id: string; number: string; bill_name: string; bill_email: string; items: string; amount: number; currency: string; payment_ref: string | null; purpose: string; ref_id: string }>(
+      "SELECT * FROM invoices WHERE id = ?",
+      [str(fd, "id", 40)]
+    );
+    if (!inv) throw new PortalError("Invoice not found.");
+    const { formatMoney } = await import("@/lib/settings");
+    await notify("payment_received", {
+      to: inv.bill_email,
+      name: inv.bill_name,
+      scope: inv.purpose === "event" ? `event:${inv.ref_id.split(":")[0]}` : inv.purpose,
+      vars: {
+        item: (JSON.parse(inv.items) as { description: string }[]).map((i) => i.description).join("; "),
+        amount: formatMoney(inv.amount, inv.currency),
+        invoiceNumber: inv.number,
+        paymentRef: inv.payment_ref ?? "—",
+      },
+      attachment: { type: "invoice", invoiceId: inv.id },
+    });
+    return `Invoice ${inv.number} emailed to ${inv.bill_email}.`;
   });
 }

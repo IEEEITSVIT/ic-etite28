@@ -22,7 +22,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-export default function HotelBookingDirectory() {
+export default function HotelBookingDirectory({ hotels = hotelsData }: { hotels?: Hotel[] }) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("distance");
@@ -36,7 +36,7 @@ export default function HotelBookingDirectory() {
   };
 
   const filteredHotels = useMemo(() => {
-    return hotelsData
+    return hotels
       .filter((hotel) => {
         // Category filter
         if (activeCategory !== "all" && hotel.category !== activeCategory) {
@@ -74,32 +74,32 @@ export default function HotelBookingDirectory() {
         }
         return 0;
       });
-  }, [activeCategory, searchQuery, sortBy, onlyVerified]);
+  }, [hotels, activeCategory, searchQuery, sortBy, onlyVerified]);
 
   const categories = [
-    { id: "all", label: "All Stays", count: hotelsData.length, icon: Building },
+    { id: "all", label: "All Stays", count: hotels.length, icon: Building },
     {
       id: "closest",
       label: "Closest to VIT (< 2 km)",
-      count: hotelsData.filter((h) => h.category === "closest").length,
+      count: hotels.filter((h) => h.category === "closest").length,
       icon: Compass,
     },
     {
       id: "luxury",
       label: "Luxury & Star Rating",
-      count: hotelsData.filter((h) => h.category === "luxury").length,
+      count: hotels.filter((h) => h.category === "luxury").length,
       icon: Sparkles,
     },
     {
       id: "transit",
       label: "Green Circle & Transit",
-      count: hotelsData.filter((h) => h.category === "transit").length,
+      count: hotels.filter((h) => h.category === "transit").length,
       icon: Car,
     },
     {
       id: "city",
       label: "City Center & Heritage",
-      count: hotelsData.filter((h) => h.category === "city").length,
+      count: hotels.filter((h) => h.category === "city").length,
       icon: MapPin,
     },
   ];
@@ -110,7 +110,7 @@ export default function HotelBookingDirectory() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-red-50 text-[#EE2A24] flex items-center justify-center shrink-0 font-black text-lg">
-            {hotelsData.length}
+            {hotels.length}
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Verified Stays</p>

@@ -2,7 +2,9 @@
 
 import { requireUser } from "@/lib/auth/session";
 import { batch, first, now, run } from "@/lib/db";
-import { getSettings } from "@/lib/settings";
+import { formatInr, formatMoney, getSettings } from "@/lib/settings";
+import { notify } from "@/lib/notifications";
+import { formatDeadline } from "@/lib/pricing";
 import { priceNow, windowState } from "@/lib/pricing";
 import { bool, guarded, isEmail, str } from "@/lib/portal/actions";
 import { ORG_TYPES } from "@/lib/portal/technext";
@@ -82,28 +84,19 @@ export async function saveTechnextBookingAction(fd: FormData) {
     }
     const id = newId();
     const t = now();
-    await batch([
-      {
-        sql: `INSERT INTO technext_bookings (organization_name, organization_type, sector, contact_name, designation, email, phone, city, state, website,
-                stall_type, representatives, exhibit_description, power_required, special_requirements, gst_number, payment_amount, payment_status, updated_at,
-                id, user_id, payment_currency, status, created_at)
-              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'INR','pending',?)`,
-        params: [...values, id, user.id, t],
-      },
-      outboxInsert({
-        to: email,
-        toName: required.contact_name,
-        subject: "TechNext '28 stall booking received",
-        html: emailLayout(
-          "Stall booking received",
-          textToHtml(
-            `Dear ${required.contact_name},\n\nThank you for booking a ${stall.label} for ${required.organization_name} at TechNext '28. The organising committee will review your booking and confirm it shortly; payment details follow on approval.\n\nTrack your booking: ${SITE_URL}/dashboard`
-          )
-        ),
-        scope: "technext",
-        priority: 3,
-      }),
-    ]);
+    await run(
+      `INSERT INTO technext_bookings (organization_name, organization_type, sector, contact_name, designation, email, phone, city, state, website,
+         stall_type, representatives, exhibit_description, power_required, special_requirements, gst_number, payment_amount, payment_status, updated_at,
+         id, user_id, payment_currency, status, created_at)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'INR','pending',?)`,
+      [...values, id, user.id, t]
+    );
+    await notify("technext_booked", {
+      to: email,
+      name: required.contact_name,
+      scope: "technext",
+      vars: { organisation: required.organization_name, stall: stall.label, amount: formatInr(stallPrice) },
+    });
     return "Booking submitted. We'll review it and email you once it's approved.";
   }, "/dashboard");
 }
@@ -190,6 +183,16 @@ export async function saveConferenceRegistrationAction(fd: FormData) {
        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',?)`,
       [...values, newId(), user.id, now()]
     );
+    await notify("conference_registered", {
+      to: user.email,
+      name: user.name,
+      scope: "conference",
+      vars: {
+        category: tier.category,
+        amount: formatMoney(amount, currency),
+        deadline: settings.conference.closesAt ? ` before ${formatDeadline(settings.conference.closesAt)}` : "",
+      },
+    });
     return "Registration saved. Complete the payment to confirm it.";
   }, "/dashboard");
 }

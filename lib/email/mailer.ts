@@ -97,6 +97,13 @@ export interface CertificateAttachment {
   userId: string;
 }
 
+export interface InvoiceAttachment {
+  type: "invoice";
+  invoiceId: string;
+}
+
+export type EmailAttachment = CertificateAttachment | InvoiceAttachment;
+
 export interface QueuedEmail {
   to: string;
   toName?: string | null;
@@ -104,7 +111,7 @@ export interface QueuedEmail {
   html: string;
   scope?: string;
   priority?: number;
-  attachment?: CertificateAttachment | null;
+  attachment?: EmailAttachment | null;
 }
 
 export const outboxInsert = (m: QueuedEmail) => ({
@@ -185,11 +192,19 @@ export async function processOutbox(limit = 20, onlyId?: string): Promise<Proces
       if (claim.changes === 0) continue;
       try {
         const attachments = [];
-        const att = parseJson<CertificateAttachment | null>(row.attachment, null);
+        // Attachments are rendered at send time; nothing is stored.
+        const att = parseJson<EmailAttachment | null>(row.attachment, null);
         if (att?.type === "certificate") {
           const { renderCertificateFor } = await import("@/lib/certificates/server");
           const pdf = await renderCertificateFor(att.scope, att.kind, att.userId);
           if (pdf) attachments.push({ filename: pdf.filename, content: Buffer.from(pdf.bytes), contentType: "application/pdf" });
+        } else if (att?.type === "invoice") {
+          const { invoicePdf } = await import("@/lib/invoices");
+          const inv = await first<import("@/lib/invoices").InvoiceRow>("SELECT * FROM invoices WHERE id = ?", [att.invoiceId]);
+          if (inv) {
+            const pdf = await invoicePdf(inv);
+            attachments.push({ filename: pdf.filename, content: Buffer.from(pdf.bytes), contentType: "application/pdf" });
+          }
         }
         await transport.sendMail({
           from: `"${cfg.fromName.replace(/"/g, "")}" <${cfg.fromEmail}>`,

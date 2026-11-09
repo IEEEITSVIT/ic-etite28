@@ -4,6 +4,8 @@ import { all, isDbConfigured, now, run } from "@/lib/db";
 import { importantDatesData } from "@/data/dates";
 import { registrationFeesData } from "@/data/registration";
 import { NO_EARLY_BIRD, type EarlyBird, type Prize } from "@/lib/pricing";
+import { hotelsData, type Hotel } from "@/data/hotels";
+import { defaultSponsorPackages, type SponsorPackage } from "@/data/sponsorship";
 
 export type { EarlyBird, Prize };
 
@@ -55,6 +57,41 @@ export interface PaymentSettings {
   instructions: string;
 }
 
+export interface InvoiceTemplate {
+  prefix: string; // invoice numbers look like PREFIX/2027-28/00001
+  orgName: string;
+  orgAddress: string;
+  gstin: string;
+  pan: string;
+  email: string;
+  phone: string;
+  gstPercent: number; // 0 = no GST line; amounts are GST-inclusive
+  title: string;
+  notes: string;
+  signatory: string;
+}
+
+export interface TickerItem {
+  text: string;
+  url: string;
+  isNew: boolean;
+}
+
+// Scrolling announcement bar above the navbar.
+export interface TickerSettings {
+  enabled: boolean;
+  label: string;
+  speed: "slow" | "normal" | "fast";
+  dismissible: boolean;
+  items: TickerItem[];
+}
+
+export interface HotelsSettings {
+  published: boolean;
+  intro: string;
+  items: Hotel[];
+}
+
 export interface Settings {
   dates: DateItem[];
   conferenceStart: string; // ISO date-time for the countdown
@@ -72,6 +109,10 @@ export interface Settings {
   conference: { opensAt: string; closesAt: string; earlyBird: EarlyBird; prizePool: string; prizes: Prize[] };
   payments: PaymentSettings;
   bolt: { eventSlug: string };
+  invoice: InvoiceTemplate;
+  hotels: HotelsSettings;
+  sponsorship: { packages: SponsorPackage[] };
+  ticker: TickerSettings;
 }
 
 const shortTitles: Record<string, string> = {
@@ -133,6 +174,36 @@ export const DEFAULT_SETTINGS: Settings = {
     instructions: "Payment details will be shared by the organising committee. Your registration is held as pending until payment is confirmed.",
   },
   bolt: { eventSlug: "bolt-3" },
+  invoice: {
+    prefix: "ICETITE28",
+    orgName: "Vellore Institute of Technology",
+    orgAddress: "School of Computer Science Engineering and Information Systems (SCORE), VIT, Vellore, Tamil Nadu 632014, India",
+    gstin: "",
+    pan: "",
+    email: "icetiteconference@vit.ac.in",
+    phone: "",
+    gstPercent: 0,
+    title: "Payment Receipt / Invoice",
+    notes: "Thank you for registering for ic-ETITE'28. This is a computer-generated invoice and does not require a signature.",
+    signatory: "Organising Committee, ic-ETITE'28",
+  },
+  hotels: {
+    published: false,
+    intro: "Partner and nearby hotels for ic-ETITE'28 delegates. Book directly with the hotel; mention ic-ETITE'28 where a conference rate is offered.",
+    items: hotelsData,
+  },
+  sponsorship: { packages: defaultSponsorPackages },
+  ticker: {
+    enabled: true,
+    label: "Announcements",
+    speed: "normal",
+    dismissible: true,
+    items: [
+      { text: "Call for Papers open — full paper submission closes 05 October 2027", url: "/call-for-papers", isNew: true },
+      { text: "ic-ETITE'28 · 10–11 February 2028 · VIT Vellore · Technically co-sponsored by IEEE", url: "/about", isNew: false },
+      { text: "BOLT 3.0 national hackathon and TechNext '28 industrial expo — details coming soon", url: "/hackathon", isNew: false },
+    ],
+  },
 };
 
 export type SettingsKey = keyof Settings;

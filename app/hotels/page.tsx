@@ -3,6 +3,8 @@ import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import { Clock, Mail, ArrowLeft } from "lucide-react";
+import { getSettings } from "@/lib/settings";
+import HotelBookingDirectory from "@/components/HotelBookingDirectory";
 
 export const metadata: Metadata = pageMetadata("/hotels", {
   title: "Hotels & Accommodation | ic-ETITE'28",
@@ -10,7 +12,22 @@ export const metadata: Metadata = pageMetadata("/hotels", {
     "Hotels and accommodation details for ic-ETITE'28 at VIT Vellore will be updated soon.",
 });
 
-export default function HotelsPage() {
+export default async function HotelsPage() {
+  const { hotels } = await getSettings();
+  if (hotels.published && hotels.items.length > 0) {
+    return (
+      <div className="bg-[#FAFBFD] min-h-screen text-[#002147]">
+        <PageHeader
+          badge="Conference Hospitality & Accommodation"
+          title="Hotels & Accommodation"
+          subtitle={hotels.intro}
+          breadcrumb="Hotels & Accommodation"
+          bgImage="/images/frame_.webp"
+        />
+        <HotelBookingDirectory hotels={hotels.items} />
+      </div>
+    );
+  }
   return (
     <div className="bg-[#FAFBFD] min-h-screen text-[#002147] flex flex-col justify-between">
       <div>

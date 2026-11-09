@@ -45,6 +45,17 @@ All set from the admin portal — no code changes:
 
 An item's own early price wins; otherwise the default % applies; after the early-bird date the regular price applies. The amount is fixed when someone first registers, so editing a registration later keeps the early-bird price. Registrations outside the open/close window are refused (existing unpaid registrations can still be edited).
 
+### Automatic notices
+Sent the moment something happens (Admin → Email & SMTP → *Automatic notices* to edit wording or switch any off): conference registration received, TechNext booking received / approved / not approved, event registration, team created (with the team code), member joined (to the member and the lead), and payment received (with the invoice PDF attached).
+
+### Invoices
+When a payment becomes **paid** — an admin marks it paid, or the payment gateway confirms it via `/api/payments/callback` — the portal issues an invoice with a unique sequential number (`PREFIX/2027-28/00001`), confirms conference registrations, and emails the payer the PDF. Set the issuer details, GSTIN/PAN, GST % (amounts are GST-inclusive), prefix, footer and signatory under Site content → *Invoice template* and preview it there. All invoices: Admin → *Invoices* (download, resend). Payers download theirs from the dashboard. PDFs are generated on demand; only the invoice record is stored.
+
+### Hotels, sponsorship packages and the announcement bar
+- Admin → *Hotels*: add, edit or remove hotels and publish the directory (until published, the Hotels page shows "will be updated soon").
+- Site content → *Sponsorship packages*: tiers, prices, badge, tagline, benefits and card style for the Sponsorship page.
+- Site content → *Scrolling announcement bar*: on/off, label, speed, whether visitors can close it, and the items (text, link, "New" tag). It scrolls above the navbar on public pages.
+
 ### Emails
 Compose in an event / TechNext / conference page, choose an audience (all, no team, payment due, qualified / not qualified in round N, winners, approved exhibitors, confirmed delegates…), use placeholders like `{{name}}`, `{{team}}`, `{{score}}`, `{{rank}}`, `{{portalUrl}}`, optionally attach a certificate, save as a draft, and queue. Then **Email & SMTP → Send queued emails**. Verification codes and password resets go out immediately.
 

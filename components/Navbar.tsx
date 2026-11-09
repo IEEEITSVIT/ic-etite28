@@ -430,7 +430,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
         ========================================================================= */}
         {mobileOpen && (
           <div
-            className="lg:hidden fixed inset-x-0 bottom-0 top-[56px] sm:top-[64px] bg-[#00142E] border-t border-white/15 text-white shadow-2xl z-40 overflow-y-auto animate-in slide-in-from-top-2 duration-200"
+            className="lg:hidden absolute inset-x-0 top-full h-[calc(100dvh-56px)] sm:h-[calc(100dvh-64px)] bg-[#00142E] border-t border-white/15 text-white shadow-2xl z-40 overflow-y-auto animate-in slide-in-from-top-2 duration-200"
           >
             <div className="container-x py-6 space-y-6 pb-24">
               {/* Co-located Events Highlights in Mobile Drawer */}

@@ -1,4 +1,4 @@
-import { CreditCard } from "lucide-react";
+import { CreditCard, FileText } from "lucide-react";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { StatusBadge, btnGold } from "@/components/portal/ui";
 import { payAction } from "@/app/actions/events";
@@ -41,6 +41,11 @@ export default function PaymentCard({
           </p>
         </div>
       </div>
+      {status === "paid" && (
+        <a href={`/api/invoices?purpose=${purpose}&ref=${encodeURIComponent(refId)}`} className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+          <FileText className="h-4 w-4" /> Download invoice
+        </a>
+      )}
       {due && (
         <form action={payAction}>
           <input type="hidden" name="purpose" value={purpose} />

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getSettings } from "@/lib/settings";
+import type { SponsorStyle } from "@/data/sponsorship";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -22,99 +24,41 @@ export const metadata: Metadata = pageMetadata("/sponsorship", {
     "Official corporate and academic sponsorship tiers for ic-ETITE at VIT Vellore. Gain unmatched national branding, prominent campus LED broadcasts, keynote slots, hackathon judging, and premier exhibition spaces.",
 });
 
-interface SponsorTier {
-  name: string;
-  price: string;
-  badge: string;
-  tagline: string;
-  icon: typeof Crown;
-  headerBg: string;
-  accentColor: string;
-  borderColor: string;
-  buttonBg: string;
-  isPopular?: boolean;
-  benefits: string[];
-}
-
-const sponsorTiers: SponsorTier[] = [
-  {
-    name: "Platinum Sponsor",
-    price: "₹ 5,00,000",
-    badge: "Title Sponsor · Maximum Brand Impact",
-    tagline:
-      "Premier tier with title sponsor naming rights, premier campus visibility, and dedicated event slots.",
+// Card look per package style; content comes from the CMS (admin → Site content).
+const STYLES: Record<SponsorStyle, { icon: typeof Crown; headerBg: string; accentColor: string; borderColor: string; buttonBg: string }> = {
+  platinum: {
     icon: Crown,
     headerBg: "bg-gradient-to-br from-[#001733] via-[#002B5B] to-[#001733]",
     accentColor: "text-[#FFB81C]",
     borderColor: "border-[#FFB81C] ring-2 ring-[#FFB81C]/25 shadow-xl",
     buttonBg: "bg-[#002147] hover:bg-[#003366] text-[#FFB81C] border border-[#FFB81C]/30",
-    isPopular: true,
-    benefits: [
-      "Company will be identified as the Title Sponsor for ic-ETITE'28.",
-      "Branding around campus during the conference through high-impact LED screens across academic blocks and plazas.",
-      "One full-page advertisement in the official conference program booklet.",
-      "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
-      "Nation-wide circulation of commercials through our online media partners.",
-      "Marketing through standees inside the campus everywhere.",
-      "Dedicated speaker time pre/post conference with non-competing program.",
-      "Prominent advertisement on the ic-ETITE'28 website and mobile app.",
-      "Name and Logo printed on the official conference T-Shirt.",
-      "Dedicated sponsor webpage on conference website (content delivered once approved by committee).",
-      "Official judge for the TechNext '28 Exhibition and BOLT 3.0 Hackathon.",
-      "Keynote speaker session and tailored corporate event during the conference.",
-      "Complimentary 10×10 sq ft exhibition stall for two full days.",
-    ],
   },
-  {
-    name: "Gold Sponsor",
-    price: "₹ 3,50,000",
-    badge: "Co-Sponsor · High Campus Visibility",
-    tagline:
-      "Distinguished co-sponsor prominence across academic blocks, digital media, and exhibition arena.",
+  gold: {
     icon: Award,
     headerBg: "bg-gradient-to-br from-[#1C1404] via-[#332208] to-[#140D02]",
     accentColor: "text-[#F59E0B]",
     borderColor: "border-amber-300/80 hover:border-amber-400 shadow-md",
     buttonBg: "bg-[#2A1B0A] hover:bg-[#3D270F] text-[#FBBF24] border border-amber-400/30",
-    benefits: [
-      "Company will be identified as a Co-Sponsor for ic-ETITE'28.",
-      "Branding around campus during the conference through LED screens (more than 30–40 times daily).",
-      "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
-      "One half-page advertisement in the official conference program booklet.",
-      "Nation-wide circulation of commercials through our online media partners.",
-      "Marketing through standees placed strategically inside the campus.",
-      "Prominent advertisement on the ic-ETITE'28 website and mobile app.",
-      "Name and Logo printed on the official conference T-Shirt.",
-      "Dedicated speaker session at the conference.",
-      "Complimentary 10×10 sq ft exhibition stall for two full days.",
-    ],
   },
-  {
-    name: "Silver Sponsor",
-    price: "₹ 2,00,000",
-    badge: "Conference Sponsor · Essential Presence",
-    tagline:
-      "Core conference sponsor package with campus LED branding, marketing standees, and stall space.",
+  silver: {
     icon: Medal,
     headerBg: "bg-gradient-to-br from-[#1E293B] via-[#334155] to-[#0F172A]",
     accentColor: "text-slate-200",
     borderColor: "border-slate-300 hover:border-slate-400 shadow-md",
     buttonBg: "bg-[#002147] hover:bg-[#003366] text-white",
-    benefits: [
-      "Company will be identified as a Sponsor for ic-ETITE'28.",
-      "Branding around campus during the conference through LED screens (more than 10–25 times daily).",
-      "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
-      "Nation-wide circulation of commercials through our online media partners.",
-      "Marketing through standees inside the campus.",
-      "Advertisement on the ic-ETITE'28 website and mobile app.",
-      "Name and Logo printed on the official conference T-Shirt.",
-      "Speaker session at the conference.",
-      "Complimentary 5×5 sq ft exhibition stall for one full day.",
-    ],
   },
-];
+  bronze: {
+    icon: Medal,
+    headerBg: "bg-gradient-to-br from-[#3B1F0E] via-[#5C3317] to-[#2A160A]",
+    accentColor: "text-orange-300",
+    borderColor: "border-orange-300/80 hover:border-orange-400 shadow-md",
+    buttonBg: "bg-[#3B1F0E] hover:bg-[#5C3317] text-orange-200",
+  },
+};
 
-export default function SponsorshipPage() {
+export default async function SponsorshipPage() {
+  const { sponsorship } = await getSettings();
+  const sponsorTiers = sponsorship.packages.map((p) => ({ ...p, ...STYLES[p.style] ?? STYLES.silver, isPopular: p.popular }));
   return (
     <div className="bg-[#FAFBFD] min-h-screen text-[#002147]">
       {/* ── HERO BANNER ── */}

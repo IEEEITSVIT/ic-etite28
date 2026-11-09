@@ -3,12 +3,14 @@ import { getSmtpSettings, sentInLast24h } from "@/lib/email/mailer";
 import { clearOutboxAction, retryFailedAction, saveSmtpAction, sendTestEmailAction } from "@/app/actions/admin-email";
 import { fmtIst } from "@/lib/portal/actions";
 import OutboxRunner from "@/components/admin/OutboxRunner";
+import { NOTIFICATION_DEFS, NOTIFICATION_KEYS, getNotificationTemplates } from "@/lib/notifications";
+import { saveNotificationsAction } from "@/app/actions/admin-settings";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Card, Empty, Field, Flash, PortalPage, Stat, StatusBadge, Table, Td, btnDanger, btnSecondary, inputCls } from "@/components/portal/ui";
 
 export default async function AdminEmailPage({ searchParams }: { searchParams: Promise<{ ok?: string; error?: string }> }) {
   const { ok, error } = await searchParams;
-  const [smtp, sent24, counts, recent] = await Promise.all([
+  const [smtp, sent24, counts, recent, notices] = await Promise.all([
     getSmtpSettings(),
     sentInLast24h(),
     first<{ queued: number; failed: number; sent: number }>(
@@ -17,6 +19,7 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
     all<{ id: string; to_email: string; subject: string; status: string; error: string | null; created_at: string; sent_at: string | null; attachment: string | null }>(
       "SELECT id, to_email, subject, status, error, created_at, sent_at, attachment FROM email_outbox ORDER BY created_at DESC LIMIT 60"
     ),
+    getNotificationTemplates(),
   ]);
   const envOverride = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
   const configured = envOverride || Boolean(smtp.user && smtp.passEnc);
@@ -97,6 +100,36 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
           </form>
         </Card>
       </div>
+
+      <Card title="Automatic notices" className="mt-6">
+        <form id="notices" action={saveNotificationsAction} className="space-y-4 scroll-mt-28">
+          <p className="text-sm text-slate-500">
+            Sent automatically as soon as the event happens. Use the placeholders listed for each notice; untick to stop sending it.
+          </p>
+          {NOTIFICATION_KEYS.map((k) => {
+            const def = NOTIFICATION_DEFS[k];
+            const t = notices[k];
+            return (
+              <details key={k} className="rounded-xl border border-slate-200">
+                <summary className="flex cursor-pointer flex-wrap items-center gap-2 px-4 py-3">
+                  <span className="font-bold text-[#002147]">{def.label}</span>
+                  <StatusBadge status={t.enabled ? "sent" : "hidden"} />
+                  <span className="text-xs text-slate-500">{def.when}</span>
+                </summary>
+                <div className="space-y-2 border-t border-slate-100 p-4">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <input type="checkbox" name={`${k}_enabled`} defaultChecked={t.enabled} className="accent-[#002147]" /> Send this notice
+                  </label>
+                  <input name={`${k}_subject`} defaultValue={t.subject} required className={inputCls} />
+                  <textarea name={`${k}_body`} defaultValue={t.body} required rows={7} className={`${inputCls} font-mono text-sm`} />
+                  <p className="text-xs text-slate-500">Placeholders: {def.placeholders.map((p) => `{{${p}}}`).join("  ")}</p>
+                </div>
+              </details>
+            );
+          })}
+          <SubmitButton pendingText="Saving…">Save notices</SubmitButton>
+        </form>
+      </Card>
 
       <Card title="Recent emails" className="mt-6">
         {recent.length === 0 ? (

@@ -1,5 +1,15 @@
 import { getSettings } from "@/lib/settings";
-import { saveConferenceAction, saveDatesAction, saveFeesAction, savePaymentsAction, saveTechnextAction, saveVisibilityAction } from "@/app/actions/admin-settings";
+import {
+  saveConferenceAction,
+  saveDatesAction,
+  saveFeesAction,
+  saveInvoiceTemplateAction,
+  savePaymentsAction,
+  saveSponsorshipAction,
+  saveTechnextAction,
+  saveTickerAction,
+  saveVisibilityAction,
+} from "@/app/actions/admin-settings";
 import { EarlyBirdFields, PrizeFields } from "@/components/admin/CmsFields";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Card, Field, Flash, PortalPage, inputCls } from "@/components/portal/ui";
@@ -25,6 +35,8 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
   const dateRows = [...s.dates, ...Array.from({ length: BLANK_ROWS }, () => null)];
   const feeRows = [...s.fees, ...Array.from({ length: BLANK_ROWS }, () => null)];
   const stallRows = [...s.technext.stallTypes, ...Array.from({ length: BLANK_ROWS }, () => null)];
+  const tickRows = [...s.ticker.items, ...Array.from({ length: BLANK_ROWS }, () => null)];
+  const pkgRows = [...s.sponsorship.packages, null];
   const startLocal = s.conferenceStart.slice(0, 16);
 
   return (
@@ -52,6 +64,48 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
               <input name="bolt_slug" defaultValue={s.bolt.eventSlug} className={`${inputCls} max-w-sm`} />
             </Field>
             <SubmitButton pendingText="Saving…">Save visibility</SubmitButton>
+          </form>
+        </Card>
+
+        <Card title="Scrolling announcement bar">
+          <form id="ticker" action={saveTickerAction} className="space-y-4 scroll-mt-28">
+            <input type="hidden" name="tick_count" value={tickRows.length} />
+            <div className="flex flex-wrap items-end gap-4">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <input type="checkbox" name="enabled" defaultChecked={s.ticker.enabled} className="h-4 w-4 accent-[#002147]" /> Show the bar on the website
+              </label>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <input type="checkbox" name="dismissible" defaultChecked={s.ticker.dismissible} className="h-4 w-4 accent-[#002147]" /> Visitors can close it
+              </label>
+              <Field label="Label" className="w-48">
+                <input name="label" defaultValue={s.ticker.label} placeholder="Announcements" className={small} />
+              </Field>
+              <Field label="Scroll speed" className="w-40">
+                <select name="speed" defaultValue={s.ticker.speed} className={small}>
+                  <option value="slow">Slow</option>
+                  <option value="normal">Normal</option>
+                  <option value="fast">Fast</option>
+                </select>
+              </Field>
+            </div>
+            <div className="space-y-2">
+              {tickRows.map((t, i) => (
+                <div key={i} className="grid gap-2 rounded-xl border border-slate-200 p-3 md:grid-cols-12 md:items-center">
+                  <input name={`tick_text_${i}`} defaultValue={t?.text ?? ""} placeholder="Announcement text" className={`${small} md:col-span-6`} />
+                  <input name={`tick_url_${i}`} defaultValue={t?.url ?? ""} placeholder="Link: /registration or https://…" className={`${small} md:col-span-4`} />
+                  <label className="flex items-center gap-1.5 text-sm text-slate-600 md:col-span-1">
+                    <input type="checkbox" name={`tick_new_${i}`} defaultChecked={t?.isNew ?? false} className="accent-[#002147]" /> New
+                  </label>
+                  {t && (
+                    <label className="flex items-center gap-1.5 text-sm text-red-600 md:col-span-1">
+                      <input type="checkbox" name={`tick_delete_${i}`} className="accent-red-600" /> Delete
+                    </label>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-slate-500">Items scroll continuously above the navbar and pause when hovered. It is not shown on admin or evaluator pages.</p>
+            <SubmitButton pendingText="Saving…">Save announcement bar</SubmitButton>
           </form>
         </Card>
 
@@ -205,6 +259,87 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
             </div>
             <p className="text-sm text-slate-500">Each event has its own payment link (Events & BOLT → event settings), and any single registration can be given its own link from its admin page.</p>
             <SubmitButton pendingText="Saving…">Save payment settings</SubmitButton>
+          </form>
+        </Card>
+
+        <Card title="Sponsorship packages">
+          <form id="sponsorship" action={saveSponsorshipAction} className="space-y-4 scroll-mt-28">
+            <input type="hidden" name="pkg_count" value={pkgRows.length} />
+            <p className="text-sm text-slate-500">Shown on the Sponsorship page, in this order. Benefits: one per line. Leave a package name empty to skip that row.</p>
+            {pkgRows.map((p, i) => (
+              <div key={i} className="space-y-2 rounded-2xl border border-slate-200 p-4">
+                <div className="grid gap-2 md:grid-cols-12">
+                  <input name={`pkg_name_${i}`} defaultValue={p?.name ?? ""} placeholder="Package name (e.g. Platinum Sponsor)" className={`${small} md:col-span-4`} />
+                  <input name={`pkg_price_${i}`} defaultValue={p?.price ?? ""} placeholder="Price (e.g. ₹ 5,00,000)" className={`${small} md:col-span-3`} />
+                  <select name={`pkg_style_${i}`} defaultValue={p?.style ?? "silver"} className={`${small} md:col-span-2`}>
+                    <option value="platinum">Platinum style</option>
+                    <option value="gold">Gold style</option>
+                    <option value="silver">Silver style</option>
+                    <option value="bronze">Bronze style</option>
+                  </select>
+                  <label className="flex items-center gap-1.5 text-sm text-slate-600 md:col-span-2">
+                    <input type="checkbox" name={`pkg_popular_${i}`} defaultChecked={p?.popular ?? false} className="accent-[#002147]" /> Highlight
+                  </label>
+                  {p && (
+                    <label className="flex items-center gap-1.5 text-sm text-red-600 md:col-span-1">
+                      <input type="checkbox" name={`pkg_delete_${i}`} className="accent-red-600" /> Delete
+                    </label>
+                  )}
+                </div>
+                <input name={`pkg_badge_${i}`} defaultValue={p?.badge ?? ""} placeholder="Badge line (e.g. Title Sponsor · Maximum Brand Impact)" className={small} />
+                <input name={`pkg_tagline_${i}`} defaultValue={p?.tagline ?? ""} placeholder="Tagline" className={small} />
+                <textarea name={`pkg_benefits_${i}`} rows={4} defaultValue={p?.benefits.join("\n") ?? ""} placeholder="Benefits, one per line" className={small} />
+              </div>
+            ))}
+            <SubmitButton pendingText="Saving…">Save sponsorship packages</SubmitButton>
+          </form>
+        </Card>
+
+        <Card
+          title="Invoice template"
+          actions={
+            <a href="/api/admin/invoices/preview" target="_blank" className="text-sm font-semibold text-[#004B87] hover:underline">
+              Preview sample invoice →
+            </a>
+          }
+        >
+          <form id="invoice" action={saveInvoiceTemplateAction} className="grid gap-4 scroll-mt-28 md:grid-cols-2">
+            <Field label="Invoice number prefix" hint="Numbers look like PREFIX/2027-28/00001 — unique and sequential.">
+              <input name="prefix" defaultValue={s.invoice.prefix} required className={inputCls} />
+            </Field>
+            <Field label="Document title">
+              <input name="title" defaultValue={s.invoice.title} className={inputCls} />
+            </Field>
+            <Field label="Issued by (organisation)">
+              <input name="orgName" defaultValue={s.invoice.orgName} className={inputCls} />
+            </Field>
+            <Field label="Contact email / phone">
+              <div className="flex gap-2">
+                <input name="email" defaultValue={s.invoice.email} placeholder="Email" className={inputCls} />
+                <input name="phone" defaultValue={s.invoice.phone} placeholder="Phone" className={inputCls} />
+              </div>
+            </Field>
+            <Field label="Address" className="md:col-span-2">
+              <textarea name="orgAddress" rows={2} defaultValue={s.invoice.orgAddress} className={inputCls} />
+            </Field>
+            <Field label="GSTIN">
+              <input name="gstin" defaultValue={s.invoice.gstin} maxLength={15} className={`${inputCls} uppercase`} />
+            </Field>
+            <Field label="PAN">
+              <input name="pan" defaultValue={s.invoice.pan} maxLength={10} className={`${inputCls} uppercase`} />
+            </Field>
+            <Field label="GST % included in fees" hint="0 hides the GST line; otherwise the invoice shows the taxable value and GST included in the total.">
+              <input name="gstPercent" type="number" min={0} max={50} step="0.01" defaultValue={s.invoice.gstPercent} className={inputCls} />
+            </Field>
+            <Field label="Signatory">
+              <input name="signatory" defaultValue={s.invoice.signatory} className={inputCls} />
+            </Field>
+            <Field label="Footer note" className="md:col-span-2">
+              <textarea name="notes" rows={2} defaultValue={s.invoice.notes} className={inputCls} />
+            </Field>
+            <div className="md:col-span-2">
+              <SubmitButton pendingText="Saving…">Save invoice template</SubmitButton>
+            </div>
           </form>
         </Card>
       </div>

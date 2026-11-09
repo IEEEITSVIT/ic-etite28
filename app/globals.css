@@ -570,3 +570,20 @@ input[type="search"]::-webkit-search-cancel-button {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* ── Scrolling announcement bar (components/TickerBar.tsx) ── */
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: tickerScroll 45s linear infinite;
+}
+.ticker-bar:hover .ticker-track,
+.ticker-bar:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .ticker-viewport { overflow-x: auto; }
+}
