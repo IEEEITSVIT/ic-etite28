@@ -1,11 +1,16 @@
+import type { Metadata } from "next";
 import Hero from "@/components/Hero";
 import AboutAndThemesSection from "@/components/AboutAndThemesSection";
 import HomePastEditions from "@/components/HomePastEditions";
-import HomePhotoMoments from "@/components/HomePhotoMoments";
+import HomePhotoMomentsSlideshow from "@/components/HomePhotoMomentsSlideshow";
 import TechnicalSponsorsSection from "@/components/TechnicalSponsorsSection";
 import HomeCallForPapers from "@/components/HomeCallForPapers";
 import HomeImportantDates from "@/components/HomeImportantDates";
 import HomeKeynoteSpeakers from "@/components/HomeKeynoteSpeakers";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (
@@ -20,7 +25,7 @@ export default function HomePage() {
       <HomePastEditions />
 
       {/* 4. ic-ETITE'24 Curated Moments & Highlights Showcase */}
-      <HomePhotoMoments />
+      <HomePhotoMomentsSlideshow />
 
       {/* 5. Technical Sponsorship (IEEE) & Organizing Chapter (IEEE ITS) */}
       <TechnicalSponsorsSection />
@@ -36,4 +41,3 @@ export default function HomePage() {
     </div>
   );
 }
-

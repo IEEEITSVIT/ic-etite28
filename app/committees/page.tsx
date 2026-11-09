@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Award, Globe, Building2, Cpu, Users } from "lucide-react";
 import {
   chiefPatron,
@@ -38,6 +39,21 @@ type TabType = "organizing" | "international" | "national" | "technical" | "stud
 
 export default function CommitteesPage() {
   const [activeTab, setActiveTab] = useState<TabType>("organizing");
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 120);
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Organizing Committee: Executive Leadership Sections
   const executiveLeadershipLeft: CommitteeSection[] = [
@@ -256,36 +272,81 @@ export default function CommitteesPage() {
   ];
 
   return (
-    <main className="bg-white min-h-screen text-[#1A1A1A] py-8 sm:py-12">
+    <div className="bg-white min-h-screen text-[#1A1A1A] py-8 sm:py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* SWITCHER PILL */}
-        <div className="flex justify-center mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full shadow-sm max-w-full overflow-x-auto no-scrollbar">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+        {/* FLOATING LIQUID GLASS COMMITTEE NAVIGATION */}
+        <div className="sticky top-[76px] z-40 -mx-4 px-4 py-3 mb-10 sm:mb-12 flex justify-center pointer-events-none">
+          <div className="relative pointer-events-auto max-w-full">
+            {/* Soft glass blur extending below the bar */}
+            {isScrolled && (
+              <div
+                className="absolute -inset-x-2 -bottom-4 h-10 rounded-full
+                bg-white/30 backdrop-blur-xl
+                [mask-image:linear-gradient(to_bottom,black,transparent)]
+                pointer-events-none"
+              />
+            )}
 
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
-                    isActive
-                      ? "bg-[#002147] text-white shadow-md"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-                  }`}
-                  aria-pressed={isActive}
-                >
-                  <Icon
-                    className={`w-4 h-4 shrink-0 transition-colors ${
-                      isActive ? "text-[#FFB81C]" : "text-slate-400"
-                    }`}
-                  />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+            {/* Main glass navigation */}
+            <div
+              className={`
+                relative flex items-center gap-1 sm:gap-1.5
+                p-1.5 max-w-full overflow-x-auto
+                whitespace-nowrap no-scrollbar rounded-full
+                border transition-all duration-500 ease-out
+                ${
+                  isScrolled
+                    ? "bg-white/85 backdrop-blur-[32px] backdrop-saturate-[180%] border-white/90 shadow-[0_10px_35px_rgba(0,33,71,0.16)]"
+                    : "bg-[#F8FAFC] border-[#E2E8F0] shadow-sm"
+                }
+              `}
+              style={{
+                WebkitBackdropFilter: isScrolled
+                  ? "blur(32px) saturate(180%)"
+                  : "none",
+              }}
+            >
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id);
+
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }}
+                    className={`
+                      flex items-center gap-2
+                      px-3.5 sm:px-5 py-2 sm:py-2.5
+                      rounded-full text-xs sm:text-sm
+                      font-semibold transition-all duration-300
+                      whitespace-nowrap shrink-0
+                      ${
+                        isActive
+                          ? "bg-[#002147] text-white shadow-md"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                      }
+                    `}
+                    aria-pressed={isActive}
+                  >
+                    <Icon
+                      className={`
+                        w-4 h-4 shrink-0 transition-colors duration-300
+                        ${isActive ? "text-[#FFB81C]" : "text-slate-400"}
+                      `}
+                    />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -353,9 +414,21 @@ export default function CommitteesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-10">
                 {functionalCommittees.map((group) => (
                   <section key={group.title} className="space-y-2">
-                    <h3 className="text-xl sm:text-2xl font-bold text-[#004B87] tracking-tight">
-                      {group.title}
-                    </h3>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h3 className="text-xl sm:text-2xl font-bold text-[#004B87] tracking-tight">
+                        {group.title}
+                      </h3>
+                      {group.title.includes("BOLT") && (
+                        <div className="relative h-6 w-20 shrink-0">
+                          <Image src="/logos/bolt-logo.png" alt="BOLT 3.0" fill sizes="80px" className="object-contain object-left" />
+                        </div>
+                      )}
+                      {group.title.toLowerCase().includes("technext") && (
+                        <div className="relative h-6 w-24 shrink-0">
+                          <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="100px" className="object-contain object-left" />
+                        </div>
+                      )}
+                    </div>
                     <div className="space-y-1.5 pt-1">
                       {group.members.map((member) => (
                         <div
@@ -442,6 +515,8 @@ export default function CommitteesPage() {
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
                     <span className="font-bold text-black">{m.name}</span>
                     {m.institution ? `, ${m.institution}` : ""}
+                    {m.location ? `, ${m.location}` : ""}
+                    {m.country ? `, ${m.country}` : ""}
                   </div>
                 ))}
               </div>
@@ -450,6 +525,8 @@ export default function CommitteesPage() {
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
                     <span className="font-bold text-black">{m.name}</span>
                     {m.institution ? `, ${m.institution}` : ""}
+                    {m.location ? `, ${m.location}` : ""}
+                    {m.country ? `, ${m.country}` : ""}
                   </div>
                 ))}
               </div>
@@ -478,6 +555,6 @@ export default function CommitteesPage() {
         )}
 
       </div>
-    </main>
+    </div>
   );
 }

@@ -63,13 +63,13 @@ export default function HomeSponsorsPartners() {
             <div className="w-16 h-16 rounded-full border border-[#E4E7EC] bg-[#F7F8FA] grid place-items-center mb-4 font-serif font-bold text-xl text-[#0B6B4A]">
               ITS
             </div>
-            <h3 className="font-serif text-xl font-bold text-[#101B2E]">IEEE ITS VIT Student Chapter</h3>
+            <h3 className="font-serif text-xl font-bold text-[#101B2E]">IEEE ITS VIT Chapter</h3>
             <p className="text-[13px] text-[#4A5568] mt-2 max-w-sm leading-relaxed">
               Advancing student leadership, hackathons, doctoral consortiums, and technical paper dissemination across computing
               and engineering disciplines.
             </p>
             <a
-              href="https://ieee-its-1-tzbd.vercel.app/"
+              href="https://ieee-its-vit.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 text-[12.5px] font-semibold text-[#0B6B4A] hover:underline inline-flex items-center gap-1"
@@ -130,10 +130,8 @@ export default function HomeSponsorsPartners() {
               <span>Inquire for Sponsorship</span>
             </a>
             <a
-              href="/Formatted_ic-ETITE_Conference_Brochure.pdf"
-              download="ic-ETITE_Conference_Brochure.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/ic-ETITE'28.pdf"
+              download="ic-ETITE'28.pdf"
               className="btn-outline text-xs inline-flex items-center gap-1.5"
             >
               <Download className="w-3.5 h-3.5 text-[#FFB81C]" />

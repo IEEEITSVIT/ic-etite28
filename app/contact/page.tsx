@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { conferenceData } from "@/data/conference";
 import { Mail, MapPin, Building2, Phone, ArrowRight, ExternalLink } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/contact", {
   title: "Contact Conference Secretariat | ic-ETITE'28",
   description:
     "Official contact directory for ic-ETITE'28 at Vellore Institute of Technology, School of Computer Science Engineering & Information Systems (SCORE).",
-};
+});
 
 const leadershipContacts = [
   {
@@ -47,7 +48,7 @@ export default function ContactPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <div className="container-x py-14 sm:py-20 space-y-12 sm:space-y-16">
+      <div className="container-x py-8 sm:py-12 space-y-6 sm:space-y-8">
         {/* Top: 3-Column Secretariat Information Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
           {/* Card 1: Primary Electronic Mail */}

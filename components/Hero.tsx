@@ -15,17 +15,51 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+const HERO_VIDEO_SRC = "/videoplayback-2abc.mp4";
+
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [brochureModalOpen, setBrochureModalOpen] = useState(false);
 
   useEffect(() => {
-    // Attempt autoplay
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay handled
-      });
+    const playVideo = () => {
+      if (videoRef.current) {
+        videoRef.current.play().catch(() => {
+          // Autoplay handled safely
+        });
+      }
+    };
+
+    // The video's <source> only matches desktop widths, so phones never download it (~2.5 MB)
+    // and keep the still image. Save-Data and reduced-motion users get the still image too.
+    const skipVideo =
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (skipVideo && videoRef.current) {
+      const video = videoRef.current;
+      video.pause();
+      video.querySelector("source")?.remove();
+      video.load();
+    } else {
+      playVideo();
     }
+
+    // Ensure background video keeps playing on tab focus / visibility return
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        playVideo();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", playVideo);
+    window.addEventListener("touchstart", playVideo, { once: true });
+    window.addEventListener("click", playVideo, { once: true });
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", playVideo);
+    };
   }, []);
 
   return (
@@ -36,20 +70,31 @@ export default function Hero() {
         className="relative min-h-[640px] md:min-h-[740px] lg:min-h-[820px] flex items-center overflow-hidden bg-[#002147] text-white select-none"
         aria-label="Conference Introduction"
       >
-        {/* Background Video Player */}
+        {/* Optimized Hero Background with Continuous Video Playback */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <Image
+            src="/images/frame_15.webp"
+            alt="VIT Campus Aerial View"
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            className="object-cover object-center pointer-events-none -z-10"
+          />
+
           <video
             ref={videoRef}
-            src="/videoplayback-2abc.mp4"
-            poster="/images/frame_15.webp"
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover object-center scale-[1.02] transform transition-opacity duration-1000"
-          />
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+          >
+            <source src={HERO_VIDEO_SRC} type="video/mp4" media="(min-width: 768px)" />
+          </video>
 
-          {/* Fallback pattern overlay */}
           <div
             className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
@@ -73,7 +118,7 @@ export default function Hero() {
         </div>
 
         {/* Hero Content Container - Strictly Left-Aligned as requested */}
-        <div className="container-x relative z-10 w-full py-16 md:py-24 lg:py-28">
+        <div className="block container-x relative z-10 w-full py-12 sm:py-16 md:py-24 lg:py-28">
           <div className="max-w-2xl text-left">
             {/* Header logo at left top of the video matching user instruction */}
             <div className="mb-6 flex items-center gap-4">
@@ -83,7 +128,7 @@ export default function Hero() {
                   alt="Vellore Institute of Technology Logo"
                   fill
                   className="object-contain object-left drop-shadow"
-                  priority
+		  sizes="(max-width: 768px) 100vw, 750px"
                 />
               </div>
 
@@ -114,12 +159,10 @@ export default function Hero() {
             <div className="flex flex-wrap items-center gap-4">
               {/* Enlarged Dark Download Brochure Button */}
               <a
-                href="/Formatted_ic-ETITE_Conference_Brochure.pdf"
-                download="ic-ETITE_Conference_Brochure.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/ic-ETITE'28.pdf"
+                download="ic-ETITE'28.pdf"
                 className="group flex items-center gap-3 px-7 py-3.5 sm:px-8 sm:py-4 rounded-full bg-[#001C3D] hover:bg-[#002855] text-white border-2 border-[#D39E00] shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all hover:scale-105 text-sm sm:text-base font-bold cursor-pointer"
-                aria-label="Download Conference Brochure"
+                aria-label="Download ic-ETITE'28 brochure"
               >
                 <Download className="w-5 h-5 text-[#FFB81C] group-hover:scale-110 transition-transform" />
                 <span className="tracking-wide">Download Brochure</span>
@@ -175,41 +218,73 @@ export default function Hero() {
       </div>
 
       {/* VIT INSTITUTIONAL CREDENTIAL STRIP ALIGNED WITH VIT.AC.IN */}
-      <section className="border-b border-[#E2E8F0] bg-white relative z-20 shadow-sm">
-        <div className="container-x py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 text-left">
-            <div className="border-l-2 border-[#F5A623] pl-3.5">
-              <p className="text-[14px] font-bold text-[#002147]">10–11 Feb 2028</p>
-              <p className="text-[11.5px] text-[#4A5568] mt-0.5">Conference Dates</p>
-            </div>
-            <div className="border-l-2 border-[#002147] pl-3.5">
-              <p className="text-[14px] font-bold text-[#002147]">VIT Vellore, India</p>
-              <p className="text-[11.5px] text-[#4A5568] mt-0.5">Host Campus &amp; Venue</p>
+      <section className="border-b border-[#E2E8F0] bg-white relative z-20 shadow-xs">
+        <div className="container-x py-6 sm:py-7">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 text-left">
+            <div className="border-l-4 border-[#F5A623] pl-4 sm:pl-5 py-0.5">
+              <p className="text-base sm:text-lg lg:text-xl font-extrabold text-[#002147] tracking-tight leading-tight">
+                10–11 Feb 2028
+              </p>
+              <p className="text-xs sm:text-[13px] text-slate-600 font-semibold uppercase tracking-wider mt-1">
+                Conference Dates
+              </p>
             </div>
 
-            <div className="border-l-2 border-[#F5A623] pl-3.5">
-              <p className="text-[14px] font-bold text-[#002147]">Double-Blind</p>
-              <p className="text-[11.5px] text-[#4A5568] mt-0.5">Peer-Reviewed Tracks</p>
+            <div className="border-l-4 border-[#002147] pl-4 sm:pl-5 py-0.5">
+              <p className="text-base sm:text-lg lg:text-xl font-extrabold text-[#002147] tracking-tight leading-tight">
+                VIT Vellore, India
+              </p>
+              <p className="text-xs sm:text-[13px] text-slate-600 font-semibold uppercase tracking-wider mt-1">
+                Host Campus &amp; Venue
+              </p>
             </div>
-            <div className="border-l-2 border-[#002147] pl-3.5 col-span-2 md:col-span-1">
-              <p className="text-[14px] font-bold text-[#002147]">NIRF #10 / NAAC A++</p>
-              <p className="text-[11.5px] text-[#4A5568] mt-0.5">Top Indian Institution</p>
+
+            <div className="border-l-4 border-[#F5A623] pl-4 sm:pl-5 py-0.5">
+              <p className="text-base sm:text-lg lg:text-xl font-extrabold text-[#002147] tracking-tight leading-tight">
+                Double-Blind
+              </p>
+              <p className="text-xs sm:text-[13px] text-slate-600 font-semibold uppercase tracking-wider mt-1">
+                Peer-Reviewed Tracks
+              </p>
+            </div>
+
+            <div className="border-l-4 border-[#002147] pl-4 sm:pl-5 py-0.5 col-span-2 sm:col-span-1">
+              <p className="text-base sm:text-lg lg:text-xl font-extrabold text-[#002147] tracking-tight leading-tight">
+                NIRF #10 / NAAC A++
+              </p>
+              <p className="text-xs sm:text-[13px] text-slate-600 font-semibold uppercase tracking-wider mt-1">
+                Top Indian Institution
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* VIT.AC.IN ACCREDITATION & INSTITUTIONAL STRIP */}
+      {/* VIT.AC.IN ACCREDITATION & INSTITUTIONAL STRIP (3-PART BALANCED LAYOUT) */}
       <section className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
-        <div className="container-x py-4">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs">
-            <div className="flex items-center gap-2 text-[#002147] font-semibold">
-              <Award className="w-4 h-4 text-[#F5A623]" />
-              <span>Vellore Institute of Technology (Deemed to be University under section 3 of UGC Act 1956)</span>
+        <div className="container-x py-3.5 sm:py-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 items-center gap-2.5 sm:gap-4 lg:gap-6 text-xs sm:text-[13px]">
+            {/* LEFT SIDE: Organizing School */}
+            <div className="text-center lg:text-left text-slate-700">
+              <span className="font-bold text-[#002147]">SCORE</span>{" "}
+              <span className="text-slate-600 font-medium">
+                (School of Computer Science Engineering and Information Systems)
+              </span>
             </div>
-            <div className="flex items-center gap-4 text-[#4A5568] font-medium">
-              <span>SCORE (School of Computer Science Engineering and Information Systems)</span>
-              <span>·</span>
+
+            {/* CENTER: Host University with Medal Icon */}
+            <div className="flex items-center justify-center gap-2 text-center text-[#002147] font-bold">
+              <Award className="w-4 h-4 text-[#F5A623] shrink-0" />
+              <span>
+                Vellore Institute of Technology
+                <span className="text-slate-500 font-normal block sm:inline sm:ml-1 text-[11px] sm:text-xs">
+                  (Deemed to be University under section 3 of UGC Act 1956)
+                </span>
+              </span>
+            </div>
+
+            {/* RIGHT SIDE: Technical Student Chapter */}
+            <div className="text-center lg:text-right font-bold text-[#004B87]">
               <span>IEEE Information Theory Society, VIT</span>
             </div>
           </div>
@@ -325,10 +400,8 @@ export default function Hero() {
                 <span>Print / Save as PDF</span>
               </button>
               <a
-                href="/Formatted_ic-ETITE_Conference_Brochure.pdf"
-                download="ic-ETITE_Conference_Brochure.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/ic-ETITE'28.pdf"
+                download="ic-ETITE'28.pdf"
                 className="btn-primary text-xs py-2 px-4 inline-flex items-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />

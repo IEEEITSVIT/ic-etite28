@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import TracksSection from "@/components/TracksSection";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/tracks", {
   title: "Conference Research Tracks & Indicative Topics | ic-ETITE'28",
   description:
     "Comprehensive directory of research tracks across Information Technology, Communication Engineering, Computer Engineering, and Electronics Engineering for ic-ETITE'28.",
-};
+});
 
 import PageHeader from "@/components/PageHeader";
 

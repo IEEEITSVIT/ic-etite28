@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import {
   FileText,
@@ -15,11 +16,11 @@ import {
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/visa", {
   title: "Visa Information & Facilitation | ic-ETITE'28",
   description:
     "Official Indian Conference Visa guidelines, Government of India clearances, and invitation letter assistance for international delegates of ic-ETITE'28 at VIT Vellore.",
-};
+});
 
 export default function VisaPage() {
   return (
@@ -32,7 +33,7 @@ export default function VisaPage() {
         bgImage="/images/frame_.webp"
       />
 
-      <div className="container-x py-16 space-y-16">
+      <div className="container-x py-8 sm:py-12 space-y-8">
         {/* Important Notice Callout */}
         <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-[#002147]/15 shadow-sm flex flex-col md:flex-row items-start gap-5">
           <div className="w-12 h-12 rounded-2xl bg-[#002147] text-[#FFB81C] flex items-center justify-center shrink-0 shadow-md">

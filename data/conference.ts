@@ -176,7 +176,7 @@ export const conferenceData: ConferenceInfo = {
       name: "IEEE Information Theory Society, VIT Student Chapter",
       role: "Supported By",
       badgeText: "Organizing Society Chapter",
-      website: "https://ieee-its-1-tzbd.vercel.app/",
+      website: "https://ieee-its-vit.vercel.app/",
     },
   ],
   theme: {

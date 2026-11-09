@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import CFPSection from "@/components/CFPSection";
 import TracksSection from "@/components/TracksSection";
 import HomeImportantDates from "@/components/HomeImportantDates";
 import { FileCheck, ShieldCheck, CheckCircle2, ExternalLink } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/call-for-papers", {
   title: "Call for Papers & Author Guidelines | ic-ETITE'28",
   description:
     "Author instructions, manuscript templates, IEEE publication rules, plagiarism criteria, and Microsoft (CMT) submission link for ic-ETITE'28.",
-};
+});
 
 import PageHeader from "@/components/PageHeader";
 
@@ -26,18 +27,18 @@ export default function CallForPapersPage() {
       <CFPSection />
 
       {/* Detailed Manuscript Preparation Protocols */}
-      <section className="py-16 bg-[#F7F8FA] border-b border-[#E4E7EC]">
+      <section className="py-8 sm:py-12 bg-[#F7F8FA] border-b border-[#E4E7EC]">
         <div className="container-x">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#002147] tracking-tight">
+          <div className="text-center max-w-2xl mx-auto mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#002147] tracking-tight">
               Detailed Manuscript Preparation Guidelines
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
               Please ensure your submission adheres strictly to IEEE conference formatting requirements before upload.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="bg-white p-7 rounded-2xl border-2 border-slate-200 shadow-sm hover:border-[#002147] transition-all">
               <FileCheck className="w-7 h-7 text-[#002147] mb-4" />
               <h3 className="font-bold text-[#002147] text-lg sm:text-xl mb-2">
@@ -80,7 +81,7 @@ export default function CallForPapersPage() {
       {/* ── Final Submission CTA ── */}
       <section
         id="submit"
-        className="py-20 md:py-28 bg-gradient-to-br from-[#001733] via-[#002147] to-[#0D2E5C] border-t border-white/10 scroll-mt-20"
+        className="py-10 md:py-14 bg-gradient-to-br from-[#001733] via-[#002147] to-[#0D2E5C] border-t border-white/10 scroll-mt-20"
       >
         <div className="container-x flex flex-col items-center text-center gap-6 max-w-3xl mx-auto">
           {/* Badge */}

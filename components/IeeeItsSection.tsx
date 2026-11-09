@@ -34,7 +34,7 @@ export default function IeeeItsSection() {
               </p>
 
               <a
-                href="https://ieee-its-landing.vercel.app/"
+                href="https://ieee-its-vit.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#004B87] hover:underline transition-colors"

@@ -4,15 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Award,
-  BookOpen,
-  Users,
   Cpu,
-  ShieldCheck,
-  CheckCircle2,
   ExternalLink,
-  MapPin,
-  Camera,
-  Building2,
 } from "lucide-react";
 
 export default function VitScoreConferenceSection() {

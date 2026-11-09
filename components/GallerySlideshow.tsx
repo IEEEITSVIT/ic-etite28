@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Play,
   Pause,
   MapPin,
@@ -17,6 +18,7 @@ import {
 export interface GalleryItem {
   id: string;
   image: string;
+  thumbnail?: string;
   title: string;
   edition: string;
   location: string;
@@ -28,11 +30,11 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "stage-2020",
     image: "/images/gallery/icetite20_stage_inaugural.webp",
-    title: "Main Dais & Inaugural Ceremony",
+    title: "Valedictory Ceremony & Proceedings",
     edition: "ic-ETITE'20 Inaugural Edition",
     location: "Anna Auditorium Main Stage, VIT Vellore",
     caption:
-      "Hon'ble Chancellor Dr. G. Viswanathan, Chief Guest, Guests of Honour, and university leadership presiding over the solemn inauguration of ic-ETITE'20 on the Anna Auditorium dais.",
+      "Valedictory ceremony of ic-ETITE'24, marking the conclusion of the conference and celebrating the contributions of distinguished guests, researchers, and participants.",
     category: "2020",
   },
   {
@@ -128,11 +130,11 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "inauguration-2024",
     image: "/images/icetite24/icetite24_16_inaugural_ceremony_dais.webp",
-    title: "Inaugural Dais & Proceedings Review",
+    title: "Valedictory Ceremony & Proceedings",
     edition: "ic-ETITE'24 Second Edition",
-    location: "Anna Auditorium Main Stage, VIT Vellore",
+    location: "VIT Vellore",
     caption:
-      "Chief Guest Shri S. Krishnan, IAS, Secretary MeitY, and university leadership presiding over the inauguration and reviewing 'Times of ic-ETITE'.",
+      "Valedictory ceremony of ic-ETITE'24, marking the conclusion of the conference and celebrating the contributions of distinguished guests, researchers, and participants.",
     category: "2024",
   },
   {
@@ -153,16 +155,6 @@ export const galleryItems: GalleryItem[] = [
     location: "Anna Auditorium Dais, VIT Vellore",
     caption:
       "Presentation of Certificate of Achievement to BOLT 2.0 second place winners on dais by Chief Guest Shri S. Krishnan, IAS, and Vice President Dr. Sankar Viswanathan.",
-    category: "2024",
-  },
-  {
-    id: "cisco-expo-2024",
-    image: "/images/icetite24/icetite24_04_cisco_expo.webp",
-    title: "Interactive Tech Challenges at Cisco Booth",
-    edition: "Industry Collaboration",
-    location: "TechNext Industrial Expo Arena, VIT Vellore",
-    caption:
-      "Students participating in interactive coding challenges and technology demos at the Title Sponsor Cisco 'Code with Cisco' pavilion.",
     category: "2024",
   },
   {
@@ -223,16 +215,6 @@ export const galleryItems: GalleryItem[] = [
     location: "TechNext Exhibition Stalls, VIT Vellore",
     caption:
       "International jury members and delegates evaluating student robotic vehicle and hardware prototype at TechNext'24 project stalls.",
-    category: "2024",
-  },
-  {
-    id: "smart-world-2024",
-    image: "/images/icetite24/icetite24_05_technext_smart_world.webp",
-    title: "Indian Classical Dance Recital",
-    edition: "Cultural Evening",
-    location: "Outdoor Amphitheatre Stage, VIT Vellore",
-    caption:
-      "Student artists performing graceful Indian classical dance (Bharatanatyam recital) during the ic-ETITE'24 cultural evening reception.",
     category: "2024",
   },
   {
@@ -331,6 +313,7 @@ export default function GallerySlideshow({
   const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [detailsExpanded, setDetailsExpanded] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const filteredItems = items
@@ -343,6 +326,10 @@ export default function GallerySlideshow({
   useEffect(() => {
     setCurrentIndex(0);
   }, [activeCategory, items]);
+
+  useEffect(() => {
+    setDetailsExpanded(false);
+  }, [currentIndex]);
 
   const nextSlide = useCallback(() => {
     if (!filteredItems.length) return;
@@ -383,7 +370,7 @@ export default function GallerySlideshow({
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
-            All Moments ({galleryItems.length})
+            All Moments
           </button>
           <button
             onClick={() => setActiveCategory("2020")}
@@ -393,7 +380,7 @@ export default function GallerySlideshow({
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
-            ic-ETITE&apos;20 Inaugural (10)
+            ic-ETITE&apos;20 Inaugural
           </button>
           <button
             onClick={() => setActiveCategory("2024")}
@@ -403,7 +390,7 @@ export default function GallerySlideshow({
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
-            ic-ETITE&apos;24 Conclave (3)
+            ic-ETITE&apos;24 Conclave
           </button>
         </div>
       )}
@@ -440,21 +427,18 @@ export default function GallerySlideshow({
             <div className="flex items-center gap-2 pointer-events-auto">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 transition-all text-xs"
+                className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 transition-all text-xs cursor-pointer"
                 title={isPlaying ? "Pause auto-scroll" : "Play auto-scroll"}
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
               </button>
               <button
                 onClick={() => setLightboxOpen(true)}
-                className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 transition-all text-xs"
+                className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 transition-all text-xs cursor-pointer"
                 title="View full image"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
               </button>
-              <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white/90 text-xs font-mono border border-white/20">
-                {String(currentIndex + 1).padStart(2, "0")} / {String(filteredItems.length).padStart(2, "0")}
-              </span>
             </div>
           </div>
 
@@ -474,18 +458,34 @@ export default function GallerySlideshow({
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Bottom Title & Truthful Caption Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7 text-white z-20 max-w-4xl">
-            <div className="flex items-center gap-1.5 text-xs text-amber-300 mb-1 font-medium">
-              <MapPin className="w-3.5 h-3.5 shrink-0" />
-              <span>{activeItem.location}</span>
+          {/* Responsive Caption Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-7 text-white z-20 max-w-4xl">
+            <button
+              type="button"
+              onClick={() => setDetailsExpanded((prev) => !prev)}
+              aria-expanded={detailsExpanded}
+              className="sm:hidden inline-flex items-center gap-2 rounded-full bg-black/70 border border-white/30 px-4 py-2 text-xs font-semibold text-white backdrop-blur-sm"
+            >
+              {detailsExpanded ? "Hide Details" : "View Details"}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${
+                  detailsExpanded ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            <div className={`${detailsExpanded ? "block" : "hidden"} sm:block mt-3`}>
+              <div className="flex items-center gap-1.5 text-xs text-amber-300 mb-1 font-medium">
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                <span>{activeItem.location}</span>
+              </div>
+              <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight drop-shadow-md">
+                {activeItem.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-200 mt-1.5 max-w-3xl leading-relaxed drop-shadow-sm">
+                {activeItem.caption}
+              </p>
             </div>
-            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight drop-shadow-md">
-              {activeItem.title}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 mt-1.5 max-w-3xl leading-relaxed drop-shadow-sm">
-              {activeItem.caption}
-            </p>
           </div>
         </div>
 
@@ -512,7 +512,7 @@ export default function GallerySlideshow({
             title={item.title}
           >
             <Image
-              src={item.image}
+              src={item.thumbnail ?? item.image}
               alt={item.title}
               fill
               loading="lazy"

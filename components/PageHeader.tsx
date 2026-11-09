@@ -18,7 +18,7 @@ export default function PageHeader({
   bgImage = "/images/frame_15.webp",
 }: PageHeaderProps) {
   return (
-    <div className="relative bg-[#002147] text-white py-16 md:py-24 overflow-hidden border-b border-white/15 select-none">
+    <div className="relative bg-[#002147] text-white py-10 md:py-16 overflow-hidden border-b border-white/15 select-none">
       {/* Background Image with Dark Navy Gradient Overlay matching vit.ac.in */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -27,7 +27,6 @@ export default function PageHeader({
           fill
           sizes="100vw"
           className="object-cover object-center opacity-20 filter saturate-150"
-          priority
         />
         <div
           className="absolute inset-0"

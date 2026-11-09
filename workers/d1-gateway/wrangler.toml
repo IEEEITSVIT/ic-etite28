@@ -1,0 +1,12 @@
+# Thin HTTPS gateway that lets the Next.js app (on Vercel) talk to Cloudflare D1.
+# Deploy: npx wrangler deploy   ·   Secret: npx wrangler secret put GATEWAY_SECRET
+name = "icetite-d1-gateway"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "icetite"
+database_id = "6d59618c-0ce8-4a86-9773-9918c1733e1e"
+migrations_dir = "../../db/migrations"

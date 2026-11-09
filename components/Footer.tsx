@@ -42,7 +42,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Grid - Spread evenly across 4 balanced columns */}
-      <div className="container-x py-16 sm:py-20">
+      <div className="container-x py-10 sm:py-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16">
           {/* Col 1: University Host & Academic Identity */}
           <div className="space-y-4">
@@ -226,20 +226,37 @@ export default function Footer() {
               </div>
 
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                <p className="text-[11px] text-[#72EFDD] font-bold uppercase tracking-wider mb-0.5">Student Chapter</p>
+                <p className="text-[11px] text-[#72EFDD] font-bold uppercase tracking-wider mb-0.5">Chapter</p>
                 <a
-                  href="https://ieee-its-1-tzbd.vercel.app/"
+                  href="https://ieee-its-vit.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white font-medium hover:text-[#72EFDD] transition-colors block"
                 >
-                  IEEE ITS VIT Student Chapter ↗
+                  IEEE ITS VIT Chapter ↗
                 </a>
               </div>
 
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                 <p className="text-[11px] text-[#FFB81C] font-bold uppercase tracking-wider mb-0.5">Venue &amp; Dates</p>
                 <p className="text-white font-medium">10–11 February 2028 · VIT Vellore</p>
+              </div>
+
+              {/* Co-Located Flagship Events */}
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                <p className="text-[11px] text-[#FFB81C] font-bold uppercase tracking-wider">Co-Located Flagship Events</p>
+                <div className="flex items-center gap-3 pt-0.5">
+                  <Link href="/technext" title="TechNext '28 Industrial Expo" className="hover:opacity-85 transition-opacity">
+                    <div className="relative h-6 w-24">
+                      <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="100px" className="object-contain object-left" />
+                    </div>
+                  </Link>
+                  <Link href="/hackathon" title="BOLT 3.0 National Hackathon" className="hover:opacity-85 transition-opacity">
+                    <div className="relative h-6 w-20">
+                      <Image src="/logos/bolt-logo-white.png" alt="BOLT 3.0" fill sizes="80px" className="object-contain object-left" />
+                    </div>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -259,7 +276,7 @@ export default function Footer() {
               href="/team"
               className="text-xs sm:text-sm text-white/80 hover:text-white underline underline-offset-4 decoration-[#00B4D8]/60 hover:decoration-[#00B4D8] transition-colors"
               id="footer-built-by-team-btn"
-              title="View IEEE Information Theory Society Student Chapter Development Team"
+              title="View IEEE Information Theory Society Chapter Development Team"
             >
               Built by IEEE ITS Team
             </Link>

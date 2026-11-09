@@ -4,7 +4,7 @@ const technicalCoSponsors = [
 ];
 
 const supportedBy = [
-  { name: "IEEE ITS VIT Chapter", logo: "/logos/logo-round-ieee-its.png", url: "https://ieee-its-1-tzbd.vercel.app/", bg: "bg-blue-50" },
+  { name: "IEEE ITS VIT Chapter", logo: "/logos/logo-round-ieee-its.png", url: "https://ieee-its-vit.vercel.app/", bg: "bg-blue-50" },
   { name: "VIT Vellore", logo: "/logos/vit-header-logo.webp", url: "https://vit.ac.in", bg: "bg-sky-50" },
 ];
 

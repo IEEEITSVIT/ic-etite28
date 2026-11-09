@@ -29,7 +29,7 @@ export default function AdvisoryPage() {
   const cleanTech = dedupe(technicalCommitteeData, combinedSet);
 
   return (
-    <main className="bg-white min-h-screen text-[#1A1A1A] py-10 sm:py-14">
+    <div className="bg-white min-h-screen text-[#1A1A1A] py-10 sm:py-14">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-10 sm:mb-12">
@@ -88,6 +88,6 @@ export default function AdvisoryPage() {
         </div>
 
       </div>
-    </main>
+    </div>
   );
 }

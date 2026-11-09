@@ -17,7 +17,7 @@ export const ieeeItsLeadership: TeamMember[] = [
     badge: "Project Lead",
   },
   {
-    name: "Judson Daniel",
+    name: "Judson Daniel R",
     affiliation: "SCORE, VIT Vellore",
     badge: "Project Lead",
   },

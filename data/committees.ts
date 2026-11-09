@@ -332,13 +332,7 @@ export const publicationCommittee: CommitteeMember[] = [
     image: "/images/faculty/dr-karthikeyan-d.webp",
     portfolioUrl: "https://vit.ac.in/information-technolo/dr-karthikeyan-d",
   },
-  {
-    name: "Dr. Anbarasa Kumar. A",
-    role: "Assistant Professor",
-    affiliation: "SCORE, VIT, Vellore",
-    image: "/images/faculty/dr-anbarasa-kumar-a.webp",
-    portfolioUrl: "https://vit.ac.in/information-technolo/dr-anbarasa-kumar-a",
-  },
+  
   {
     name: "Dr. Yogaraja. C. A",
     role: "Assistant Professor",

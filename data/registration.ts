@@ -13,40 +13,40 @@ export interface RegistrationPolicy {
 export const registrationFeesData: RegistrationFeeTier[] = [
   {
     category: "Industry Professionals",
-    indianFee: "Rs. 15,000",
-    foreignFee: "400$",
+    indianFee: "INR 15,000",
+    foreignFee: "USD 400",
   },
   {
     category: "Faculty / Academicians",
-    indianFee: "Rs. 14,000",
-    foreignFee: "350$",
+    indianFee: "INR 14,000",
+    foreignFee: "USD 350",
   },
   {
     category: "Faculty / Academicians (IEEE Members)",
-    indianFee: "Rs. 12,000",
-    foreignFee: "325$",
+    indianFee: "INR 12,000",
+    foreignFee: "USD 325",
     isIeeeDiscount: true,
   },
   {
     category: "Research Scholars, UG and PG Students",
-    indianFee: "Rs. 10,000",
-    foreignFee: "300$",
+    indianFee: "INR 10,000",
+    foreignFee: "USD 300",
   },
   {
     category: "Research Scholars, UG and PG Students (IEEE Members)",
-    indianFee: "Rs. 8,000",
-    foreignFee: "275$",
+    indianFee: "INR 8,000",
+    foreignFee: "USD 275",
     isIeeeDiscount: true,
   },
   {
     category: "VIT (internal)",
-    indianFee: "Rs. 10,000",
+    indianFee: "INR 10,000",
     foreignFee: "—",
   },
   {
     category: "Co-Authors / Participants (non-authors)",
-    indianFee: "Rs. 5,000",
-    foreignFee: "200$",
+    indianFee: "INR 5,000",
+    foreignFee: "USD 200",
   },
 ];
 

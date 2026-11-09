@@ -6,7 +6,7 @@ import { Sparkles, ArrowRight, Award, Globe, Users } from "lucide-react";
 export default function HomeKeynoteSpeakers() {
   return (
     <section id="speakers" className="border-b border-[#E2E8F0] bg-[#F8FAFC] scroll-mt-20">
-      <div className="container-x py-14 sm:py-18">
+      <div className="container-x py-8 sm:py-12">
         <div className="relative overflow-hidden rounded-3xl border-2 border-[#002147]/15 bg-gradient-to-br from-[#002147] via-[#001733] to-[#002147] p-8 sm:p-12 text-white shadow-xl">
           {/* Ambient Lighting */}
           <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-[#F5A623]/10 blur-3xl" />

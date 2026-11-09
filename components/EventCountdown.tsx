@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Clock, Calendar } from "lucide-react";
+import Link from "next/link";
+import { Clock, Calendar, ArrowRight } from "lucide-react";
 
 interface TimeLeft {
   days: number;
@@ -13,6 +14,29 @@ interface TimeLeft {
 
 // Conference Start: 10 February 2028, 09:00:00 IST (Indian Standard Time UTC+5:30)
 const EVENT_TARGET_DATE = new Date("2028-02-10T09:00:00+05:30").getTime();
+
+const MILESTONE_TIMELINE = [
+  {
+    date: "05 Oct 2027",
+    label: "Paper Submission Last Date",
+    isTarget: false,
+  },
+  {
+    date: "04 Nov 2027",
+    label: "Acceptance Notice",
+    isTarget: false,
+  },
+  {
+    date: "12 Dec 2027",
+    label: "Camera Ready & Reg.",
+    isTarget: false,
+  },
+  {
+    date: "10–11 Feb 2028",
+    label: "Conference Days",
+    isTarget: true,
+  },
+];
 
 function calculateTimeLeft(): TimeLeft {
   const now = new Date().getTime();
@@ -108,6 +132,74 @@ export default function EventCountdown() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ── TIMELINE SECTION ── */}
+          <div className="relative z-10 mt-5 sm:mt-6 pt-4 sm:pt-5 border-t border-white/15">
+            {/* Header: Title "Timeline" (Bigger font size) + Full Schedule Link */}
+            <div className="flex items-center justify-between mb-3.5 sm:mb-4">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FFB81C] shadow-[0_0_8px_#FFB81C] animate-pulse" />
+                <span>Timeline</span>
+              </h3>
+              <Link
+                href="/important-dates"
+                className="text-xs sm:text-sm font-semibold text-[#38BDF8] hover:text-[#7dd3fc] transition-colors inline-flex items-center gap-1.5 group"
+              >
+                <span>Full Schedule</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Timeline Milestones Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+              {MILESTONE_TIMELINE.map((item, idx) => (
+                <div
+                  key={item.label}
+                  className={`group relative flex flex-col items-center text-center p-3 sm:p-3.5 rounded-2xl transition-all duration-300 ${
+                    item.isTarget
+                      ? "bg-gradient-to-b from-[#FFB81C]/20 to-[#FFB81C]/5 border-2 border-[#FFB81C] shadow-[0_0_25px_rgba(255,184,28,0.22)]"
+                      : "bg-white/[0.06] border border-white/15 hover:border-white/30 hover:bg-white/[0.1]"
+                  }`}
+                >
+                  {/* Step Stage Pill */}
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        item.isTarget
+                          ? "bg-[#FFB81C] shadow-[0_0_6px_#FFB81C] animate-pulse"
+                          : "bg-[#38BDF8]"
+                      }`}
+                    />
+                    <span
+                      className={`text-[10px] font-mono uppercase tracking-wider font-bold ${
+                        item.isTarget ? "text-[#FFB81C]" : "text-white/60"
+                      }`}
+                    >
+                      {item.isTarget ? "Target" : `Stage 0${idx + 1}`}
+                    </span>
+                  </div>
+
+                  {/* Date */}
+                  <span
+                    className={`text-xs sm:text-sm md:text-[15px] font-extrabold tabular-nums tracking-tight ${
+                      item.isTarget ? "text-[#FFB81C]" : "text-white"
+                    }`}
+                  >
+                    {item.date}
+                  </span>
+
+                  {/* Milestone Label */}
+                  <span
+                    className={`text-[11px] sm:text-xs font-medium leading-tight mt-1 ${
+                      item.isTarget ? "text-white font-semibold" : "text-slate-300"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

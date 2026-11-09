@@ -1,0 +1,79 @@
+ .gitignore                                         |     10 [32m+[m
+ app/about/page.tsx                                 |     81 [32m+[m[31m-[m
+ app/advisory/page.tsx                              |     30 [32m+[m[31m-[m
+ app/committees/page.tsx                            |     49 [32m+[m[31m-[m
+ app/hackathon/page.tsx                             |     26 [32m+[m[31m-[m
+ app/ic-ETITE20/page.tsx                            |     14 [32m+[m[31m-[m
+ app/ic-ETITE24/page.tsx                            |    160 [32m+[m[31m-[m
+ app/layout.tsx                                     |      6 [32m+[m[31m-[m
+ app/page.tsx                                       |     13 [32m+[m[31m-[m
+ app/sponsorship/page.tsx                           |    395 [32m+[m
+ app/team/page.tsx                                  |     50 [32m+[m[31m-[m
+ components/AboutAndThemesSection.tsx               |     40 [32m+[m[31m-[m
+ components/BoltPhotoMoments.tsx                    |    165 [32m+[m
+ components/Footer.tsx                              |      5 [32m+[m
+ components/GallerySlideshow.tsx                    |    192 [32m+[m[31m-[m
+ components/Hero.tsx                                |     20 [32m+[m[31m-[m
+ components/HomePhotoMoments.tsx                    |    166 [32m+[m
+ components/HomeSponsorsPartners.tsx                |      4 [32m+[m[31m-[m
+ components/Icetite24FullGallery.tsx                |    335 [32m+[m
+ components/Navbar.tsx                              |      1 [32m+[m
+ components/StartupAnimation.tsx                    |      4 [32m+[m[31m-[m
+ data/advisory.ts                                   |     16 [32m+[m[31m-[m
+ data/conference.ts                                 |      4 [32m+[m[31m-[m
+ data/hotels.ts                                     |      6 [32m+[m[31m-[m
+ data/icetite24GalleryData.ts                       |    262 [32m+[m
+ data/photos.ts                                     |    145 [32m+[m[31m-[m
+ data/team.ts                                       |     22 [32m+[m[31m-[m
+ ic-ETITE28-startup-animation.html                  |    639 [32m+[m[31m-[m
+ pics/WhatsApp Image 2026-10-19 at 22.13.14.jpeg    |    Bin [31m0[m -> [32m297472[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.15 (1).jpeg |    Bin [31m0[m -> [32m521211[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.15 (2).jpeg |    Bin [31m0[m -> [32m524652[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.15.jpeg    |    Bin [31m0[m -> [32m403246[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.16 (1).jpeg |    Bin [31m0[m -> [32m397070[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.16.jpeg    |    Bin [31m0[m -> [32m372838[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.17 (1).jpeg |    Bin [31m0[m -> [32m342970[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.17 (2).jpeg |    Bin [31m0[m -> [32m235291[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.17.jpeg    |    Bin [31m0[m -> [32m363322[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.18 (1).jpeg |    Bin [31m0[m -> [32m240249[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.18 (2).jpeg |    Bin [31m0[m -> [32m307228[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.18.jpeg    |    Bin [31m0[m -> [32m287814[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.19 (1).jpeg |    Bin [31m0[m -> [32m330189[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.19.jpeg    |    Bin [31m0[m -> [32m300201[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.20 (1).jpeg |    Bin [31m0[m -> [32m183741[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.20 (2).jpeg |    Bin [31m0[m -> [32m265014[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.20.jpeg    |    Bin [31m0[m -> [32m405396[m bytes
+ .../WhatsApp Image 2026-10-19 at 22.13.21 (1).jpeg |    Bin [31m0[m -> [32m394468[m bytes
+ pics/WhatsApp Image 2026-10-19 at 22.13.21.jpeg    |    Bin [31m0[m -> [32m400389[m bytes
+ public/Formatted_ic-ETITE_Conference_Brochure.pdf  | 113652 [32m++++++++++++++++++[m
+ public/brochure_ic-ETITE'24.pdf                    |    Bin [31m6500511[m -> [32m22460583[m bytes
+ .../icetite24/icetite24_01_networking_gala.webp    |    Bin [31m0[m -> [32m108630[m bytes
+ .../icetite24/icetite24_02_campus_evening.webp     |    Bin [31m0[m -> [32m253876[m bytes
+ .../icetite24/icetite24_03_student_delegates.webp  |    Bin [31m0[m -> [32m268002[m bytes
+ .../images/icetite24/icetite24_04_cisco_expo.webp  |    Bin [31m0[m -> [32m168234[m bytes
+ .../icetite24_05_technext_smart_world.webp         |    Bin [31m0[m -> [32m164086[m bytes
+ .../icetite24_06_plenary_audience_hall.webp        |    Bin [31m0[m -> [32m150982[m bytes
+ .../icetite24_07_delegates_celebration.webp        |    Bin [31m0[m -> [32m140930[m bytes
+ .../icetite24/icetite24_08_campus_gathering.webp   |    Bin [31m0[m -> [32m89700[m bytes
+ .../icetite24/icetite24_09_cultural_evening.webp   |    Bin [31m0[m -> [32m148340[m bytes
+ .../icetite24/icetite24_10_organizing_team.webp    |    Bin [31m0[m -> [32m82084[m bytes
+ .../icetite24_11_drone_prototype_expo.webp         |    Bin [31m0[m -> [32m113388[m bytes
+ .../icetite24_12_dignitaries_keynote.webp          |    Bin [31m0[m -> [32m105414[m bytes
+ .../icetite24_13_java_capital_innovators.webp      |    Bin [31m0[m -> [32m120162[m bytes
+ .../icetite24/icetite24_14_technext_committee.webp |    Bin [31m0[m -> [32m100392[m bytes
+ .../icetite24/icetite24_15_podium_address.webp     |    Bin [31m0[m -> [32m50566[m bytes
+ .../icetite24_16_inaugural_ceremony_dais.webp      |    Bin [31m0[m -> [32m95092[m bytes
+ .../icetite24_17_intell_green_innovation.webp      |    Bin [31m0[m -> [32m172502[m bytes
+ .../icetite24_18_bolt_hackathon_awards_stage.webp  |    Bin [31m0[m -> [32m169430[m bytes
+ .../icetite24_19_bolt_winners_felicitation.webp    |    Bin [31m0[m -> [32m176606[m bytes
+ public/images/ieee-its-group.webp                  |    Bin [31m0[m -> [32m88434[m bytes
+ public/images/vit-sjt.webp                         |    Bin [31m0[m -> [32m46462[m bytes
+ public/logos/ic-etite20-logo-cropped.png           |    Bin [31m0[m -> [32m18889[m bytes
+ public/logos/ic-etite20-logo-transparent.png       |    Bin [31m0[m -> [32m20558[m bytes
+ public/logos/ic-etite20-logo-white.png             |    Bin [31m0[m -> [32m19702[m bytes
+ public/logos/ic-etite20-logo.png                   |    Bin [31m0[m -> [32m23138[m bytes
+ public/logos/ic-etite24-logo-clean.png             |    Bin [31m0[m -> [32m17237[m bytes
+ public/logos/ic-etite24-logo-cropped.png           |    Bin [31m0[m -> [32m16693[m bytes
+ public/logos/ic-etite24-logo-transparent.png       |    Bin [31m0[m -> [32m18629[m bytes
+ public/logos/ic-etite24-logo.png                   |    Bin [31m0[m -> [32m24760[m bytes
+ 78 files changed, 115997 insertions(+), 515 deletions(-)

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { History, Sparkles, ExternalLink, FileCheck, Globe2, Award } from "lucide-react";
+import { History, ExternalLink } from "lucide-react";
 
 export default function WhatsIcetiteHistorySection() {
   const statsRef = useRef<HTMLDivElement>(null);

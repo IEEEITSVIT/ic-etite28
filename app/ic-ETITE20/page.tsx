@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
-import GallerySlideshow, { GalleryItem } from "@/components/GallerySlideshow";
+import Icetite20PhotoGrid from "@/components/Icetite20PhotoGrid";
+import type { GalleryItem } from "@/components/GallerySlideshow";
 
 const icetite20GalleryItems: GalleryItem[] = [
   {
@@ -116,11 +118,11 @@ import {
   Layers,
 } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/ic-ETITE20", {
   title: "ic-ETITE'20 — Inaugural Edition | Highlights & Photo Archive",
   description:
     "Official highlights, stats, and photo archive of the First IEEE International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE'20), held on 24–25 Feb 2020 at VIT Vellore.",
-};
+});
 
 const stats = [
   { label: "Technical Sessions", value: "21", icon: Layers },
@@ -231,7 +233,7 @@ export default function Icetite20Page() {
             <h1 className="sr-only">ic-ETITE&apos;20</h1>
           </div>
           <p className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed mb-8">
-            The First International Conference on Emerging Trends in Information Technology and Engineering — organized at VIT Vellore, technically co-sponsored by IEEE, 24–25 February 2020.
+            The First International Conference on Emerging Trends in Information Technology and Engineering
           </p>
 
           <a
@@ -259,31 +261,62 @@ export default function Icetite20Page() {
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
-      <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-20 bg-[#F7F9FC] border-b border-slate-200">
-        <div className="max-w-5xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4">
-            About ic-ETITE&apos;20
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#002147] mb-5 leading-tight">
-            The First Edition
-          </h2>
-          <p className="text-slate-600 text-base leading-relaxed mb-4">
-            This event took place in Vellore Institute of Technology, Vellore, India on 24th &amp; 25th February 2020. The purpose of this conference was to enhance the research in Information Technology, Computer Engineering, Communication Engineering, Electronics Engineering and to afford an international platform for researchers, academicians, engineers, industrialists and students around the world to share their research findings with the global experts in the field of Science and Technology.
-          </p>
-          <p className="text-slate-600 text-base leading-relaxed mb-6">
-            ic-ETITE 2020 expressed its concern towards the upgradation of researchers in Information Technology and Engineering. It motivates to provide a worldwide platform to researchers far and widespread by exploring their innovations in the fields of science and technology. The mission is to promote and improve the research and development related to the topics of the conference.
-          </p>
-          <a
-            href="https://ieeexplore.ieee.org/xpl/conhome/9070069/proceeding"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#5B2D8E] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#4a2073] transition-colors text-sm"
-          >
-            <BookOpen className="w-4 h-4" />
-            View IEEE Xplore Proceedings
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+      {/* ── ABOUT: TEXT WRAPS ALL AROUND FLOATED PHOTO ── */}
+      <section className="py-8 sm:py-12 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
+        <div className="max-w-6xl mx-auto bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-right md:ml-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+              <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/gallery/icetite20_stage_inaugural.webp"
+                  alt="ic-ETITE'20 Inaugural Ceremony on Anna Auditorium Dais"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </div>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                Hon&apos;ble Chancellor Dr. G. Viswanathan and international luminaries presiding over ic-ETITE&apos;20 inauguration
+              </p>
+            </div>
+          </div>
+
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1 rounded-full border border-purple-200 inline-block">
+              Inaugural Edition Legacy
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#002147] leading-tight">
+              About ic-ETITE&apos;20: The First Edition
+            </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The inaugural <strong>First International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE’20)</strong> took place at Vellore Institute of Technology (VIT), Vellore, India, on <strong>24th &amp; 25th February 2020</strong>. Organised by the School of Information Technology and Engineering (SITE / SCORE), the conference was technically co-sponsored by the <strong>IEEE Computer Society Madras Chapter</strong> and the <strong>IEEE Communications Society Madras Chapter</strong>.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The purpose of the conference was to enhance high-impact research across Information Technology, Computer Engineering, Communication Engineering, and Electronics Engineering, affording an authoritative international platform for researchers, academicians, engineers, industrialists, and students worldwide to share breakthrough findings with global experts.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              ic-ETITE’20 featured <strong>21 dedicated technical sessions</strong> and <strong>17 enriching keynote sessions</strong> delivered by eminent global academicians, including Prof. Brian A. Barsky (UC Berkeley, USA), Dr. Ajith Abraham (Director, MIR Labs, USA), and Dr. Raija Halonen (University of Oulu, Finland). In alignment with green campus traditions, visiting dignitaries planted memorial trees on the auditorium lawns.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              All accepted and presented peer-reviewed research papers were successfully indexed and published in the <strong>IEEE Xplore Digital Library</strong> (Electronic ISBN: 978-1-7281-4142-8). Alongside scientific sessions, the first edition debuted the 24-hour national hackathon BOLT (Breakthrough On Locked Technology), which engaged 500+ participants with ₹1,00,000 in cash awards.
+            </p>
+          </div>
+
+          <div className="clear-both pt-4 flex flex-wrap gap-3">
+            <a
+              href="https://ieeexplore.ieee.org/xpl/conhome/9070069/proceeding"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#5B2D8E] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#4a2073] transition-colors text-xs sm:text-sm shadow-sm"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>View IEEE Xplore Proceedings</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -312,21 +345,21 @@ export default function Icetite20Page() {
         </div>
       </section>
 
-      {/* ── PHOTO GALLERY SLIDESHOW ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
+      {/* ── PHOTO GALLERY (4x4 Grid, No Captions, Load More) ── */}
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10 px-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4">
+          <div className="text-center mb-10 sm:mb-12 px-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-3">
               Official Photo Archive
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#002147] mb-2">
-              ic-ETITE&apos;20 Gallery
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#002147] mb-3">
+              ic-ETITE&apos;20 Photo Gallery
             </h2>
-            <p className="text-slate-500 text-base max-w-xl mx-auto">
-              Archival photographs from the inaugural edition — inaugurations, keynotes, sessions &amp; more.
+            <p className="text-slate-600 text-base max-w-2xl mx-auto">
+              Archival photographs from the inaugural edition — inaugural dais, keynote addresses, technical sessions, tree plantation, and international delegate gatherings.
             </p>
           </div>
-          <GallerySlideshow items={icetite20GalleryItems} showCategoryFilter={false} />
+          <Icetite20PhotoGrid />
         </div>
       </section>
 

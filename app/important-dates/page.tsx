@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import DatesTimeline from "@/components/DatesTimeline";
 import PageHeader from "@/components/PageHeader";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/important-dates", {
   title: "Important Dates & Milestone Schedule | ic-ETITE'28",
   description:
     "Official schedule and milestone dates for ic-ETITE'28 at Vellore Institute of Technology (VIT), Vellore.",
-};
+});
 
 export default function ImportantDatesPage() {
   return (

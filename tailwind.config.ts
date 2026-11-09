@@ -79,7 +79,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          '"Plus Jakarta Sans"',
+          "var(--font-inter)",
           "Inter",
           "ui-sans-serif",
           "system-ui",
@@ -90,6 +90,7 @@ const config: Config = {
           "sans-serif",
         ],
         serif: [
+          "var(--font-jakarta)",
           '"Plus Jakarta Sans"',
           "Inter",
           "ui-sans-serif",
@@ -101,6 +102,7 @@ const config: Config = {
           "sans-serif",
         ],
         display: [
+          "var(--font-jakarta)",
           '"Plus Jakarta Sans"',
           "Inter",
           "ui-sans-serif",

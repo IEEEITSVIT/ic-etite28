@@ -1,15 +1,23 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import LoadingScreen from "@/components/LoadingScreen";
 import AppNavbar from "@/components/AppNavbar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import StartupAnimation from "@/components/StartupAnimation";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
+
+// Self-hosted at build time: Inter for body text, Plus Jakarta Sans for headings.
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://icetite28.vit.ac.in"),
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
-    default: "Third International Conference on Emerging Trends in Information Technology and Engineering",
-    template: "%s | Third International Conference on Emerging Trends in Information Technology and Engineering",
+    default: "ic-ETITE'28 | Third International Conference on Emerging Trends in Information Technology and Engineering",
+    // Page titles already carry the conference name
+    template: "%s",
   },
   description:
     "Official website of ic-ETITE'28, the Third International Conference on Emerging Trends in Information Technology and Engineering, organized by Vellore Institute of Technology, Vellore. Technically co-sponsored by IEEE. 10–11 February 2028.",
@@ -24,7 +32,16 @@ export const metadata: Metadata = {
     "Information Technology Conference",
     "Electronics Engineering",
     "IEEE Xplore",
+    "ic-ETITE 2028 call for papers",
+    "IEEE conference India 2028",
+    "international conference Vellore",
+    "BOLT hackathon",
   ],
+  icons: {
+    icon: "/assets/icetite-logo.jpeg",
+    apple: "/assets/icetite-logo.jpeg",
+  },
+  category: "conference",
   authors: [{ name: "Vellore Institute of Technology (VIT), Vellore" }],
   creator: "VIT Vellore, SCORE",
   publisher: "IEEE & Vellore Institute of Technology",
@@ -37,8 +54,8 @@ export const metadata: Metadata = {
     title: "Third International Conference on Emerging Trends in Information Technology and Engineering",
     description:
       "Official website of ic-ETITE'28, organized by Vellore Institute of Technology, Vellore. Technically co-sponsored by IEEE. 10–11 February 2028.",
-    url: "https://icetite28.vit.ac.in",
-    siteName: "ic-ETITE'28",
+    url: "/",
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
   },
@@ -51,7 +68,20 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#002147",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -60,14 +90,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/assets/icetite-logo.jpeg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (!sessionStorage.getItem("icetite28_intro_seen")) {
+                  document.documentElement.classList.add("show-intro");
+                }
+              } catch (e) {}
+            `,
+          }}
         />
         {/* JSON-LD Structured Data for Academic Conference Event */}
         <script
@@ -78,6 +112,10 @@ export default function RootLayout({
               "@type": "AcademicConference",
               name: "The Third International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE'28)",
               alternateName: "ic-ETITE'28",
+              url: SITE_URL,
+              image: `${SITE_URL}/opengraph-image`,
+              description:
+                "The Third International Conference on Emerging Trends in Information Technology and Engineering, organized by the School of Computer Science Engineering and Information Systems (SCORE), VIT Vellore. Technically co-sponsored by IEEE.",
               startDate: "2028-02-10",
               endDate: "2028-02-11",
               eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
@@ -110,8 +148,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-white text-[#101B2E] antialiased">
-        <LoadingScreen />
+      <body
+        className="min-h-screen flex flex-col bg-white text-[#101B2E] antialiased"
+        suppressHydrationWarning
+      >
+        <StartupAnimation />
         <AppNavbar />
         <main className="flex-1">{children}</main>
         <Footer />

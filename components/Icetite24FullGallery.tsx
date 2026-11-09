@@ -83,37 +83,12 @@ export default function Icetite24FullGallery() {
         {/* Category Pills */}
         <div className="flex flex-wrap items-center gap-2">
           {[
-            { id: "all", label: `All Moments (${ICETITE24_PHOTOS.length})` },
-            {
-              id: "dais",
-              label: `Inaugural & Dais (${
-                ICETITE24_PHOTOS.filter((p) => p.category === "dais").length
-              })`,
-            },
-            {
-              id: "hackathon",
-              label: `BOLT 2.0 Hackathon (${
-                ICETITE24_PHOTOS.filter((p) => p.category === "hackathon").length
-              })`,
-            },
-            {
-              id: "expo",
-              label: `TechNext Expo (${
-                ICETITE24_PHOTOS.filter((p) => p.category === "expo").length
-              })`,
-            },
-            {
-              id: "networking",
-              label: `Networking & Gala (${
-                ICETITE24_PHOTOS.filter((p) => p.category === "networking").length
-              })`,
-            },
-            {
-              id: "keynote",
-              label: `Keynotes & Plenary (${
-                ICETITE24_PHOTOS.filter((p) => p.category === "keynote").length
-              })`,
-            },
+            { id: "all", label: "All Moments" },
+            { id: "dais", label: "Inaugural & Dais" },
+            { id: "hackathon", label: "BOLT 2.0 Hackathon" },
+            { id: "expo", label: "TechNext Expo" },
+            { id: "networking", label: "Networking & Gala" },
+            { id: "keynote", label: "Keynotes & Plenary" },
           ].map((cat) => (
             <button
               key={cat.id}
@@ -256,10 +231,6 @@ export default function Icetite24FullGallery() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] text-white/50 hidden sm:inline">
-                  {filteredPhotos.findIndex((p) => p.id === activePhoto.id) + 1} of{" "}
-                  {filteredPhotos.length}
-                </span>
                 <button
                   onClick={closeLightbox}
                   className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-1"

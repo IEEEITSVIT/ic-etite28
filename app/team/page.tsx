@@ -8,7 +8,7 @@ export default function TeamPage() {
   const studentMembers = ieeeItsLeadership.filter((m) => m.badge !== "Faculty Advisor");
 
   return (
-    <main className="bg-white min-h-screen text-[#1A1A1A] py-10 sm:py-14">
+    <div className="bg-white min-h-screen text-[#1A1A1A] py-10 sm:py-14">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Title matching committee page style (Blue) */}
@@ -70,6 +70,6 @@ export default function TeamPage() {
         </div>
 
       </div>
-    </main>
+    </div>
   );
 }

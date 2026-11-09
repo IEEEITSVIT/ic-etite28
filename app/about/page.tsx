@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Award,
   CheckCircle2,
   ExternalLink,
   Camera,
   ChevronRight,
+  ArrowRight,
+  Award,
+  Cpu,
+  Globe2,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import GallerySlideshow from "@/components/GallerySlideshow";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/about", {
   title: "About ic-ETITE'28 | Vellore Institute of Technology",
   description:
     "Learn about ic-ETITE'28, organized by SCORE, VIT Vellore. Explore conference legacy, VIT rankings, and IEEE ITS chapter.",
-};
+});
 
 const rankingsList = [
   {
@@ -141,7 +145,7 @@ const archivalGallery = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-white min-h-screen text-[#002147]">
+    <div className="bg-[#FAFBFD] min-h-screen text-[#002147]">
       <PageHeader
         badge="Vellore Institute of Technology · SCORE"
         title="About ic-ETITE'28"
@@ -150,163 +154,196 @@ export default function AboutPage() {
         bgImage="/images/frame_15.webp"
       />
 
-      <div className="container-x py-16 md:py-24 space-y-20">
-        {/* Conference Overview */}
-        <section className="grid md:grid-cols-12 gap-10 md:gap-14 items-stretch">
-          <div className="md:col-span-6 space-y-5 flex flex-col justify-center">
-            <span className="text-xs sm:text-sm font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3.5 py-1.5 rounded-full border border-[#F5A623]/50 w-fit">
-              About ic-ETITE’28
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#002147] font-bold leading-tight">
-              An International Platform for Research &amp; Innovation
-            </h2>
-            <p className="text-base sm:text-lg leading-relaxed text-slate-700 font-normal text-justify">
-              The conference aims to provide an international platform for researchers, academicians, engineers, industry professionals, and students to present and exchange innovative research in Information Technology, Computer Engineering, Communication Engineering, Electronics Engineering, and related emerging areas.
-            </p>
-            <p className="text-base sm:text-lg leading-relaxed text-slate-700 font-normal text-justify">
-              ic-ETITE’28 seeks to foster knowledge sharing, interdisciplinary collaboration, industry–academia interaction, and future research partnerships among participants from around the world.
-            </p>
-            <p className="text-base leading-relaxed text-slate-700 font-normal text-justify">
-              Original and unpublished research papers addressing emerging challenges, innovative technologies, and recent developments are invited from researchers worldwide. The conference is committed to promoting research excellence and facilitating the dissemination of knowledge that contributes to the advancement of science, technology, and education.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-3">
-              <Link href="/call-for-papers" className="btn-primary text-sm font-bold py-2.5 px-5">
-                Call for Papers
-              </Link>
-              <Link href="/tracks" className="btn-outline text-sm font-semibold py-2.5 px-5">
-                Explore Tracks
-              </Link>
-            </div>
-          </div>
-
-          <div className="md:col-span-6 flex flex-col justify-center">
-            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+      <div className="container-x py-8 sm:py-12 space-y-6 sm:space-y-8">
+        {/* =========================================================================
+            1. CONFERENCE OVERVIEW: ic-ETITE'28
+        ========================================================================= */}
+        <section className="bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-right md:ml-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
               <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
                 <Image
                   src="/images/gallery/icetite24_inauguration.webp"
                   alt="ic-ETITE Conference Plenary Session"
                   fill
                   loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 1024px) 100vw, 500px"
                   className="object-cover object-center hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs sm:text-sm text-slate-600 font-medium rounded-b-xl mt-2.5">
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
                 Dignitaries and keynote luminaries at ic-ETITE, Anna Auditorium, VIT Vellore
-              </div>
+              </p>
             </div>
           </div>
+
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <span className="text-xs sm:text-sm font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3.5 py-1.5 rounded-full border border-[#F5A623]/50 inline-block">
+              About ic-ETITE’28
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold leading-tight">
+              An International Platform for Research &amp; Innovation
+            </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The <strong>Third International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE’28)</strong> will convene at Vellore Institute of Technology (VIT), Vellore, India, on <strong>10–11 February 2028</strong>. The conference aims to provide a distinguished global forum for researchers, academicians, engineers, industry professionals, and students to present and exchange innovative research in Information Technology, Computer Engineering, Communication Engineering, Electronics Engineering, and related emerging areas.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              ic-ETITE’28 seeks to foster cross-disciplinary knowledge sharing, international research collaboration, industry–academia synergy, and future research partnerships among participants from around the world. Over two comprehensive conference days, delegates will engage in peer-reviewed oral paper presentations, distinguished keynote addresses from world-renowned scientists, interactive technical panels, and demonstrations of next-generation technological prototypes.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              Original and unpublished research papers addressing emerging technical challenges, novel computational architectures, and recent engineering developments are invited from researchers worldwide. The conference is committed to promoting scientific excellence and facilitating the dissemination of high-impact research. All accepted and presented papers will be submitted for inclusion in the <strong>IEEE Xplore Digital Library</strong>, and extended versions of selected papers will be recommended for publication in Scopus-indexed journals with impact factors.
+            </p>
+          </div>
+
+          <div className="clear-both pt-4 flex flex-wrap gap-3">
+            <Link href="/call-for-papers" className="btn-primary text-sm font-bold py-2.5 px-5">
+              Call for Papers
+            </Link>
+            <Link href="/tracks" className="btn-outline text-sm font-semibold py-2.5 px-5">
+              Explore Tracks
+            </Link>
+          </div>
         </section>
 
-        {/* The Theme of the Conference */}
-        <section className="bg-[#FAFBFD] border-2 border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm">
-          <div className="max-w-3xl mb-6">
-            <span className="text-xs sm:text-sm font-bold text-[#DE6D1B] uppercase tracking-wider bg-orange-50 px-3.5 py-1.5 rounded-full border border-orange-200 inline-block mb-3">
+        {/* =========================================================================
+            2. THE THEME OF THE CONFERENCE
+        ========================================================================= */}
+        <section className="bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop (Left) */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-left md:mr-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+              <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/004A3344.webp"
+                  alt="Conference Hall and Participants at ic-ETITE"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover object-center hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                Scholars and delegates participating in conference technical deliberations
+              </p>
+            </div>
+          </div>
+
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <span className="text-xs sm:text-sm font-bold text-[#DE6D1B] uppercase tracking-wider bg-orange-50 px-3.5 py-1.5 rounded-full border border-orange-200 inline-block">
               Conference Focus
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#002147]">
-              The theme of the Conference
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#002147]">
+              The Theme of the Conference
             </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              ic-ETITE’28 emphasizes the vital importance of advancing research, ethical innovation, and technological development in Information Technology and Engineering. The conference aims to provide a global platform for researchers, academicians, engineers, industry leaders, and students to showcase breakthrough innovations, exchange domain expertise, and explore emerging developments in science and technology.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The core tracks span four pivotal fields of engineering: <strong>Information Technology</strong> (encompassing cloud architectures, data engineering, blockchain, and cyber intelligence); <strong>Computer Engineering</strong> (artificial intelligence, machine learning, computer vision, and cognitive systems); <strong>Communication Engineering</strong> (next-generation wireless, 5G/6G protocols, IoT sensor networks, and signal processing); and <strong>Electronics Engineering</strong> (semiconductor devices, VLSI architectures, robotics, and cyber-physical automation).
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The conference is committed to promoting sustainable, energy-efficient, and human-centric engineering solutions that address global environmental and industrial challenges, while creating lifelong international research networks.
+            </p>
           </div>
-          <div className="space-y-4 text-base sm:text-lg leading-relaxed text-slate-700 text-justify">
-            <p>
-              ic-ETITE’28 emphasizes the importance of advancing research and innovation in Information Technology and Engineering. The conference aims to provide a global platform for researchers, academicians, engineers, industry professionals, and students to showcase their innovations, exchange knowledge, and explore emerging developments in science and technology.
-            </p>
-            <p>
-              The conference is committed to promoting research, innovation, and technological development in Information Technology and Engineering. It seeks to foster international collaboration, encourage interdisciplinary research, and facilitate global research networks that support future joint initiatives and academic partnerships.
-            </p>
+
+          <div className="clear-both pt-4">
+            <Link href="/tracks" className="btn-outline text-sm font-semibold py-2.5 px-5 inline-flex items-center gap-2">
+              <span>View Track Details &amp; Topics</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </section>
 
-        {/* ── HIGHLIGHTS OF PREVIOUS EDITIONS (ic-ETITE'24 & ic-ETITE'20) ── */}
-        <section id="highlights" className="space-y-8 scroll-mt-24">
+        {/* =========================================================================
+            3. HIGHLIGHTS OF PREVIOUS EDITIONS (ic-ETITE'24 & ic-ETITE'20)
+        ========================================================================= */}
+        <section id="highlights" className="space-y-6 scroll-mt-24">
           <div className="text-center max-w-3xl mx-auto">
-            <span className="text-xs sm:text-sm font-bold text-[#004B87] uppercase tracking-wider bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/30 inline-block mb-3">
+            <span className="text-xs sm:text-sm font-bold text-[#004B87] uppercase tracking-wider bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/30 inline-block mb-2">
               Conference Heritage &amp; Impact
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#002147]">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#002147]">
               Highlights of Previous Editions
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
               A proven track record of research excellence, international keynote speakers, hackathons, and IEEE Xplore proceedings.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* ic-ETITE'24 Card */}
-            <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-sm p-7 sm:p-9 flex flex-col justify-between hover:border-[#002147] transition-all">
+            <div className="bg-white rounded-2xl border-2 border-slate-200 shadow-sm p-6 sm:p-7 flex flex-col justify-between hover:border-[#002147] transition-all">
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <span className="px-3 py-1 rounded-full bg-[#002147] text-white text-xs font-bold font-mono uppercase tracking-wider">
                     Second ic-ETITE’24 · 22–23 Feb 2024
                   </span>
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                     IEEE Xplore Indexed
                   </span>
                 </div>
 
-                <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#002147] mb-2">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#002147] mb-1">
                   Highlights of the Second ic-ETITE’24
                 </h3>
-                <p className="text-sm text-slate-600 mb-6">
+                <p className="text-xs text-slate-600 mb-4 min-h-[38px] flex items-center">
                   Organized by SCORE, VIT Vellore: 22–23 February 2024. Technically co-sponsored by IEEE.
                 </p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 mb-6 text-center">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#002147]">1,688</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Papers Received</p>
+                <div className="grid grid-cols-3 gap-2.5 mb-5 text-center">
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">1,688</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Papers Received</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#002147]">19</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Countries</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">19</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Countries</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#002147]">1,088</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Participants</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">1,088</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Participants</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#004B87]">32</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Tech Sessions</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#004B87] tracking-tight tabular-nums">32</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Tech Sessions</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#004B87]">22</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Keynotes</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#004B87] tracking-tight tabular-nums">22</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Keynotes</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-2xl font-serif font-bold text-[#DE6D1B]">683</p>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">BOLT 2.0 Reg.</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#DE6D1B] tracking-tight tabular-nums">683</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">BOLT 2.0 Reg.</p>
                   </div>
                 </div>
 
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                <ul className="space-y-2.5 text-xs text-slate-700">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#002147] shrink-0 mt-0.5" />
-                    <span><strong>Chief Guests:</strong> Dr. Zvi Galil, Georgia Institute of Technology, USA, and Shri S. Krishnan, IAS, Secretary, MeitY, Government of India.</span>
+                    <span><strong>Chief Guests:</strong> Dr. Zvi Galil, Georgia Tech, USA, and Shri S. Krishnan, IAS, Secretary, MeitY, Government of India.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#002147] shrink-0 mt-0.5" />
-                    <span><strong>Keynote Sessions:</strong> 22 keynote sessions delivered by eminent international academicians, Vice-Chancellors, IIT professors, and industry experts from Microsoft, Amazon, and other organizations.</span>
+                    <span><strong>Keynotes &amp; Panels:</strong> 22 keynote sessions delivered by global professors and industry leaders from Microsoft, Amazon, and Cisco.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#002147] shrink-0 mt-0.5" />
-                    <span><strong>Panel Discussions:</strong> Expert panel discussions were conducted with distinguished speakers from academia, IEEE, and industry.</span>
+                    <span><strong>Technext’24:</strong> Industrial expo, hardware demonstrations, and student project competition.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#002147] shrink-0 mt-0.5" />
-                    <span><strong>Technext’24:</strong> Industrial expo and project competition conducted.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#002147] shrink-0 mt-0.5" />
-                    <span><strong>Industry Collaborations &amp; Sponsorships:</strong> Intel, Cisco, Yellow.ai, Java Capital, and Seed VC Innovation.</span>
+                    <span><strong>IEEE Xplore:</strong> All presented papers published in IEEE Xplore Digital Library.</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-200 flex flex-col sm:flex-row gap-3">
+              <div className="pt-4 mt-4 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5">
                 <Link
                   href="/ic-ETITE24"
-                  className="bg-[#002147] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-3 px-4 rounded-xl inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm"
+                  className="bg-[#002147] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5 transition-all shadow-sm"
                 >
                   <span>Explore ic-ETITE&apos;24</span>
                   <ChevronRight className="w-4 h-4 text-[#FFB81C]" />
@@ -315,68 +352,84 @@ export default function AboutPage() {
                   href="https://ieeexplore.ieee.org/xpl/conhome/10493200/proceeding"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#004B87] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-3 px-4 rounded-xl inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm"
+                  className="bg-[#004B87] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5 transition-all shadow-sm"
                 >
                   <span>Access IEEE Proceedings</span>
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
 
             {/* ic-ETITE'20 Card */}
-            <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-sm p-7 sm:p-9 flex flex-col justify-between hover:border-[#002147] transition-all">
+            <div className="bg-white rounded-2xl border-2 border-slate-200 shadow-sm p-6 sm:p-7 flex flex-col justify-between hover:border-[#002147] transition-all">
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <span className="px-3 py-1 rounded-full bg-[#004B87] text-white text-xs font-bold font-mono uppercase tracking-wider">
                     First ic-ETITE’20 · 24–25 Feb 2020
                   </span>
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                     IEEE Xplore Indexed
                   </span>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#002147] mb-2">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#002147] mb-1">
                   Highlights of First ic-ETITE’20
                 </h3>
-                <p className="text-sm text-slate-600 mb-6">
-                  The first IEEE International Conference on “Emerging Trends in Information Technology and Engineering” was organized on 24th &amp; 25th February 2020.
+                <p className="text-xs text-slate-600 mb-4 min-h-[38px] flex items-center">
+                  The inaugural IEEE International Conference on Emerging Trends in IT and Engineering: 24–25 February 2020 at VIT Vellore.
                 </p>
 
-                <div className="grid grid-cols-2 gap-3.5 mb-6 text-center">
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-3xl font-bold text-[#002147]">21</p>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Technical Sessions</p>
+                <div className="grid grid-cols-3 gap-2.5 mb-5 text-center">
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">21</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Tech Sessions</p>
                   </div>
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <p className="text-3xl font-bold text-[#002147]">17</p>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Keynote Sessions</p>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">17</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Keynotes</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#002147] tracking-tight tabular-nums">500+</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">BOLT Coders</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#004B87] tracking-tight tabular-nums">100%</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">IEEE Indexed</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#004B87] tracking-tight tabular-nums">2</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Days Plenary</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[64px]">
+                    <p className="text-xl sm:text-2xl font-sans font-bold text-[#DE6D1B] tracking-tight tabular-nums">₹1 Lakh</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Prize Pool</p>
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-xs sm:text-sm text-slate-700">
+                <ul className="space-y-2.5 text-xs text-slate-700">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
-                    <span><strong>Technical Co-Sponsorship:</strong> ic-ETITE’20 was technically co-sponsored by IEEE.</span>
+                    <span><strong>Technical Co-Sponsors:</strong> IEEE Computer Society &amp; IEEE Communications Society Madras Chapters; supported by ACM &amp; IEEE IAS.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
-                    <span><strong>IEEE Xplore Proceedings:</strong> All the presented papers were published in the IEEE Xplore by the IEEE.</span>
+                    <span><strong>Distinguished Keynotes:</strong> Prof. Brian A. Barsky (UC Berkeley, USA), Dr. Ajith Abraham (Director, MIR Labs, USA), and Dr. Raija Halonen (Univ. of Oulu, Finland).</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
-                    <span><strong>Official ISBN:</strong> Electronic ISBN: <code className="font-mono text-[11px] bg-slate-100 px-1.5 py-0.5 rounded">978-1-7281-4142-8</code> | USB ISBN: <code className="font-mono text-[11px] bg-slate-100 px-1.5 py-0.5 rounded">978-1-7281-4141-1</code></span>
+                    <span><strong>BOLT 1.0 Hackathon:</strong> Inaugural 24-hour national hackathon (&ldquo;Breakthrough On Locked Technology&rdquo;) engaging 500+ student innovators.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
-                    <span><strong>BOLT Hackathon:</strong> A hackathon titled, “Breakthrough on Locked Technology” BOLT was conducted with 500+ participants and gave Rs. 1,00,000 as prize money.</span>
+                    <span><strong>IEEE Xplore Proceedings:</strong> All accepted and presented papers archived in IEEE Xplore. Electronic ISBN: <code className="font-mono text-[10px] bg-slate-100 px-1 py-0.5 rounded">978-1-7281-4142-8</code>.</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-200 flex flex-col sm:flex-row gap-3">
+              <div className="pt-4 mt-4 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5">
                 <Link
                   href="/ic-ETITE20"
-                  className="bg-[#002147] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-3 px-4 rounded-xl inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm"
+                  className="bg-[#002147] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5 transition-all shadow-sm"
                 >
                   <span>Explore ic-ETITE&apos;20</span>
                   <ChevronRight className="w-4 h-4 text-[#FFB81C]" />
@@ -385,52 +438,54 @@ export default function AboutPage() {
                   href="https://ieeexplore.ieee.org/xpl/conhome/9070069/proceeding"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#004B87] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-3 px-4 rounded-xl inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm"
+                  className="bg-[#004B87] hover:bg-[#003366] text-white font-bold text-xs flex-1 py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5 transition-all shadow-sm"
                 >
                   <span>Access IEEE Proceedings</span>
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── PHOTO GALLERY OF PREVIOUS EDITIONS ── */}
-        <section className="bg-gradient-to-b from-[#FAFBFD] to-white border-2 border-slate-200 rounded-3xl p-6 sm:p-10 md:p-12 shadow-sm">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF4DB] border border-[#F5A623]/40 text-xs font-bold text-[#002147] mb-2 uppercase tracking-wider">
+        {/* =========================================================================
+            4. PHOTO GALLERY OF PREVIOUS EDITIONS
+        ========================================================================= */}
+        <section className="bg-white border-2 border-slate-200/90 rounded-2xl p-6 sm:p-8 md:p-10 shadow-sm">
+          <div className="text-center max-w-2xl mx-auto mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF4DB] border border-[#F5A623]/40 text-xs font-bold text-[#002147] mb-2 uppercase tracking-wider">
               <Camera className="w-3.5 h-3.5 text-[#F5A623]" />
               <span>Official Photo Archive</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#002147]">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#002147]">
               Conference Moments &amp; Gallery
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2">
-              Authentic glimpses of the inaugural ceremonies, keynote addresses, and delegates from ic-ETITE’24 and ic-ETITE’20 at VIT Vellore.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Authentic glimpses of inaugural ceremonies, keynote addresses, and delegates from ic-ETITE’24 and ic-ETITE’20 at VIT Vellore.
             </p>
           </div>
 
           <GallerySlideshow />
 
           {/* Curated Historical Moments 3-in-a-row Grid */}
-          <div className="mt-14 pt-10 border-t border-slate-200">
-            <div className="text-center max-w-xl mx-auto mb-8">
-              <h3 className="font-serif text-2xl font-bold text-[#002147]">
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <div className="text-center max-w-xl mx-auto mb-6">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#002147]">
                 Curated Archival Moments
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Selected archival photographs with official event details and dignitary attributions.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {archivalGallery.map((photo, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-6xl mx-auto">
+              {archivalGallery.slice(0, 3).map((photo, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                  className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
                 >
                   <div>
-                    <div className="relative h-56 w-full overflow-hidden bg-slate-100">
+                    <div className="relative h-48 w-full overflow-hidden bg-slate-100">
                       <Image
                         src={photo.image}
                         alt={photo.title}
@@ -439,111 +494,103 @@ export default function AboutPage() {
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute top-3 left-3 z-10">
-                        <span className="inline-block px-2.5 py-1 rounded-full bg-[#001C3D]/85 backdrop-blur-md text-[#FFB81C] text-[10.5px] font-bold border border-white/20 tracking-wide">
+                      <div className="absolute top-2.5 left-2.5 z-10">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#001C3D]/85 backdrop-blur-md text-[#FFB81C] text-[10px] font-bold border border-white/20 tracking-wide">
                           {photo.badge}
                         </span>
                       </div>
                     </div>
 
-                    <div className="p-5">
-                      <h4 className="font-bold text-base sm:text-lg text-[#002147] mb-1.5 group-hover:text-[#004B87] transition-colors leading-snug">
+                    <div className="p-4">
+                      <h4 className="font-bold text-sm sm:text-base text-[#002147] mb-1 group-hover:text-[#004B87] transition-colors leading-snug">
                         {photo.title}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      <p className="text-xs text-slate-600 leading-relaxed font-normal">
                         {photo.caption}
                       </p>
                     </div>
                   </div>
 
-                  <div className="px-5 pb-5 pt-0">
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#DE6D1B]">
+                  <div className="px-4 pb-4 pt-0">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#DE6D1B]">
                       <span>VIT Vellore Campus</span>
-                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* Link to Full 19-Photo Archive */}
-            <div className="mt-10 text-center">
-              <Link
-                href="/ic-ETITE24#gallery"
-                className="inline-flex items-center gap-2 bg-[#002147] hover:bg-[#003366] text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <span>Explore All 19 Official ic-ETITE’24 Photographs &amp; Full Gallery</span>
-                <ChevronRight className="w-4 h-4 text-[#FFB81C]" />
-              </Link>
-            </div>
           </div>
         </section>
 
-        {/* ── ABOUT VIT & RANKINGS ── */}
-        <section className="space-y-12">
-          <div className="grid md:grid-cols-12 gap-10 md:gap-14 items-center">
-            <div className="md:col-span-6 order-2 md:order-1 flex flex-col justify-center">
-              <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-                <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
-                  <Image
-                    src="/images/vit-campus.webp"
-                    alt="VIT Vellore Main Campus Entrance"
-                    fill
-                    loading="lazy"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-center hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs sm:text-sm text-slate-600 font-medium rounded-b-xl mt-2.5">
-                  Vellore Institute of Technology (VIT), Vellore Main Campus Entrance
-                </div>
+        {/* =========================================================================
+            5. ABOUT VIT & RANKINGS
+        ========================================================================= */}
+        <section className="bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-left md:mr-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+              <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/vit-campus.webp"
+                  alt="VIT Vellore Main Campus Entrance"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover object-center hover:scale-105 transition-transform duration-700"
+                />
               </div>
-            </div>
-
-            <div className="md:col-span-6 order-1 md:order-2 space-y-5 flex flex-col justify-center">
-              <span className="text-xs sm:text-sm font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3.5 py-1.5 rounded-full border border-[#F5A623]/50">
-                Host University
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#002147] font-bold leading-tight">
-                About VIT
-              </h2>
-              <p className="text-base leading-relaxed text-slate-700 font-normal text-justify">
-                Vellore Institute of Technology (VIT) was established in 1984 as Vellore Engineering College and was granted university status by the Government of India in 2001 under Section 3 of the University Grants Commission (UGC) Act, 1956. Founded by <strong>Dr. G. Viswanathan</strong>, VIT is committed to providing quality higher education and fostering excellence in teaching, research, and innovation.
-              </p>
-              <p className="text-base leading-relaxed text-slate-700 font-normal text-justify">
-                The University promotes a vibrant and cosmopolitan academic environment, attracting students and faculty from across India and around the world. VIT places strong emphasis on research, innovation, international collaboration, and industry engagement. Its extensive academic and research collaborations with universities and institutions worldwide facilitate student and faculty exchanges, joint research, and global academic partnerships. With a strong focus on academic excellence and a professional approach to governance, VIT continues to advance its vision of <em>“Transforming life through excellence in education and research.”</em> The University remains committed to preparing students and researchers to address emerging global challenges and contribute meaningfully to society.
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                Vellore Institute of Technology (VIT), Vellore Main Campus Entrance
               </p>
             </div>
           </div>
 
-          {/* Ranking & Accreditation Cards */}
-          <div className="bg-[#FAFBFD] border-2 border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm">
-            <div className="max-w-3xl mb-8">
-              <span className="text-xs sm:text-sm font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3.5 py-1.5 rounded-full border border-[#F5A623]/50 inline-block mb-3">
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002147]/5 border border-[#002147]/15 text-xs font-bold text-[#002147] uppercase tracking-wider w-fit">
+              <Award className="w-3.5 h-3.5 text-[#F5A623]" />
+              <span>Host University · Established 1984</span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold leading-tight">
+              About VIT
+            </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              Vellore Institute of Technology (VIT) was established in 1984 as Vellore Engineering College and was granted university status by the Government of India in 2001 under Section 3 of the University Grants Commission (UGC) Act, 1956. Founded by <strong>Dr. G. Viswanathan</strong>, VIT is committed to providing quality higher education and fostering excellence in teaching, research, and innovation.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The University promotes a vibrant and cosmopolitan academic environment, attracting students and faculty from across India and around the world. VIT places strong emphasis on research, innovation, international collaboration, and industry engagement. Its extensive academic and research collaborations with universities and institutions worldwide facilitate student and faculty exchanges, joint research, and global academic partnerships.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              With a strong focus on academic excellence and a professional approach to governance, VIT continues to advance its vision of <em>“Transforming life through excellence in education and research.”</em> The University remains committed to preparing students and researchers to address emerging global challenges and contribute meaningfully to society.
+            </p>
+          </div>
+
+          {/* Ranking Cards directly within section to eliminate gaps */}
+          <div className="clear-both mt-8 pt-6 border-t border-slate-200">
+            <div className="max-w-3xl mb-5">
+              <span className="text-xs font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3 py-1 rounded-full border border-[#F5A623]/50 inline-block mb-2">
                 Global Recognition &amp; Quality Accreditations
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold">
-                Ranking &amp; Accreditation
+              <h3 className="font-serif text-xl sm:text-2xl text-[#002147] font-bold">
+                Ranking &amp; Accreditation Overview
               </h3>
-              <p className="text-sm sm:text-base text-slate-600 mt-2">
-                Vellore Institute of Technology (VIT) is committed to excellence in teaching, research, innovation, and global academic engagement. Its strong performance in national and international rankings and accreditation reflects its continuing emphasis on academic and research excellence.
-              </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rankingsList.map((rank) => (
                 <div
                   key={rank.title}
-                  className="w-full sm:w-[calc(33.333%-14px)] max-w-sm bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-xs flex flex-col justify-between hover:border-[#002147] transition-colors"
+                  className="bg-slate-50/70 p-4 rounded-xl border border-slate-200 flex flex-col justify-between hover:border-[#002147] transition-colors"
                 >
                   <div>
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-bold font-mono bg-[#002147]/10 text-[#002147] mb-3">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold font-mono bg-[#002147]/10 text-[#002147] mb-2">
                       {rank.badge}
                     </span>
-                    <h4 className="font-bold text-[#002147] text-base mb-2">
+                    <h4 className="font-bold text-[#002147] text-sm mb-1.5 leading-snug">
                       {rank.title}
                     </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       {rank.desc}
                     </p>
                   </div>
@@ -553,99 +600,123 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* ── ABOUT SCORE ── */}
-        <section className="bg-white border-2 border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm">
-          <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-center mb-10">
-            <div className="md:col-span-7 space-y-4 flex flex-col justify-center">
-              <span className="text-xs sm:text-sm font-bold text-[#004B87] uppercase tracking-wider bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/30 inline-block w-fit">
-                Organizing School
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#002147] font-bold">
-                About SCORE
-              </h2>
-              <p className="text-base sm:text-lg leading-relaxed text-slate-700 text-justify">
-                The School of Computer Science Engineering and Information Systems (SCORE) at Vellore Institute of Technology (VIT), Vellore, is a vibrant academic and research community committed to excellence in Computer Science, Information Technology, Artificial Intelligence, Data Engineering, Cyber Security, Software Engineering, and Computer Applications.
-              </p>
-              <p className="text-sm sm:text-base leading-relaxed text-slate-600 text-justify">
-                The School offers a diverse range of undergraduate, postgraduate, research, and doctoral programmes, including B.Tech. in Information Technology, B.Tech. in Computer Science and Engineering (Artificial Intelligence and Data Engineering), B.Tech. in Computer Science and Engineering (Cyber Security), BCA, B.Sc. in Computer Science, M.Tech. in Computer Science and Engineering (Cybersecurity), M.Tech. in Software Engineering, MCA, M.Sc. in Artificial Intelligence and Machine Learning, M.Tech. by Research, and Ph.D. programmes, equipping students with strong technical knowledge, practical skills, and the ability to address real-world challenges.
-              </p>
-              <p className="text-sm sm:text-base leading-relaxed text-slate-600 text-justify">
-                SCORE fosters a research-driven and innovation-oriented environment through interdisciplinary research, industry collaboration, consultancy, and engagement with leading academic and research organisations. Supported by state-of-the-art infrastructure, industry-supported laboratories, Centres of Excellence, and a strong community of students, faculty members, researchers, visiting professors, and industry professionals, the School promotes excellence in teaching, learning, research, and innovation. Through seminars, workshops, international expert talks, symposia, conferences, and industry interactions, SCORE provides opportunities to engage with emerging technologies and global research developments, while advancing its vision of transformative education, impactful research, innovation, and lifelong learning.
-              </p>
-            </div>
-
-            <div className="md:col-span-5 flex flex-col justify-center">
-              <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-                <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
-                  <Image
-                    src="/images/004A3344.webp"
-                    alt="ic-ETITE Conference Plenary Gathering at Anna Auditorium, VIT Vellore"
-                    fill
-                    loading="lazy"
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover object-center hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2.5">
-                  SCORE Academic Facilities &amp; Technology Infrastructure, VIT Vellore
-                </div>
+        {/* =========================================================================
+            6. ABOUT SCORE
+        ========================================================================= */}
+        <section className="bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-right md:ml-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+              <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/vit-sjt.webp"
+                  alt="Silver Jubilee Tower (SJT) at VIT Vellore"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover object-center hover:scale-105 transition-transform duration-700"
+                />
               </div>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                Silver Jubilee Tower (SJT), hosting SCORE Computing Labs, VIT Vellore
+              </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-[#FAFBFD] border border-slate-200 text-center">
-              <p className="text-3xl font-serif font-bold text-[#002147]">5,900+</p>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Students</p>
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#004B87]/5 border border-[#004B87]/15 text-xs font-bold text-[#004B87] uppercase tracking-wider w-fit">
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Organizing School</span>
             </div>
-            <div className="p-5 rounded-2xl bg-[#FAFBFD] border border-slate-200 text-center">
-              <p className="text-3xl font-serif font-bold text-[#002147]">188+</p>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Research Faculty</p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold">
+              About SCORE
+            </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              The <strong>School of Computer Science Engineering and Information Systems (SCORE)</strong> at Vellore Institute of Technology (VIT), Vellore, is a vibrant academic and research community committed to excellence in Computer Science, Information Technology, Artificial Intelligence, Data Engineering, Cyber Security, Software Engineering, and Computer Applications.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              The School offers a diverse range of undergraduate, postgraduate, research, and doctoral programmes, including B.Tech. in Information Technology, B.Tech. in Computer Science and Engineering (Artificial Intelligence and Data Engineering), B.Tech. in Computer Science and Engineering (Cyber Security), BCA, B.Sc. in Computer Science, M.Tech. in Computer Science and Engineering (Cybersecurity), M.Tech. in Software Engineering, MCA, M.Sc. in Artificial Intelligence and Machine Learning, M.Tech. by Research, and Ph.D. programmes, equipping students with strong technical knowledge, practical skills, and the ability to address real-world challenges.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              SCORE fosters a research-driven and innovation-oriented environment through interdisciplinary research, industry collaboration, consultancy, and engagement with leading academic and research organisations. Supported by state-of-the-art infrastructure, industry-supported laboratories, Centres of Excellence, and a strong community of students, faculty members, researchers, visiting professors, and industry professionals, the School promotes excellence in teaching, learning, research, and innovation.
+            </p>
+          </div>
+
+          {/* Quick Metrics */}
+          <div className="clear-both mt-6 pt-6 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <p className="text-2xl font-serif font-bold text-[#002147]">5,900+</p>
+              <p className="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Students</p>
             </div>
-            <div className="p-5 rounded-2xl bg-[#FAFBFD] border border-slate-200 text-center">
-              <p className="text-3xl font-serif font-bold text-[#004B87]">NAAC</p>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">A++ Grade (3.66)</p>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <p className="text-2xl font-serif font-bold text-[#002147]">188+</p>
+              <p className="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Faculty</p>
             </div>
-            <div className="p-5 rounded-2xl bg-[#FAFBFD] border border-slate-200 text-center">
-              <p className="text-3xl font-serif font-bold text-emerald-700">IEEE</p>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Xplore Standards</p>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <p className="text-2xl font-serif font-bold text-[#004B87]">NAAC</p>
+              <p className="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">A++ (3.66)</p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <p className="text-2xl font-serif font-bold text-emerald-700">IEEE</p>
+              <p className="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wide mt-0.5">Indexed</p>
             </div>
           </div>
         </section>
 
-        {/* ── ABOUT IEEE ITS CHAPTER ── */}
-        <section className="grid md:grid-cols-12 gap-10 md:gap-14 items-center">
-          <div className="md:col-span-6 space-y-4 flex flex-col justify-center">
-            <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 w-fit">
-              Co-Organizing Chapter
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold leading-tight">
-              About ITS
-            </h2>
-            <p className="text-base leading-relaxed text-slate-700 text-justify">
-              The IEEE Information Theory Society at VIT is a student chapter dedicated to exploring the latest advancements in information theory and applying them to address contemporary technological challenges.
-            </p>
-            <p className="text-sm sm:text-base leading-relaxed text-slate-600 text-justify">
-              The chapter provides a nurturing platform for students to foster innovative ideas, develop technical expertise, and engage in meaningful research and projects. Through technical events, workshops, seminars, and collaborative initiatives, the chapter promotes knowledge sharing and practical learning while connecting students with partners and collaborators from academia and industry. By encouraging curiosity, creativity, and continuous learning, the IEEE Information Theory Society at VIT strives to empower students to develop innovative solutions, address emerging challenges, and contribute meaningfully to the advancement of information and communication technologies.
-            </p>
-          </div>
-
-          <div className="md:col-span-6 flex flex-col justify-center">
-            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+        {/* =========================================================================
+            7. ABOUT IEEE ITS CHAPTER
+        ========================================================================= */}
+        <section className="bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-left md:mr-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
               <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
                 <Image
-                  src="/images/ieee-its-group.webp"
+                  src="/images/vit-its.jpg"
                   alt="IEEE Information Theory Society Team at VIT"
                   fill
                   loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 1024px) 100vw, 500px"
                   className="object-cover object-center hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs sm:text-sm text-slate-600 font-medium rounded-b-xl mt-2.5">
-                IEEE Information Theory Society Student Chapter team and faculty at VIT Vellore
-              </div>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                IEEE Information Theory Society Student Chapter Team
+              </p>
             </div>
+          </div>
+
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00B4D8]/10 border border-[#00B4D8]/30 text-xs font-bold text-[#004B87] uppercase tracking-wider w-fit">
+              <Globe2 className="w-3.5 h-3.5 text-[#00B4D8]" />
+              <span>Co-Organizing Chapter · VIT Vellore</span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#002147] font-bold leading-tight">
+              About ITS
+            </h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              The <strong>IEEE Information Theory Society at VIT</strong> is a distinguished student chapter dedicated to exploring the latest advancements in information theory and applying them to address contemporary technological challenges. The chapter provides a nurturing platform for students to foster innovative ideas, develop technical expertise, and engage in meaningful research and development projects.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              Through technical events, workshops, seminars, and collaborative initiatives, the chapter promotes knowledge sharing and practical learning while connecting students with partners and collaborators from academia and industry. By encouraging curiosity, creativity, and continuous learning, the IEEE Information Theory Society at VIT strives to empower students to develop innovative solutions, address emerging challenges, and contribute meaningfully to the advancement of information and communication technologies.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 text-justify">
+              As co-organizers of ic-ETITE’28, IEEE ITS plays a central role in delivering national hackathons, coordinating delegate interactions, and managing modern digital platforms for the conference.
+            </p>
+          </div>
+
+          <div className="clear-both pt-4 flex flex-wrap gap-3">
+            <a
+              href="https://ieee-its-vit.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary inline-flex items-center gap-2 text-xs py-2.5 px-5"
+            >
+              <span>Visit Official ITS Website</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         </section>
       </div>

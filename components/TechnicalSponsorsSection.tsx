@@ -7,27 +7,27 @@ export default function TechnicalSponsorsSection() {
   return (
     <section
       id="sponsors"
-      className="border-b border-[#E2E8F0] bg-white py-12 md:py-16 scroll-mt-20 select-none"
+      className="border-b border-[#E2E8F0] bg-white py-8 md:py-10 scroll-mt-20 select-none"
       aria-label="Technical Sponsors and Organizing School"
     >
       <div className="container-x">
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl p-6 sm:p-10 border border-slate-100 shadow-xs">
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl p-5 sm:p-8 border border-slate-100 shadow-xs">
           {/* TECHNICAL SPONSOR Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4">
             <h3 className="text-sm sm:text-base md:text-lg font-black tracking-widest text-[#001C3D] uppercase">
               TECHNICAL SPONSOR
             </h3>
           </div>
 
           {/* To Be Announced */}
-          <div className="flex justify-center items-center mb-12">
-            <div className="h-16 w-72 rounded-2xl border border-dashed border-slate-200 flex items-center justify-center text-slate-400 text-xs font-medium tracking-wider uppercase">
+          <div className="flex justify-center items-center mb-6">
+            <div className="h-14 w-72 rounded-2xl border border-dashed border-slate-200 flex items-center justify-center text-slate-400 text-xs font-medium tracking-wider uppercase">
               To Be Announced
             </div>
           </div>
 
           {/* ORGANIZING SCHOOL Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <h3 className="text-sm sm:text-base md:text-lg font-black tracking-widest text-[#001C3D] uppercase">
               ORGANIZING SCHOOL
             </h3>

@@ -7,10 +7,10 @@ import { History, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 export default function HomePastEditions() {
   return (
     <section id="previous-editions" className="border-b border-[#E2E8F0] bg-[#FAFBFD] scroll-mt-20">
-      <div className="container-x py-16 md:py-24">
+      <div className="container-x py-10 md:py-14">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#004B87]/10 border border-[#004B87]/25 text-xs font-bold text-[#004B87] uppercase tracking-wider mb-3">
             <History className="w-3.5 h-3.5" />
             <span>Conference Heritage &amp; Track Record</span>

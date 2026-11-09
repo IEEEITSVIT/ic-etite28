@@ -1,9 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { X, Maximize2 } from "lucide-react";
-import { ICETITE24_PHOTOS, Icetite24Photo } from "@/data/icetite24GalleryData";
+import {
+  X,
+  Maximize2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import {
+  ICETITE24_PHOTOS,
+  type Icetite24Photo,
+} from "@/data/icetite24GalleryData";
+import { ICETITE24_MAIN_PHOTOS } from "@/data/icetite24MainPhotos";
+
+type HomeMomentPhoto = Pick<
+  Icetite24Photo,
+  "id" | "image" | "title" | "badge" | "caption"
+> & {
+  thumbnail: string;
+};
+
+function getOptimizedImagePath(imagePath: string) {
+  const relativePath = imagePath.replace(/^\/+/, "");
+  const webpPath = relativePath.replace(/\.[^.]+$/, ".webp");
+
+  return `/optimized/${webpPath}`;
+}
+
+const HOME_MOMENT_PHOTOS: HomeMomentPhoto[] = [
+  ...ICETITE24_PHOTOS.slice(0, 8).map((photo) => ({
+    id: photo.id,
+    image: photo.image,
+    thumbnail: getOptimizedImagePath(photo.image),
+    title: photo.title,
+    badge: photo.badge ?? photo.categoryLabel,
+    caption: photo.caption,
+  })),
+  ...ICETITE24_MAIN_PHOTOS.slice(0, 8).map((photo) => ({
+    id: `main-${photo.id}`,
+    image: photo.src,
+    thumbnail: getOptimizedImagePath(photo.src),
+    title: photo.title,
+    badge: "Main Gallery",
+    caption: "From the main ic-ETITE'24 photo collection.",
+  })),
+];
 
 // Subtle alternating tilt angles for natural art gallery frame look
 const TILT_ANGLES = [
@@ -19,13 +61,32 @@ const TILT_ANGLES = [
   "rotate-1.5",
 ];
 
-export default function HomePhotoMoments() {
-  const [activePhoto, setActivePhoto] = useState<Icetite24Photo | null>(null);
+export default function HomePhotoMoments({
+  showHeading = true,
+}: {
+  showHeading?: boolean;
+}) {
+  const [activePhoto, setActivePhoto] = useState<HomeMomentPhoto | null>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
 
-  // Duplicate items for a seamless, continuous infinite scroll loop
-  const duplicatedPhotos = [...ICETITE24_PHOTOS, ...ICETITE24_PHOTOS];
+  const moveMarquee = (direction: "left" | "right") => {
+    const animation = marqueeRef.current?.getAnimations()[0];
+    if (!animation) return;
 
-  const openLightbox = (photo: Icetite24Photo) => {
+    const duration =
+      Number(animation.effect?.getComputedTiming().duration) || 55000;
+
+    const currentTime = Number(animation.currentTime) || 0;
+    const step = 1800;
+    const delta = direction === "left" ? step : -step;
+
+    animation.currentTime =
+      ((currentTime + delta) % duration + duration) % duration;
+  };
+
+  const duplicatedPhotos = [...HOME_MOMENT_PHOTOS, ...HOME_MOMENT_PHOTOS];
+
+  const openLightbox = (photo: HomeMomentPhoto) => {
     setActivePhoto(photo);
   };
 
@@ -41,49 +102,73 @@ export default function HomePhotoMoments() {
 
       <div className="w-full relative z-10">
         
-        {/* Section Header: Just the heading as requested, centered, no arrows */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147]">
-            Moments from ic-ETITE&apos;24
-          </h2>
-        </div>
+        {/* Optional Section Heading */}
+        {showHeading && (
+          <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147]">
+              Moments from ic-ETITE&apos;24
+            </h2>
+          </div>
+        )}
 
         {/* Continuous Scrolling Frames Track (Auto-scrolls & pauses on hover) */}
         <div className="relative w-full overflow-hidden py-6 group/track">
-          
-          {/* Subtle edge fades for infinite marquee smoothness */}
+
+          {/* Left and right edge fades */}
           <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
 
-          {/* Marquee Track: pauses on hover so user can hover over and inspect any frame */}
-          <div className="flex gap-6 sm:gap-8 w-max animate-frame-scroll group-hover/track:[animation-play-state:paused] px-4">
+          {/* Left arrow: reverse the marquee direction */}
+          <button
+            type="button"
+            aria-label="Move photos left"
+            onClick={() => moveMarquee("left")}
+            className="absolute left-3 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/80 p-3 text-white shadow-lg transition hover:bg-cyan-500"
+          >
+            <ChevronLeft size={26} />
+          </button>
+
+          {/* Right arrow: move the marquee in reverse */}
+          <button
+            type="button"
+            aria-label="Move photos right"
+            onClick={() => moveMarquee("right")}
+            className="absolute right-3 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/80 p-3 text-white shadow-lg transition hover:bg-cyan-500"
+          >
+            <ChevronRight size={26} />
+          </button>
+
+          {/* Continuous marquee */}
+          <div
+            ref={marqueeRef}
+            className="flex gap-6 sm:gap-8 w-max animate-frame-scroll group-hover/track:[animation-play-state:paused] px-4"
+          >
             {duplicatedPhotos.map((photo, index) => {
               const tilt = TILT_ANGLES[index % TILT_ANGLES.length];
+
               return (
                 <div
                   key={`${photo.id}-${index}`}
                   onClick={() => openLightbox(photo)}
-                  className="shrink-0 w-[290px] sm:w-[360px] md:w-[420px] transition-all duration-500 ease-out cursor-pointer group/frame"
+                  className="shrink-0 w-[290px] sm:w-[360px] md:w-[420px] transition-transform duration-300 ease-out cursor-pointer group/frame"
                 >
-                  {/* Physical Art Frame: tilts naturally, straightens and lifts on hover */}
                   <div
-                    className={`bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out group-hover/frame:rotate-0 group-hover/frame:-translate-y-4 group-hover/frame:scale-[1.04] group-hover/frame:border-[#002147] group-hover/frame:shadow-[0_25px_50px_rgba(0,33,71,0.24)] group-hover/frame:z-30 relative ${tilt}`}
+                    className={`bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-transform duration-300 ease-out group-hover/frame:rotate-0 group-hover/frame:-translate-y-2 group-hover/frame:scale-[1.02] group-hover/frame:z-30 relative ${tilt}`}
                   >
-                    {/* Inner Photo Container (Strictly NO text) */}
                     <div className="relative aspect-[3/2] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
                       <Image
-                        src={photo.image}
-                        alt="ic-ETITE'24 photo moment"
+                        src={photo.thumbnail}
+                        alt={photo.title}
                         fill
                         sizes="(max-width: 640px) 290px, (max-width: 1024px) 360px, 420px"
-                        className="object-cover object-center group-hover/frame:scale-108 transition-transform duration-700 ease-out"
-                        priority={index < 4}
+                        quality={60}
+                        loading={index < 2 ? "eager" : "lazy"}
+                        priority={index < 2}
+                        className="object-cover object-center group-hover/frame:scale-105 transition-transform duration-300 ease-out"
                       />
 
-                      {/* Glass Sheen / Reflection on Hover */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-transparent opacity-0 group-hover/frame:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                      {/* Subtle hover expand icon */}
                       <div className="absolute bottom-3 right-3 opacity-0 group-hover/frame:opacity-100 transition-opacity duration-300">
                         <div className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center shadow-lg">
                           <Maximize2 className="w-3.5 h-3.5" />
@@ -147,20 +232,21 @@ export default function HomePhotoMoments() {
         </div>
       )}
 
-      {/* Keyframe animation for smooth continuous infinite scrolling */}
       <style jsx global>{`
         @keyframes frameMarquee {
           0% {
-            transform: translateX(0%);
+            transform: translateX(0);
           }
           100% {
             transform: translateX(-50%);
           }
         }
+
         .animate-frame-scroll {
-          animation: frameMarquee 55s linear infinite;
+          animation: frameMarquee 35s linear infinite;
         }
       `}</style>
+
     </section>
   );
 }

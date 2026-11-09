@@ -103,3 +103,14 @@ env/
 /logo-text.png
 /logo.jpeg
 
+ic-etite28-deployment-source.zip
+npm-audit-report.json
+ic-etite28-deployment-source.zip
+
+# Raw source photos (input for scripts/optimize-slideshow-images.cjs, not served)
+/Website Converted/
+.claude/
+
+# Cloudflare Worker local state & secrets
+.dev.vars
+.wrangler/

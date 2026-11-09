@@ -16,29 +16,29 @@ export default function CFPSection() {
   const { submission, contact } = conferenceData;
 
   return (
-    <section id="cfp" className="py-16 sm:py-20 bg-white border-b border-[#E4E7EC]">
+    <section id="cfp" className="py-8 sm:py-12 bg-white border-b border-[#E4E7EC]">
       <div className="container-x">
         {/* Scopus Recommendation Banner */}
-        <div className="mb-12 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#002147] to-[#004B87] text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-xl bg-[#F5A623] text-[#002147] grid place-items-center shrink-0">
-              <Award className="w-7 h-7" />
+        <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#002147] to-[#004B87] text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#F5A623] text-[#002147] grid place-items-center shrink-0">
+              <Award className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-bold tracking-widest text-[#FFB81C] uppercase block">
+              <span className="text-[11px] font-bold tracking-widest text-[#FFB81C] uppercase block">
                 Journal Publication Opportunity
               </span>
-              <p className="text-base sm:text-lg font-bold text-white mt-0.5 leading-snug">
+              <p className="text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">
                 Extended version of selected papers will be recommended for publication in Scopus indexed journals with impact factor.
               </p>
             </div>
           </div>
-          <span className="shrink-0 px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-xs font-bold tracking-wide text-white uppercase">
+          <span className="shrink-0 px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-bold tracking-wide text-white uppercase">
             Scopus Indexed
           </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Column: CFP Overview & Submission CTA */}
           <div className="lg:col-span-6 flex flex-col space-y-4">
             <span className="text-xs sm:text-sm font-bold text-[#002147] uppercase tracking-wider bg-[#FFF4DB] px-3.5 py-1.5 rounded-full border border-[#F5A623]/50 self-start">

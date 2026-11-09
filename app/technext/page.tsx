@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import GallerySlideshow, { GalleryItem } from "@/components/GallerySlideshow";
@@ -18,11 +19,11 @@ import {
   Mail,
 } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/technext", {
   title: "TechNext '28 | National Industrial Expo & Innovation Showcase",
   description:
     "Official page of TechNext '28, the flagship national industrial exposition and student project innovation showcase at VIT Vellore.",
-};
+});
 
 const technextGalleryItems: GalleryItem[] = [
   {
@@ -318,9 +319,9 @@ export default function TechNextPage() {
           </div>
 
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            {/* TechNext '28 All-Green Brand Logo without awkward boxes */}
-            <div className="flex justify-center mb-2">
-              <div className="relative h-16 sm:h-20 w-64 sm:w-80">
+            {/* TechNext '28 Official Brand Logo */}
+            <div className="flex justify-center mb-4">
+              <div className="relative h-16 sm:h-22 md:h-26 w-72 sm:w-96 md:w-[440px]">
                 <Image
                   src="/logos/technext-logo.png"
                   alt="TechNext '28 Logo"
@@ -369,45 +370,73 @@ export default function TechNextPage() {
         </div>
       </section>
 
-      {/* ── ABOUT TECHNEXT ── */}
-      <section id="about" className="py-16 sm:py-20 bg-white border-b border-slate-200">
+      {/* ── ABOUT TECHNEXT: TEXT WRAPS ALL AROUND FLOATED PHOTO ── */}
+      <section id="about" className="py-8 sm:py-12 bg-white border-b border-slate-200">
         <div className="container-x">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Left Description */}
-            <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
-                Expo Overview
+          <div className="bg-[#FAFBFD] rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+            {/* Floated Image on Desktop */}
+            <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-right md:ml-8 md:mb-5 mb-6">
+              <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+                <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                  <Image
+                    src="/images/technext24/technext_01.webp"
+                    alt="TechNext Expo Showcase at VIT Vellore"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 500px"
+                    className="object-cover hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                  Live hardware prototype demonstrations by innovators to industry jury at VIT Vellore
+                </div>
+              </div>
+            </div>
+
+            {/* Text flowing all around the picture */}
+            <div className="space-y-3.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3 py-1 rounded-full border border-[#004B87]/20 inline-block">
+                Expo Overview &amp; Hardware Showcase
               </span>
 
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#002147] tracking-tight leading-tight underline decoration-[#004B87] underline-offset-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#002147] tracking-tight">
                 Empowering Tangible Hardware &amp; Deep-Tech Ingenuity
               </h2>
 
-              <p className="text-base text-slate-700 leading-relaxed font-normal">
-                TechNext is the premier industrial expo and project exhibition hosted at VIT Vellore. It brings engineering to life with tactile hardware prototypes, autonomous robotics, industrial IoT, and real-world product demos.
+              <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+                <strong>TechNext</strong> is the flagship industrial expo and engineering project competition hosted as a core feature of the ic-ETITE conference at VIT Vellore. It brings academic theory into tangible physical reality with live functional prototypes, autonomous robotics, edge IoT sensor suites, embedded electronic telemetry, and applied deep-tech demonstrations.
               </p>
 
-              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 shadow-2xs">
-                <p className="text-sm font-bold text-[#004B87] uppercase tracking-wide">
+              <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+                Student innovators, research scholars, and early-stage deep-tech startups are provided with equipped demonstration booths complete with power supplies, oscilloscope testing benches, high-speed Wi-Fi, and public exhibition areas. Corporate architects, IEEE Fellows, and venture partners from top firms directly evaluate project designs based on algorithmic novelty, structural elegance, commercial viability, and societal impact.
+              </p>
+
+              <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+                In addition to competitive exhibition tracks, TechNext hosts interactive corporate pavilions where multinational technology leaders display emerging development platforms, developer boards, and quantum computing simulators to student delegates.
+              </p>
+
+              {/* Milestones Card */}
+              <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2 mt-4">
+                <p className="text-xs font-bold text-[#004B87] uppercase tracking-wide">
                   TechNext &apos;24 Key Milestones:
                 </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                    <p className="text-2xl font-bold text-[#002147]">120+</p>
-                    <p className="text-[11px] text-slate-600 uppercase font-semibold">Working Projects</p>
+                <div className="grid grid-cols-3 gap-2.5 text-center">
+                  <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <p className="text-xl font-bold text-[#002147]">120+</p>
+                    <p className="text-[10.5px] text-slate-600 uppercase font-semibold">Working Projects</p>
                   </div>
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                    <p className="text-2xl font-bold text-[#15803d]">15+</p>
-                    <p className="text-[11px] text-slate-600 uppercase font-semibold">Startups &amp; Stalls</p>
+                  <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <p className="text-xl font-bold text-[#15803d]">15+</p>
+                    <p className="text-[10.5px] text-slate-600 uppercase font-semibold">Startups &amp; Stalls</p>
                   </div>
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                    <p className="text-2xl font-bold text-[#002147]">₹50K+</p>
-                    <p className="text-[11px] text-slate-600 uppercase font-semibold">Award Grants</p>
+                  <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <p className="text-xl font-bold text-[#002147]">₹50K+</p>
+                    <p className="text-[10.5px] text-slate-600 uppercase font-semibold">Award Grants</p>
                   </div>
                 </div>
               </div>
 
-              <ul className="space-y-2.5 text-sm text-slate-700">
+              <ul className="space-y-2 text-xs sm:text-sm text-slate-700 pt-2">
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#15803d] shrink-0 mt-0.5" />
                   <span>Jury evaluation by industrial architects from leading tech corporations.</span>
@@ -421,30 +450,6 @@ export default function TechNextPage() {
                   <span>Direct recruitment &amp; seed funding evaluation by investor delegations.</span>
                 </li>
               </ul>
-            </div>
-
-            {/* Right: Featured Preview Image */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden border-2 border-slate-200 shadow-xl group">
-                <div className="relative h-72 sm:h-96 w-full">
-                  <Image
-                    src="/images/technext24/technext_01.webp"
-                    alt="TechNext Expo Showcase"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-6">
-                  <span className="text-xs uppercase font-bold tracking-wider text-[#84E320] mb-1">
-                    TechNext Showcase
-                  </span>
-                  <p className="text-base font-bold text-white">
-                    Live prototype demonstrations by innovators to industry jury at VIT Vellore.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

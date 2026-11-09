@@ -1,4 +1,4 @@
-export interface Icetite24Photo {
+﻿export interface Icetite24Photo {
   id: string;
   image: string;
   title: string;
@@ -15,14 +15,14 @@ export const ICETITE24_PHOTOS: Icetite24Photo[] = [
   {
     id: "dais-inaugural-2024",
     image: "/images/icetite24/icetite24_16_inaugural_ceremony_dais.webp",
-    title: "Inaugural Dais & Proceedings Review",
+    title: "Valedictory Ceremony & Proceedings",
     category: "dais",
     categoryLabel: "Inaugural & Dais",
     edition: "ic-ETITE'24 Second Edition",
     location: "Anna Auditorium Main Stage, VIT Vellore",
     caption:
-      "Chief Guest Shri S. Krishnan, IAS, Secretary MeitY, and university leadership presiding over the inauguration and reviewing 'Times of ic-ETITE'.",
-    badge: "Official Inauguration",
+      "Valedictory ceremony of ic-ETITE'24, marking the conclusion of the conference and celebrating the contributions of distinguished guests, researchers, and participants.",
+    badge: "Official Valedictory Ceremony",
     featuredOnHome: true,
   },
   {
@@ -50,19 +50,6 @@ export const ICETITE24_PHOTOS: Icetite24Photo[] = [
       "Presentation of Certificate of Achievement to BOLT 2.0 second place winners on dais by Chief Guest Shri S. Krishnan, IAS, and Vice President Dr. Sankar Viswanathan.",
     badge: "Hackathon Winners",
     featuredOnHome: false,
-  },
-  {
-    id: "cisco-expo-booth-2024",
-    image: "/images/icetite24/icetite24_04_cisco_expo.webp",
-    title: "Interactive Tech Challenges at Cisco Booth",
-    category: "expo",
-    categoryLabel: "TechNext & Industry Expo",
-    edition: "Industry Collaboration",
-    location: "TechNext Industrial Expo Arena, VIT Vellore",
-    caption:
-      "Students participating in interactive coding challenges and technology demos at the Title Sponsor Cisco 'Code with Cisco' pavilion.",
-    badge: "Title Sponsor Cisco",
-    featuredOnHome: true,
   },
   {
     id: "drone-prototype-expo-2024",
@@ -140,19 +127,6 @@ export const ICETITE24_PHOTOS: Icetite24Photo[] = [
     caption:
       "International jury members and delegates evaluating student robotic vehicle and hardware prototype at TechNext'24 project stalls.",
     badge: "Robotics Evaluation",
-    featuredOnHome: false,
-  },
-  {
-    id: "smart-world-iot-demo-2024",
-    image: "/images/icetite24/icetite24_05_technext_smart_world.webp",
-    title: "Indian Classical Dance Recital",
-    category: "networking",
-    categoryLabel: "Networking & Cultural",
-    edition: "Cultural Evening",
-    location: "Outdoor Amphitheatre Stage, VIT Vellore",
-    caption:
-      "Student artists performing graceful Indian classical dance (Bharatanatyam recital) during the ic-ETITE'24 cultural evening reception.",
-    badge: "Classical Dance",
     featuredOnHome: false,
   },
   {
@@ -260,3 +234,4 @@ export const ICETITE24_PHOTOS: Icetite24Photo[] = [
     featuredOnHome: false,
   },
 ];
+

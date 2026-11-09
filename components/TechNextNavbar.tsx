@@ -25,12 +25,12 @@ export default function TechNextNavbar() {
         {/* Left: TechNext Logo */}
         <div className="flex items-center gap-3 shrink-0">
           <Link href="/technext" className="flex items-center gap-2 group">
-            <div className="relative h-8 sm:h-9 w-28 sm:w-36">
+            <div className="relative h-8 sm:h-9 w-36 sm:w-44">
               <Image
                 src="/logos/technext-logo.png"
                 alt="TechNext '28"
                 fill
-                sizes="(max-width: 640px) 112px, 144px"
+                sizes="(max-width: 640px) 144px, 176px"
                 className="object-contain object-left"
                 priority
               />

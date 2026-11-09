@@ -97,10 +97,10 @@ export default function AnnouncementBar() {
             >
               <div className="relative h-5 w-16 sm:w-20 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                 <Image
-                  src="/logos/bolt-logo.png"
+                  src="/logos/bolt-logo-white.png"
                   alt="BOLT 3.0 Hackathon Logo"
                   width={80}
-                  height={22}
+                  height={24}
                   className="object-contain"
                   priority
                 />

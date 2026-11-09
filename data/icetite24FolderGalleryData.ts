@@ -1,0 +1,88 @@
+export type FolderGalleryPhoto = {
+  src: string;
+  title: string;
+  category: string;
+};
+
+export type FolderGalleryCategory = {
+  label: string;
+  slug: string;
+};
+
+export const FOLDER_GALLERY_CATEGORIES: FolderGalleryCategory[] = [
+  { label: "Inaugural", slug: "inaugural" },
+  { label: "Bolt Hackathon", slug: "bolt-hackathon" },
+  { label: "Conference", slug: "conference" },
+  { label: "Conference Keynote", slug: "conference-keynote" },
+  { label: "Evening Dinner", slug: "evening-dinner-greenos" },
+  { label: "Valedictory", slug: "valedictory" },
+  { label: "Panel Discussion", slug: "panel-discussion" },
+  { label: "TechNext\u002724", slug: "technext24" },
+];
+
+export const FOLDER_GALLERY_PHOTOS: FolderGalleryPhoto[] = [
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3120.webp", title: "004A3120", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3136.webp", title: "004A3136", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3145.webp", title: "004A3145", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3182.webp", title: "004A3182", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3189.webp", title: "004A3189", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/004A3344.webp", title: "004A3344", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_2981.webp", title: "IMG 2981", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_3505.webp", title: "IMG 3505", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_4352.webp", title: "IMG 4352", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_4377.webp", title: "IMG 4377", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_4392.webp", title: "IMG 4392", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_4424.webp", title: "IMG 4424", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/inaugural/IMG_4432.webp", title: "IMG 4432", category: "inaugural" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/004A3647.webp", title: "004A3647", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3397.webp", title: "IMG 3397", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3402.webp", title: "IMG 3402", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3422.webp", title: "IMG 3422", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3433.webp", title: "IMG 3433", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3482.webp", title: "IMG 3482", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/bolt-hackathon/IMG_3496.webp", title: "IMG 3496", category: "bolt-hackathon" },
+  { src: "/images/icetite24-folder-gallery/conference/IMG_3505.webp", title: "IMG 3505", category: "conference" },
+  { src: "/images/icetite24-folder-gallery/conference/IMG_4777.webp", title: "IMG 4777", category: "conference" },
+  { src: "/images/icetite24-folder-gallery/conference/IMG_8949.webp", title: "IMG 8949", category: "conference" },
+  { src: "/images/icetite24-folder-gallery/conference-keynote/IMG_8900.webp", title: "IMG 8900", category: "conference-keynote" },
+  { src: "/images/icetite24-folder-gallery/conference-keynote/IMG_8949.webp", title: "IMG 8949", category: "conference-keynote" },
+  { src: "/images/icetite24-folder-gallery/conference-keynote/IMG_8993.webp", title: "IMG 8993", category: "conference-keynote" },
+  { src: "/images/icetite24-folder-gallery/conference-keynote/IMG_9159.webp", title: "IMG 9159", category: "conference-keynote" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/004A3622.webp", title: "004A3622", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A0994.webp", title: "A32A0994", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1001.webp", title: "A32A1001", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1022.webp", title: "A32A1022", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1052.webp", title: "A32A1052", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1199.webp", title: "A32A1199", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1210.webp", title: "A32A1210", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1252.webp", title: "A32A1252", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1283.webp", title: "A32A1283", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/evening-dinner-greenos/A32A1356.webp", title: "A32A1356", category: "evening-dinner-greenos" },
+  { src: "/images/icetite24-folder-gallery/valedictory/004A3695.webp", title: "004A3695", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/004A3712.webp", title: "004A3712", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_3873.webp", title: "IMG 3873", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9370.webp", title: "IMG 9370", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9383.webp", title: "IMG 9383", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9437.webp", title: "IMG 9437", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9440.webp", title: "IMG 9440", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9450.webp", title: "IMG 9450", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9464.webp", title: "IMG 9464", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/valedictory/IMG_9477.webp", title: "IMG 9477", category: "valedictory" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9227.webp", title: "IMG 9227", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9229.webp", title: "IMG 9229", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9245.webp", title: "IMG 9245", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9273.webp", title: "IMG 9273", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9289.webp", title: "IMG 9289", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/panel-discussion/IMG_9306.webp", title: "IMG 9306", category: "panel-discussion" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3356.webp", title: "004A3356", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3374.webp", title: "004A3374", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3378.webp", title: "004A3378", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3386.webp", title: "004A3386", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3390.webp", title: "004A3390", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3406.webp", title: "004A3406", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/004A3409.webp", title: "004A3409", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/IMG_3067.webp", title: "IMG 3067", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/IMG_3341.webp", title: "IMG 3341", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/IMG_4458.webp", title: "IMG 4458", category: "technext24" },
+  { src: "/images/icetite24-folder-gallery/technext24/IMG_4487.webp", title: "IMG 4487", category: "technext24" },
+];

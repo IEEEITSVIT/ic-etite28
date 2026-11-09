@@ -1,41 +1,37 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
+import Image from "next/image";
 import {
-  Sparkles,
-  Award,
   Crown,
+  Award,
   Medal,
   CheckCircle2,
-  ArrowRight,
   Download,
   Mail,
   Building2,
-  Tv,
-  Presentation,
-  Store,
-  Layers,
   FileText,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/sponsorship", {
   title: "Sponsorship Packages & Corporate Partnerships | ic-ETITE",
   description:
-    "Official corporate and academic sponsorship tiers for ic-ETITE at VIT Vellore. Explore Platinum, Gold, and Silver sponsorship packages with campus LED branding, keynote slots, exhibition stalls, and student engagement.",
-};
+    "Official corporate and academic sponsorship tiers for ic-ETITE at VIT Vellore. Gain unmatched national branding, prominent campus LED broadcasts, keynote slots, hackathon judging, and premier exhibition spaces.",
+});
 
 interface SponsorTier {
   name: string;
   price: string;
-  priceNum: number;
   badge: string;
   tagline: string;
   icon: typeof Crown;
   headerBg: string;
   accentColor: string;
   borderColor: string;
-  bulletColor: string;
+  buttonBg: string;
   isPopular?: boolean;
   benefits: string[];
 }
@@ -44,77 +40,76 @@ const sponsorTiers: SponsorTier[] = [
   {
     name: "Platinum Sponsor",
     price: "₹ 5,00,000",
-    priceNum: 500000,
     badge: "Title Sponsor · Maximum Brand Impact",
-    tagline: "Premier tier with title sponsor naming rights, premier campus visibility, and dedicated event slots.",
+    tagline:
+      "Premier tier with title sponsor naming rights, premier campus visibility, and dedicated event slots.",
     icon: Crown,
     headerBg: "bg-gradient-to-br from-[#001733] via-[#002B5B] to-[#001733]",
-    accentColor: "text-[#CCFF00]",
-    borderColor: "border-[#CCFF00]/40 hover:border-[#CCFF00]",
-    bulletColor: "text-[#CCFF00]",
+    accentColor: "text-[#FFB81C]",
+    borderColor: "border-[#FFB81C] ring-2 ring-[#FFB81C]/25 shadow-xl",
+    buttonBg: "bg-[#002147] hover:bg-[#003366] text-[#FFB81C] border border-[#FFB81C]/30",
     isPopular: true,
     benefits: [
-      "Company will be identified as the Title Sponsor for ic-ETITE 2024.",
-      "Branding of the Company around the campus during the fest through LED screens (more than 50-60 times a day).",
-      "One full page advertisement in the conference program.",
+      "Company will be identified as the Title Sponsor for ic-ETITE'28.",
+      "Branding around campus during the conference through high-impact LED screens across academic blocks and plazas.",
+      "One full-page advertisement in the official conference program booklet.",
       "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
       "Nation-wide circulation of commercials through our online media partners.",
       "Marketing through standees inside the campus everywhere.",
-      "Speaker time pre/post conference with non-competing program.",
-      "Advertisement on the ic-ETITE’24 website and mobile app.",
-      "Name and Logo on the T-Shirt of the conference.",
-      "Sponsor webpage on conference website, content to be delivered by sponsor to specific conference webmaster once approved by conference committee.",
-      "Judge for the Technext Exhibition and Bolt hackathon.",
-      "Speaker session and Tailored event during the conference.",
-      "Stalls 10x10 sq ft. for two days.",
+      "Dedicated speaker time pre/post conference with non-competing program.",
+      "Prominent advertisement on the ic-ETITE'28 website and mobile app.",
+      "Name and Logo printed on the official conference T-Shirt.",
+      "Dedicated sponsor webpage on conference website (content delivered once approved by committee).",
+      "Official judge for the TechNext '28 Exhibition and BOLT 3.0 Hackathon.",
+      "Keynote speaker session and tailored corporate event during the conference.",
+      "Complimentary 10×10 sq ft exhibition stall for two full days.",
     ],
   },
   {
     name: "Gold Sponsor",
     price: "₹ 3,50,000",
-    priceNum: 350000,
     badge: "Co-Sponsor · High Campus Visibility",
-    tagline: "Distinguished co-sponsor prominence across academic blocks, digital media, and exhibition arena.",
+    tagline:
+      "Distinguished co-sponsor prominence across academic blocks, digital media, and exhibition arena.",
     icon: Award,
-    headerBg: "bg-gradient-to-br from-[#2D1B00] via-[#4D2E00] to-[#1A1000]",
-    accentColor: "text-[#FFB81C]",
-    borderColor: "border-[#FFB81C]/40 hover:border-[#FFB81C]",
-    bulletColor: "text-[#FFB81C]",
+    headerBg: "bg-gradient-to-br from-[#1C1404] via-[#332208] to-[#140D02]",
+    accentColor: "text-[#F59E0B]",
+    borderColor: "border-amber-300/80 hover:border-amber-400 shadow-md",
+    buttonBg: "bg-[#2A1B0A] hover:bg-[#3D270F] text-[#FBBF24] border border-amber-400/30",
     benefits: [
-      "Company will be identified as a co-sponsor for ic-ETITE 2024.",
-      "Branding of the Company around the campus during the fest through LED screens (more than 40-30 times a day).",
+      "Company will be identified as a Co-Sponsor for ic-ETITE'28.",
+      "Branding around campus during the conference through LED screens (more than 30–40 times daily).",
       "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
-      "One half page advertisement in specific conference program.",
+      "One half-page advertisement in the official conference program booklet.",
       "Nation-wide circulation of commercials through our online media partners.",
-      "Marketing through standees inside the campus everywhere.",
-      "Advertisement on the ic-ETITE’24 website and mobile app.",
-      "Marketing through standees inside the campus everywhere.",
-      "Name and Logo on the T-Shirt of the conference.",
-      "Speaker session at the conference.",
-      "Stalls 10x10 sq ft. for two days.",
+      "Marketing through standees placed strategically inside the campus.",
+      "Prominent advertisement on the ic-ETITE'28 website and mobile app.",
+      "Name and Logo printed on the official conference T-Shirt.",
+      "Dedicated speaker session at the conference.",
+      "Complimentary 10×10 sq ft exhibition stall for two full days.",
     ],
   },
   {
     name: "Silver Sponsor",
     price: "₹ 2,00,000",
-    priceNum: 200000,
     badge: "Conference Sponsor · Essential Presence",
-    tagline: "Core conference sponsor package with campus LED branding, marketing standees, and stall space.",
+    tagline:
+      "Core conference sponsor package with campus LED branding, marketing standees, and stall space.",
     icon: Medal,
     headerBg: "bg-gradient-to-br from-[#1E293B] via-[#334155] to-[#0F172A]",
     accentColor: "text-slate-200",
-    borderColor: "border-slate-300 hover:border-slate-400",
-    bulletColor: "text-[#004B87]",
+    borderColor: "border-slate-300 hover:border-slate-400 shadow-md",
+    buttonBg: "bg-[#002147] hover:bg-[#003366] text-white",
     benefits: [
-      "Company will be identified as a sponsor for ic-ETITE 2024.",
-      "Branding of the Company around the campus during the fest through LED screens (more than 25-10 times a day).",
+      "Company will be identified as a Sponsor for ic-ETITE'28.",
+      "Branding around campus during the conference through LED screens (more than 10–25 times daily).",
       "Publicity on campus at the Academic Blocks (during Pre-ic-ETITE and all two days of ic-ETITE).",
       "Nation-wide circulation of commercials through our online media partners.",
-      "Marketing through standees inside the campus everywhere.",
-      "Advertisement on the ic-ETITE’24 website and mobile app.",
-      "Name and Logo on the T-Shirt of the conference.",
+      "Marketing through standees inside the campus.",
+      "Advertisement on the ic-ETITE'28 website and mobile app.",
+      "Name and Logo printed on the official conference T-Shirt.",
       "Speaker session at the conference.",
-      "Stalls 5x5 sq ft. for one day.",
+      "Complimentary 5×5 sq ft exhibition stall for one full day.",
     ],
   },
 ];
@@ -131,80 +126,40 @@ export default function SponsorshipPage() {
         bgImage="/images/frame_15.webp"
       />
 
-      <div className="container-x py-12 md:py-16 space-y-16">
-        {/* ── INTRO SUMMARY CARDS ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#EBF3F8] text-[#004B87] flex items-center justify-center shrink-0">
-              <Tv className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-[#002147]">Campus-Wide LED Branding</h3>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                Over 50–60 high-impact screen rotations daily across academic blocks and main plazas throughout the conference.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#FFF4DB] text-[#FFB81C] flex items-center justify-center shrink-0">
-              <Presentation className="w-6 h-6 text-[#9A6500]" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-[#002147]">Speaker &amp; Tailored Events</h3>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                Dedicated speaker slots, non-competing address times, and interactive workshops with international researchers and students.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#EDF9E7] text-[#15803d] flex items-center justify-center shrink-0">
-              <Store className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-[#002147]">Prime Exhibition Stalls</h3>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                10x10 sq ft or 5x5 sq ft customized booths at TechNext expo for direct delegate and student recruitment interaction.
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <div className="container-x py-10 sm:py-16 space-y-16">
         {/* ── SPONSORSHIP PACKAGES SECTION ── */}
         <section id="packages" className="space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
-              Sponsorship Tiers &amp; Entitlements
+            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
+              Sponsorship Packages &amp; Entitlements
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#002147] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#002147] tracking-tight">
               Select Your Sponsorship Tier
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
               Tailored sponsorship packages designed to maximize corporate visibility, talent pipeline acquisition, and thought leadership at VIT Vellore.
             </p>
           </div>
 
           {/* Pricing Tier Cards Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-2">
             {sponsorTiers.map((tier) => {
               const TierIcon = tier.icon;
               return (
                 <div
                   key={tier.name}
-                  className={`relative flex flex-col rounded-3xl bg-white border-2 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 overflow-hidden ${
-                    tier.isPopular ? "border-[#004B87] ring-2 ring-[#004B87]/20" : "border-slate-200"
-                  }`}
+                  className={`relative flex flex-col rounded-3xl bg-white border-2 transition-all duration-300 hover:-translate-y-1 overflow-hidden ${tier.borderColor}`}
                 >
                   {/* Highlight Ribbon for Title Sponsor */}
                   {tier.isPopular && (
-                    <div className="bg-[#004B87] text-[#CCFF00] text-center py-1.5 text-xs font-black uppercase tracking-widest border-b border-[#004B87]/30">
-                      ★ Most Comprehensive Package
+                    <div className="bg-[#FFB81C] text-[#002147] text-center py-2 text-xs font-black uppercase tracking-widest border-b border-[#E5A717] shadow-xs flex items-center justify-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 fill-[#002147]" />
+                      <span>★ Most Comprehensive Package</span>
                     </div>
                   )}
 
                   {/* Header Box */}
-                  <div className={`p-6 sm:p-7 text-white ${tier.headerBg} border-b border-white/10`}>
+                  <div className={`p-5 sm:p-6 text-white ${tier.headerBg} border-b border-white/10`}>
                     <div className="flex items-center justify-between gap-3 mb-3">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold tracking-wide">
                         <TierIcon className={`w-3.5 h-3.5 ${tier.accentColor}`} />
@@ -212,14 +167,18 @@ export default function SponsorshipPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-black tracking-tight text-white">{tier.name}</h3>
-                    <p className="text-xs text-white/80 mt-1.5 leading-relaxed font-normal">{tier.tagline}</p>
+                    <h3 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
+                      {tier.name}
+                    </h3>
+                    <p className="text-xs text-white/80 mt-1.5 leading-relaxed font-normal">
+                      {tier.tagline}
+                    </p>
 
-                    <div className="mt-5 pt-4 border-t border-white/15 flex items-baseline gap-2">
-                      <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                    <div className="mt-5 pt-4 border-t border-white/15 flex items-baseline gap-2 whitespace-nowrap">
+                      <span className="text-2xl sm:text-[26px] xl:text-3xl font-serif font-black text-white tracking-tight whitespace-nowrap">
                         {tier.price}
                       </span>
-                      <span className="text-xs font-medium text-white/70 uppercase tracking-wider">
+                      <span className="text-[10px] sm:text-xs font-semibold text-white/70 uppercase tracking-wide whitespace-nowrap">
                         + Applicable GST
                       </span>
                     </div>
@@ -227,16 +186,14 @@ export default function SponsorshipPage() {
 
                   {/* Benefits List */}
                   <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-6">
-                    <div className="space-y-3.5">
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <div className="space-y-4">
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
                         Included Entitlements &amp; Benefits:
                       </p>
-                      <ul className="space-y-3 text-xs sm:text-sm text-slate-700 font-normal">
+                      <ul className="space-y-3 text-xs sm:text-[13px] text-slate-700 font-normal">
                         {tier.benefits.map((benefit, idx) => (
                           <li key={idx} className="flex items-start gap-2.5 leading-relaxed">
-                            <span className="text-[#004B87] font-bold text-base leading-none select-none shrink-0 mt-0.5">
-                              →
-                            </span>
+                            <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
                             <span>{benefit}</span>
                           </li>
                         ))}
@@ -249,11 +206,7 @@ export default function SponsorshipPage() {
                         href={`mailto:icetiteconference@vit.ac.in?subject=ic-ETITE%20${encodeURIComponent(
                           tier.name
                         )}%20Inquiry`}
-                        className={`w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm ${
-                          tier.isPopular
-                            ? "bg-[#004B87] hover:bg-[#003366] text-white hover:scale-[1.02]"
-                            : "bg-slate-100 hover:bg-[#002147] text-[#002147] hover:text-white"
-                        }`}
+                        className={`w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md hover:scale-[1.02] ${tier.buttonBg}`}
                       >
                         <Mail className="w-4 h-4" />
                         <span>Inquire for {tier.name}</span>
@@ -267,12 +220,12 @@ export default function SponsorshipPage() {
         </section>
 
         {/* ── PARTNERS & SPONSORS SECTIONS (KEPT BLANK PER INSTRUCTION) ── */}
-        <section id="partners" className="pt-10 border-t border-slate-200 space-y-14">
+        <section id="partners" className="pt-8 border-t border-slate-200 space-y-14">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
               Institutional &amp; Technical Backing
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#002147]">
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#002147]">
               Conference Partners &amp; Patrons
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -340,11 +293,11 @@ export default function SponsorshipPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-[#CCFF00] bg-white/10 px-3 py-1 rounded-full border border-white/20 inline-block">
                 Sponsorship Secretariat &amp; Inquiries
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
                 Interested in Custom Sponsorship or Event Co-Hosting?
               </h3>
               <p className="text-sm text-white/80 leading-relaxed font-normal max-w-2xl">
-                We also offer tailored exhibition booths at <strong>TechNext Expo</strong>, customized challenge statements for the <strong>BOLT Hackathon</strong>, and branded keynote halls. Reach out to our organizing committee to receive customized proposals.
+                We offer tailored exhibition booths at <strong>TechNext Expo</strong>, customized challenge statements for the <strong>BOLT Hackathon</strong>, and branded keynote halls. Reach out to our organizing committee to receive customized proposals.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-medium text-white/90">
@@ -377,10 +330,8 @@ export default function SponsorshipPage() {
               </a>
 
               <a
-                href="/Formatted_ic-ETITE_Conference_Brochure.pdf"
-                download="ic-ETITE_Conference_Brochure.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/ic-ETITE'28.pdf"
+                download="ic-ETITE'28.pdf"
                 className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm transition-all border border-white/25 hover:scale-[1.02]"
               >
                 <FileText className="w-4 h-4 text-[#FFB81C]" />

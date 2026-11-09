@@ -1,0 +1,52 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import AuthShell from "@/components/portal/AuthShell";
+import SubmitButton from "@/components/portal/SubmitButton";
+import { Field, inputCls } from "@/components/portal/ui";
+import { loginAction } from "@/app/actions/auth";
+import { getCurrentUser } from "@/lib/auth/session";
+import { portalMetadata } from "@/lib/seo";
+
+export const metadata = portalMetadata("Login");
+
+type SP = Promise<{ next?: string; ok?: string; error?: string }>;
+
+export default async function LoginPage({ searchParams }: { searchParams: SP }) {
+  const { next = "", ok, error } = await searchParams;
+  const user = await getCurrentUser();
+  if (user && !error) redirect(next.startsWith("/") ? next : "/dashboard");
+  const qs = next ? `?next=${encodeURIComponent(next)}` : "";
+
+  return (
+    <AuthShell
+      title="Log in"
+      subtitle="Access conference registration, BOLT, TechNext and your certificates."
+      ok={ok}
+      error={error}
+      footer={
+        <>
+          New here?{" "}
+          <Link href={`/signup${qs}`} className="font-bold text-[#FFB81C] hover:underline">
+            Create an account
+          </Link>
+        </>
+      }
+    >
+      <form action={loginAction} className="space-y-4">
+        <input type="hidden" name="next" value={next} />
+        <Field label="Email">
+          <input name="email" type="email" required autoComplete="email" className={inputCls} />
+        </Field>
+        <Field label="Password">
+          <input name="password" type="password" required autoComplete="current-password" className={inputCls} />
+        </Field>
+        <div className="flex items-center justify-between gap-3 pt-1">
+          <Link href="/forgot-password" className="text-sm font-semibold text-[#004B87] hover:underline">
+            Forgot password?
+          </Link>
+          <SubmitButton pendingText="Logging in…">Log in</SubmitButton>
+        </div>
+      </form>
+    </AuthShell>
+  );
+}

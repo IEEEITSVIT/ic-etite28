@@ -1,19 +1,8 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
-import GallerySlideshow, { GalleryItem } from "@/components/GallerySlideshow";
-import Icetite24FullGallery from "@/components/Icetite24FullGallery";
-import { ICETITE24_PHOTOS } from "@/data/icetite24GalleryData";
-
-const icetite24GalleryItems: GalleryItem[] = ICETITE24_PHOTOS.map((p) => ({
-  id: p.id,
-  image: p.image,
-  title: p.title,
-  edition: p.edition,
-  location: p.location,
-  caption: p.caption,
-  category: "2024" as const,
-}));
+import Icetite24PhotoGrid from "@/components/Icetite24PhotoGrid";
 
 import {
   ArrowLeft,
@@ -29,11 +18,11 @@ import {
   Cpu,
 } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata("/ic-ETITE24", {
   title: "ic-ETITE'24 — Second Edition | Highlights & Photo Archive",
   description:
     "Official highlights, stats, and photo archive of the Second IEEE International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE'24), held on 22–23 Feb 2024 at VIT Vellore.",
-};
+});
 
 const stats = [
   { label: "Papers Received", value: "1,688", icon: FileText },
@@ -75,7 +64,7 @@ const sponsors = [
   {
     label: "TECHNICAL CO-SPONSOR",
     name: "IEEE Madras Section",
-    logo: "/logos/ieee-madras-section.svg",
+    logo: "/logos/IEEE Madras section.png",
     alt: "IEEE Madras Section",
   },
   {
@@ -109,28 +98,28 @@ export default function Icetite24Page() {
     <div className="bg-white min-h-screen text-[#002147]">
 
       {/* ── HERO ── */}
-      <section className="relative min-h-[70vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-end overflow-hidden">
         {/* Background Image with Dark Navy Gradient Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/gallery/icetite24_stage_main.webp"
-            alt="ic-ETITE'24 Inaugural Stage & Dignitaries Dais at Anna Auditorium, VIT Vellore"
+            src="/images/gallery/icetite24_shield_unveiling_hero.webp"
+            alt="ic-ETITE'24 Official Unveiling Ceremony with Chief Guest Dr. Zvi Galil, Dignitaries, and IEEE Leadership"
             fill
             sizes="100vw"
             priority
-            className="object-cover object-center opacity-80"
+            className="object-cover object-[center_28%] opacity-90"
           />
-          {/* Directional gradient: darker on left to protect text, clear on right to showcase photo */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00142E]/90 via-[#00142E]/45 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#00142E] via-transparent to-black/25" />
+          {/* Directional gradient: deep navy on left to guarantee crisp readability, clear on right to showcase dignitaries and unveiled shield */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#00142E]/95 via-[#00142E]/75 via-45% to-[#00142E]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#00142E] via-[#00142E]/35 to-black/35" />
         </div>
 
         {/* Decorative grid */}
         <div className="absolute inset-0 opacity-5 z-[1] pointer-events-none"
           style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
-        <div className="relative z-10 w-full px-6 sm:px-12 lg:px-20 pb-16 pt-28">
-          <Link href="/about" className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium mb-6 transition-colors">
+        <div className="relative z-10 w-full px-6 sm:px-12 lg:px-20 pb-10 pt-20">
+          <Link href="/about" className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium mb-6 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to About
           </Link>
@@ -142,7 +131,7 @@ export default function Icetite24Page() {
             <span className="bg-white/15 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/20">
               IEEE Xplore Indexed
             </span>
-            <span className="bg-white/10 text-white/80 text-xs font-medium px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5">
+            <span className="bg-white/10 text-white/90 text-xs font-medium px-3 py-1.5 rounded-full border border-white/15 flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" /> 22–23 February 2024
             </span>
           </div>
@@ -158,8 +147,8 @@ export default function Icetite24Page() {
             />
             <h1 className="sr-only">ic-ETITE&apos;24</h1>
           </div>
-          <p className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed mb-8">
-            Second International Conference on Emerging Trends in Information Technology and Engineering — organized by SCORE, VIT Vellore, technically co-sponsored by IEEE.
+          <p className="text-lg sm:text-xl text-white/90 font-medium max-w-2xl leading-relaxed mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            Second International Conference on Emerging Trends in Information Technology and Engineering
           </p>
 
           <a
@@ -187,33 +176,61 @@ export default function Icetite24Page() {
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
-      <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-20 bg-[#F7F9FC] border-b border-slate-200">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-4">
-              About the Conference
+      {/* ── ABOUT: TEXT WRAPS ALL AROUND FLOATED PHOTO ── */}
+      <section className="py-8 sm:py-12 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
+        <div className="max-w-6xl mx-auto bg-white rounded-2xl border-2 border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-sm flow-root">
+          {/* Floated Image on Desktop */}
+          <div className="w-full sm:w-[380px] md:w-[460px] lg:w-[500px] md:float-right md:ml-8 md:mb-5 mb-6">
+            <div className="p-2.5 bg-white border-2 border-slate-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow">
+              <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/icetite24/icetite24_16_inaugural_ceremony_dais.webp"
+                  alt="ic-ETITE'24 Inaugural Dais and Chief Guests"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </div>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
+                Chief Guest Shri S. Krishnan, IAS, Secretary MeitY, and university leadership on dais at ic-ETITE&apos;24
+              </p>
+            </div>
+          </div>
+
+          {/* Text flowing all around the picture */}
+          <div className="space-y-3.5">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3 py-1 rounded-full border border-[#004B87]/20 inline-block">
+              Second Edition Legacy
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#002147] mb-5 leading-tight">
-              About ic-ETITE&apos;24
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#002147] leading-tight">
+              About ic-ETITE&apos;24: The Second Edition
             </h2>
-            <p className="text-slate-600 text-base leading-relaxed mb-4">
-              The Second IEEE International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE&apos;24) was organized on 22nd &amp; 23rd February 2024 at VIT Vellore, India. The conference was technically co-sponsored by IEEE Madras Section.
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The <strong>Second IEEE International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE&apos;24)</strong> was organized on <strong>22nd &amp; 23rd February 2024</strong> at Vellore Institute of Technology (VIT), Vellore, India. Technically co-sponsored by the <strong>IEEE Madras Section</strong> and hosted by the School of Computer Science Engineering and Information Systems (SCORE), the conference demonstrated extraordinary international academic participation.
             </p>
-            <p className="text-slate-600 text-base leading-relaxed">
-              The purpose of this conference is to enhance the research in Information Technology, Computer Engineering, Communication Engineering, Electronics Engineering and to afford an international platform for researchers, academicians, engineers, industrialists and students around the world to share their research findings with the global experts in the field of Science and Technology.
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The second edition received an astounding <strong>1,688 research manuscript submissions from 19 countries</strong> across the Americas, Europe, Asia, and Africa. Following rigorous double-blind peer reviews, the conference hosted <strong>32 parallel technical sessions</strong> and <strong>22 keynote addresses</strong> delivered by eminent global academicians and industry architects from Microsoft, Amazon, Cisco, and leading research institutes.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              The conference was inaugurated by Chief Guests <strong>Dr. Zvi Galil</strong> (former Dean of Computing at Georgia Institute of Technology, USA) and <strong>Shri S. Krishnan, IAS</strong> (Secretary, Ministry of Electronics and Information Technology [MeitY], Government of India). Alongside scientific proceedings, ic-ETITE&apos;24 featured the national hackathon <strong>BOLT 2.0</strong> with 683 participant registrations and the <strong>TechNext’24</strong> industrial expo showcasing 120+ student engineering prototypes to corporate venture partners.
+            </p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
+              All accepted and presented papers were published in the <strong>IEEE Xplore Digital Library</strong> (Conference Record #60085), ensuring lasting global scholarly impact and international citations for the contributing authors.
             </p>
           </div>
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-4">
-              Theme of the Conference
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#002147] mb-5 leading-tight">
-              Conference Theme
-            </h2>
-            <p className="text-slate-600 text-base leading-relaxed">
-              ic-ETITE&apos;24 expresses the importance of upgrading the research in Information Technology and Engineering. It motivates to provide a worldwide platform to researchers far and widespread by exploring their innovations in the field of science and technology. The mission is to promote and improve the research and development related to Information Technology and Engineering. The essential objective of the conference is to assist the researchers in discovering the global linkage for future joint efforts in their academic outlook.
-            </p>
+
+          <div className="clear-both pt-4 flex flex-wrap gap-3">
+            <a
+              href="https://ieeexplore.ieee.org/xpl/conhome/10493200/proceeding"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#00A3FF] hover:bg-[#38BDF8] text-[#00142E] font-bold px-5 py-2.5 rounded-xl transition-all text-xs sm:text-sm shadow-sm"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Access IEEE Proceedings</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         </div>
       </section>
@@ -243,48 +260,24 @@ export default function Icetite24Page() {
         </div>
       </section>
 
-      {/* ── PHOTO GALLERY & ARCHIVE (ALL 19 PHOTOS) ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
-        <div className="max-w-6xl mx-auto space-y-16">
+      {/* ── PHOTO GALLERY (4x4 Grid, No Captions, Load More) ── */}
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center px-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-4">
-              Official Photo Archive · All 19 Photographs
+          <div className="text-center px-6 mb-10 sm:mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-3">
+              Official Photo Archive
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#002147] mb-3">
-              ic-ETITE&apos;24 Highlights &amp; Gallery
+              ic-ETITE&apos;24 Photo Gallery
             </h2>
             <p className="text-slate-600 text-base max-w-2xl mx-auto">
               Every memorable moment captured during the second edition — inaugural assembly, keynote plenary, 24-hour BOLT 2.0 hackathon, TechNext industrial expo, and international delegate fellowship.
             </p>
           </div>
 
-          {/* Featured Slideshow */}
-          <div className="bg-white p-4 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
-            <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
-              <div>
-                <h3 className="font-bold text-lg text-[#002147]">Interactive Slideshow</h3>
-                <p className="text-xs text-slate-500">Auto-playing cinematic archive showcase with full details</p>
-              </div>
-              <span className="text-xs font-bold text-[#004B87] bg-[#EBF3F8] px-3 py-1 rounded-full">
-                19 Archival Moments
-              </span>
-            </div>
-            <GallerySlideshow items={icetite24GalleryItems} showCategoryFilter={false} />
-          </div>
-
-          {/* Full Grid Gallery with Category Filters, Search & Lightbox */}
-          <div>
-            <div className="mb-6 text-center sm:text-left">
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#002147]">
-                Complete Photographic Collection
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Filter by event category or search specific topics. Click any photograph to open full-resolution inspection.
-              </p>
-            </div>
-            <Icetite24FullGallery />
-          </div>
+          {/* 4x4 Photo Grid without caption, with Load More option */}
+          <Icetite24PhotoGrid />
         </div>
       </section>
 

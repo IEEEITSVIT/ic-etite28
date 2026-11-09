@@ -137,9 +137,9 @@ export const icetite24Photos: PhotoItem[] = [
   {
     id: "icetite24-16",
     src: "/images/icetite24/icetite24_16_inaugural_ceremony_dais.webp",
-    title: "Inaugural Dais & Proceedings Review",
-    category: "Inaugural Ceremony",
-    description: "Chief Guest Shri S. Krishnan, IAS, Secretary MeitY, and university leadership presiding over the inauguration and reviewing 'Times of ic-ETITE'.",
+    title: "Valedictory Ceremony & Proceedings",
+    category: "Valedictory & Closing",
+    description: "Valedictory ceremony of ic-ETITE'24, marking the conclusion of the conference and celebrating the contributions of distinguished guests, researchers, and participants.",
   },
   {
     id: "icetite24-18",
