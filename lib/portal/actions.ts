@@ -23,6 +23,9 @@ export async function guarded(path: string, fn: () => Promise<string | void>, su
     unstable_rethrow(err);
     if (err instanceof PortalError) flash(path, "error", err.message);
     console.error(err);
+    if (err instanceof Error && /Database is not configured|D1 error|fetch failed/.test(err.message)) {
+      flash(path, "error", "The portal can't reach its database right now. Please try again in a few minutes.");
+    }
     flash(path, "error", "Something went wrong. Please try again.");
   }
   const target = typeof successPath === "function" ? successPath() : successPath;

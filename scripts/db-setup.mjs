@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Seeds the portal database through the D1 gateway. Safe to re-run: existing rows are kept.
 //   npm run db:setup                       → uses .env.local
-//   npm run db:setup -- .env.production.local
+//   npm run db:setup -- .env.vercel.local
 // Creates the first admin (ADMIN_EMAIL / ADMIN_PASSWORD), stores SMTP settings from
 // SMTP_* (password encrypted with SESSION_SECRET), and a hidden BOLT 3.0 event.
 

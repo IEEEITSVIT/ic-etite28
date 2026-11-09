@@ -133,6 +133,22 @@ function paymentFor(e: EventRow, payer: boolean) {
 
 export class PortalError extends Error {}
 
+// Collapses runs of whitespace so "Quantum  Leap" and "Quantum Leap" count as the same name.
+export const normalizeTeamName = (name: string) => name.replace(/\s+/g, " ").trim().slice(0, 60);
+
+const isUniqueViolation = (err: unknown, column: string) =>
+  err instanceof Error && /UNIQUE/i.test(err.message) && err.message.includes(column);
+
+// Solo events name each participant's team after them; same-named people get a suffix.
+async function uniqueSoloName(eventId: string, base: string) {
+  const taken = await all<{ name: string }>("SELECT name FROM teams WHERE event_id = ? AND (name = ? COLLATE NOCASE OR name LIKE ?)", [eventId, base, `${base} (%)`]);
+  if (taken.length === 0) return base;
+  const names = new Set(taken.map((t) => t.name.toLowerCase()));
+  let n = 2;
+  while (names.has(`${base} (${n})`.toLowerCase())) n++;
+  return `${base} (${n})`;
+}
+
 export async function registerForEvent(e: EventRow, user: SessionUser) {
   if (!canView(e, user)) throw new PortalError("Event not found.");
   if (registrationWindow(e) !== "open") throw new PortalError("Registration is not open for this event.");
@@ -155,7 +171,7 @@ export async function registerForEvent(e: EventRow, user: SessionUser) {
     stmts.push(
       {
         sql: "INSERT INTO teams (id, event_id, name, code, lead_user_id, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-        params: [teamId, e.id, user.name, newCode(8), user.id, now()],
+        params: [teamId, e.id, await uniqueSoloName(e.id, normalizeTeamName(user.name)), newCode(8), user.id, now()],
       },
       {
         sql: "UPDATE registrations SET team_id = ?, member_role = 'lead' WHERE event_id = ? AND user_id = ?",
@@ -176,7 +192,7 @@ export async function createTeam(e: EventRow, user: SessionUser, name: string) {
   const reg = await getRegistration(e.id, user.id);
   if (!reg) throw new PortalError("Register for the event first.");
   if (reg.team_id) throw new PortalError("You are already in a team.");
-  const clean = name.trim().slice(0, 60);
+  const clean = normalizeTeamName(name);
   if (clean.length < 2) throw new PortalError("Team name must be at least 2 characters.");
   const dup = await first("SELECT 1 FROM teams WHERE event_id = ? AND name = ? COLLATE NOCASE", [e.id, clean]);
   if (dup) throw new PortalError("A team with that name already exists.");
@@ -202,8 +218,10 @@ export async function createTeam(e: EventRow, user: SessionUser, name: string) {
       ]);
       return;
     } catch (err) {
+      // The database enforces unique names per event, so a concurrent create with the same name lands here.
+      if (isUniqueViolation(err, "teams.name")) throw new PortalError("A team with that name already exists.");
       // Unique team code collision: retry with a fresh code.
-      if (!(err instanceof Error) || !/UNIQUE/i.test(err.message) || attempt === 2) throw err;
+      if (!isUniqueViolation(err, "teams.code") || attempt === 2) throw err;
     }
   }
 }

@@ -6,6 +6,7 @@ import { Field, inputCls } from "@/components/portal/ui";
 import { signupAction } from "@/app/actions/auth";
 import { getCurrentUser } from "@/lib/auth/session";
 import { portalMetadata } from "@/lib/seo";
+import { isDbConfigured } from "@/lib/db";
 
 export const metadata = portalMetadata("Create account");
 
@@ -30,6 +31,11 @@ export default async function SignupPage({ searchParams }: { searchParams: SP })
         </>
       }
     >
+      {!isDbConfigured() && (
+        <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          The portal is not connected to its database yet (D1_GATEWAY_URL / D1_GATEWAY_SECRET are not set on this deployment), so login and sign-up are unavailable.
+        </p>
+      )}
       <form action={signupAction} className="space-y-4">
         <input type="hidden" name="next" value={next} />
         <Field label="Full name" hint="As it should appear on certificates.">

@@ -17,7 +17,6 @@ import {
 } from "@/lib/portal/events";
 import { getPayable, startCheckout } from "@/lib/payments";
 import { redirect } from "next/navigation";
-import { flash } from "@/lib/portal/actions";
 
 async function load(formData: FormData): Promise<{ event: EventRow; path: string }> {
   const slug = str(formData, "slug", 80);
@@ -106,9 +105,11 @@ export async function payAction(formData: FormData) {
   const ref = str(formData, "ref", 100);
   const back = str(formData, "back", 200) || "/dashboard";
   const user = await requireUser(back);
-  const payable = await getPayable(purpose, ref);
-  if (!payable || payable.userId !== user.id) flash(back, "error", "Payment record not found.");
-  const result = await startCheckout(payable);
-  if (result.redirectUrl) redirect(result.redirectUrl);
-  flash(back, "ok", result.message ?? "Payment started.");
+  await guarded(back, async () => {
+    const payable = await getPayable(purpose, ref);
+    if (!payable || payable.userId !== user.id) throw new PortalError("Payment record not found.");
+    const result = await startCheckout(payable);
+    if (result.redirectUrl) redirect(result.redirectUrl);
+    return result.message ?? "Payment started.";
+  });
 }

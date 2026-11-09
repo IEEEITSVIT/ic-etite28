@@ -65,10 +65,10 @@ npx wrangler secret put GATEWAY_SECRET   # same value as D1_GATEWAY_SECRET
 Seed the first admin, SMTP settings and the hidden BOLT 3.0 event (safe to re-run):
 
 ```bash
-npm run db:setup -- .env.production.local
+npm run db:setup -- .env.vercel.local
 ```
 
-Vercel → Project → Settings → Environment Variables: add every key from `.env.production.local` (you can paste the file's contents), then redeploy.
+Vercel → Project → Settings → Environment Variables: add every key from `.env.vercel.local` (you can paste the file's contents), then redeploy.
 
 ### Local development
 
