@@ -1,4 +1,5 @@
 import { Calendar, MapPin, Award, Globe2, BookOpen } from "lucide-react";
+import E from "@/components/cms/E";
 
 export default function ConferenceSnapshot() {
   const items = [
@@ -28,7 +29,7 @@ export default function ConferenceSnapshot() {
       value: "IEEE ITS VIT",
       subtext: "Student Chapter Vellore",
       icon: BookOpen,
-      accent: "text-[#004B87]",
+      accent: "text-brand-secondary",
     },
     {
       label: "Global Reach",
@@ -52,16 +53,16 @@ export default function ConferenceSnapshot() {
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-mono text-[10px] tracking-wider uppercase text-[#9c968f]">
-                    {item.label}
+                    <E f="c.ConferenceSnapshot">{item.label}</E>
                   </span>
-                  <Icon className="w-3.5 h-3.5 text-[#004B87]" />
+                  <Icon className="w-3.5 h-3.5 text-brand-secondary" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-[#1a1714] leading-snug">
-                    {item.value}
+                    <E f="c.ConferenceSnapshot">{item.value}</E>
                   </p>
                   <p className="font-mono text-[10px] text-[#6b6560] mt-0.5">
-                    {item.subtext}
+                    <E f="c.ConferenceSnapshot">{item.subtext}</E>
                   </p>
                 </div>
               </div>

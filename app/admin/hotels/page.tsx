@@ -72,7 +72,7 @@ function HotelForm({ h }: { h?: Hotel }) {
         </select>
       </Field>
       <label className="flex items-center gap-2 pt-7 text-sm font-semibold text-slate-700">
-        <input type="checkbox" name="verifiedByVit" defaultChecked={h?.verifiedByVit ?? false} className="accent-[#002147]" /> Verified by VIT
+        <input type="checkbox" name="verifiedByVit" defaultChecked={h?.verifiedByVit ?? false} className="accent-brand-primary" /> Verified by VIT
       </label>
       <Field label="Amenities (comma-separated)" className="md:col-span-4">
         <input name="amenities" defaultValue={h?.amenities.join(", ") ?? ""} placeholder="Free Wi-Fi, Breakfast, Parking, AC" className={small} />
@@ -93,7 +93,7 @@ export default async function AdminHotelsPage({ searchParams }: { searchParams: 
       subtitle={`${hotels.items.length} hotels · shown on the public Hotels page when published`}
       width="max-w-6xl"
       actions={
-        <Link href="/hotels" target="_blank" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#004B87] hover:underline">
+        <Link href="/hotels" target="_blank" className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-secondary hover:underline">
           View Hotels page <ExternalLink className="h-3.5 w-3.5" />
         </Link>
       }
@@ -103,7 +103,7 @@ export default async function AdminHotelsPage({ searchParams }: { searchParams: 
         <Card title="Page">
           <form action={saveHotelsPageAction} className="space-y-3">
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-              <input type="checkbox" name="published" defaultChecked={hotels.published} className="h-4 w-4 accent-[#002147]" /> Publish the hotel directory (otherwise the page shows &quot;will be updated soon&quot;)
+              <input type="checkbox" name="published" defaultChecked={hotels.published} className="h-4 w-4 accent-brand-primary" /> Publish the hotel directory (otherwise the page shows &quot;will be updated soon&quot;)
             </label>
             <Field label="Introduction">
               <textarea name="intro" rows={2} defaultValue={hotels.intro} className={inputCls} />
@@ -119,7 +119,7 @@ export default async function AdminHotelsPage({ searchParams }: { searchParams: 
             {hotels.items.map((h) => (
               <details key={h.id} id={`h-${h.id}`} className="scroll-mt-28 rounded-xl border border-slate-200">
                 <summary className="flex cursor-pointer flex-wrap items-center gap-2 px-4 py-3">
-                  <span className="font-bold text-[#002147]">{h.name}</span>
+                  <span className="font-bold text-brand-primary">{h.name}</span>
                   <Badge>{h.categoryLabel}</Badge>
                   {h.verifiedByVit && <Badge tone="green">VIT verified</Badge>}
                   <span className="text-xs text-slate-500">{h.distanceFromVit}</span>

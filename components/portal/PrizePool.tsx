@@ -13,7 +13,7 @@ export default function PrizePool({ prizes, pool, title = "Prize pool", compact 
       <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800">
         <Trophy className="h-4 w-4" /> {title}
       </div>
-      {headline && <div className={`mt-1 font-black text-[#002147] ${compact ? "text-2xl" : "text-3xl sm:text-4xl"}`}>{headline}</div>}
+      {headline && <div className={`mt-1 font-black text-brand-primary ${compact ? "text-2xl" : "text-3xl sm:text-4xl"}`}>{headline}</div>}
       {prizes.length > 0 && (
         <ul className={`mt-3 grid gap-2 ${compact ? "" : "sm:grid-cols-2"}`}>
           {prizes.map((p, i) => (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import Icetite20PhotoGrid from "@/components/Icetite20PhotoGrid";
 import type { GalleryItem } from "@/components/GallerySlideshow";
 
@@ -117,6 +117,7 @@ import {
   Award,
   Layers,
 } from "lucide-react";
+import E from "@/components/cms/E";
 
 export const metadata: Metadata = pageMetadata("/ic-ETITE20", {
   title: "ic-ETITE'20 — Inaugural Edition | Highlights & Photo Archive",
@@ -180,7 +181,7 @@ const supportedOrganizations20 = [
 
 export default function Icetite20Page() {
   return (
-    <div className="bg-white min-h-screen text-[#002147]">
+    <div className="bg-white min-h-screen text-brand-primary">
 
       {/* ── HERO ── */}
       <section className="relative min-h-[70vh] flex items-end overflow-hidden">
@@ -205,20 +206,13 @@ export default function Icetite20Page() {
 
         <div className="relative z-10 w-full px-6 sm:px-12 lg:px-20 pb-16 pt-28">
           <Link href="/about" className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to About
-          </Link>
+            <ArrowLeft className="w-4 h-4" /><E f="ic-ETITE20">{"Back to About"}</E></Link>
 
           <div className="flex flex-wrap items-center gap-3 mb-5">
-            <span className="bg-[#FFD700] text-[#1a0033] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-              Inaugural Edition
-            </span>
-            <span className="bg-white/15 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/20">
-              IEEE Xplore Indexed
-            </span>
+            <span className="bg-[#FFD700] text-[#1a0033] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"><E f="ic-ETITE20">{"Inaugural Edition"}</E></span>
+            <span className="bg-white/15 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/20"><E f="ic-ETITE20">{"IEEE Xplore Indexed"}</E></span>
             <span className="bg-white/10 text-white/80 text-xs font-medium px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" /> 24–25 February 2020
-            </span>
+              <Calendar className="w-3.5 h-3.5" /><E f="ic-ETITE20">{" 24–25 February 2020"}</E></span>
           </div>
 
           <div className="mb-5 pt-1">
@@ -230,11 +224,9 @@ export default function Icetite20Page() {
               priority
               className="h-8 sm:h-10 md:h-12 w-auto object-contain drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
             />
-            <h1 className="sr-only">ic-ETITE&apos;20</h1>
+            <h1 className="sr-only"><E f="ic-ETITE20">{"ic-ETITE'20"}</E></h1>
           </div>
-          <p className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed mb-8">
-            The First International Conference on Emerging Trends in Information Technology and Engineering
-          </p>
+          <p className="text-lg sm:text-xl text-white/70 max-w-2xl leading-relaxed mb-8"><E f="ic-ETITE20">{"The First International Conference on Emerging Trends in Information Technology and Engineering"}</E></p>
 
           <a
             href="https://ieeexplore.ieee.org/xpl/conhome/9070069/proceeding"
@@ -242,9 +234,7 @@ export default function Icetite20Page() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#FFD700] text-[#1a0033] font-bold px-6 py-3 rounded-xl hover:bg-white transition-colors text-sm"
           >
-            <BookOpen className="w-4 h-4" />
-            IEEE Xplore Proceedings
-            <ExternalLink className="w-3.5 h-3.5" />
+            <BookOpen className="w-4 h-4" /><E f="ic-ETITE20">{"IEEE Xplore Proceedings"}</E><ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
       </section>
@@ -254,8 +244,8 @@ export default function Icetite20Page() {
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {stats.map(({ label, value }) => (
             <div key={label} className="text-center">
-              <div className="text-3xl sm:text-4xl font-black text-[#FFD700] mb-1">{value}</div>
-              <div className="text-white/60 text-xs uppercase tracking-wider font-semibold">{label}</div>
+              <div className="text-3xl sm:text-4xl font-black text-[#FFD700] mb-1"><E f="ic-ETITE20">{value}</E></div>
+              <div className="text-white/60 text-xs uppercase tracking-wider font-semibold"><E f="ic-ETITE20">{label}</E></div>
             </div>
           ))}
         </div>
@@ -277,32 +267,18 @@ export default function Icetite20Page() {
                   loading="lazy"
                 />
               </div>
-              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center">
-                Hon&apos;ble Chancellor Dr. G. Viswanathan and international luminaries presiding over ic-ETITE&apos;20 inauguration
-              </p>
+              <p className="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 font-medium rounded-b-xl mt-2 text-center"><E f="ic-ETITE20">{"Hon'ble Chancellor Dr. G. Viswanathan and international luminaries presiding over ic-ETITE'20 inauguration"}</E></p>
             </div>
           </div>
 
           {/* Text flowing all around the picture */}
           <div className="space-y-3.5">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1 rounded-full border border-purple-200 inline-block">
-              Inaugural Edition Legacy
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#002147] leading-tight">
-              About ic-ETITE&apos;20: The First Edition
-            </h2>
-            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
-              The inaugural <strong>First International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE’20)</strong> took place at Vellore Institute of Technology (VIT), Vellore, India, on <strong>24th &amp; 25th February 2020</strong>. Organised by the School of Information Technology and Engineering (SITE / SCORE), the conference was technically co-sponsored by the <strong>IEEE Computer Society Madras Chapter</strong> and the <strong>IEEE Communications Society Madras Chapter</strong>.
-            </p>
-            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
-              The purpose of the conference was to enhance high-impact research across Information Technology, Computer Engineering, Communication Engineering, and Electronics Engineering, affording an authoritative international platform for researchers, academicians, engineers, industrialists, and students worldwide to share breakthrough findings with global experts.
-            </p>
-            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
-              ic-ETITE’20 featured <strong>21 dedicated technical sessions</strong> and <strong>17 enriching keynote sessions</strong> delivered by eminent global academicians, including Prof. Brian A. Barsky (UC Berkeley, USA), Dr. Ajith Abraham (Director, MIR Labs, USA), and Dr. Raija Halonen (University of Oulu, Finland). In alignment with green campus traditions, visiting dignitaries planted memorial trees on the auditorium lawns.
-            </p>
-            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify">
-              All accepted and presented peer-reviewed research papers were successfully indexed and published in the <strong>IEEE Xplore Digital Library</strong> (Electronic ISBN: 978-1-7281-4142-8). Alongside scientific sessions, the first edition debuted the 24-hour national hackathon BOLT (Breakthrough On Locked Technology), which engaged 500+ participants with ₹1,00,000 in cash awards.
-            </p>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1 rounded-full border border-purple-200 inline-block"><E f="ic-ETITE20">{"Inaugural Edition Legacy"}</E></span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-brand-primary leading-tight"><E f="ic-ETITE20">{"About ic-ETITE'20: The First Edition"}</E></h2>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify"><E f="ic-ETITE20">{"The inaugural "}</E><strong><E f="ic-ETITE20">{"First International Conference on Emerging Trends in Information Technology and Engineering (ic-ETITE’20)"}</E></strong><E f="ic-ETITE20">{" took place at Vellore Institute of Technology (VIT), Vellore, India, on "}</E><strong><E f="ic-ETITE20">{"24th & 25th February 2020"}</E></strong><E f="ic-ETITE20">{". Organised by the School of Information Technology and Engineering (SITE / SCORE), the conference was technically co-sponsored by the "}</E><strong><E f="ic-ETITE20">{"IEEE Computer Society Madras Chapter"}</E></strong><E f="ic-ETITE20">{" and the "}</E><strong><E f="ic-ETITE20">{"IEEE Communications Society Madras Chapter"}</E></strong><E f="ic-ETITE20">{"."}</E></p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify"><E f="ic-ETITE20">{"The purpose of the conference was to enhance high-impact research across Information Technology, Computer Engineering, Communication Engineering, and Electronics Engineering, affording an authoritative international platform for researchers, academicians, engineers, industrialists, and students worldwide to share breakthrough findings with global experts."}</E></p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify"><E f="ic-ETITE20">{"ic-ETITE’20 featured "}</E><strong><E f="ic-ETITE20">{"21 dedicated technical sessions"}</E></strong><E f="ic-ETITE20">{" and "}</E><strong><E f="ic-ETITE20">{"17 enriching keynote sessions"}</E></strong><E f="ic-ETITE20">{" delivered by eminent global academicians, including Prof. Brian A. Barsky (UC Berkeley, USA), Dr. Ajith Abraham (Director, MIR Labs, USA), and Dr. Raija Halonen (University of Oulu, Finland). In alignment with green campus traditions, visiting dignitaries planted memorial trees on the auditorium lawns."}</E></p>
+            <p className="text-[16px] sm:text-[17px] md:text-[18px] leading-[1.85] text-slate-700 font-normal text-justify"><E f="ic-ETITE20">{"All accepted and presented peer-reviewed research papers were successfully indexed and published in the "}</E><strong><E f="ic-ETITE20">{"IEEE Xplore Digital Library"}</E></strong><E f="ic-ETITE20">{" (Electronic ISBN: 978-1-7281-4142-8). Alongside scientific sessions, the first edition debuted the 24-hour national hackathon BOLT (Breakthrough On Locked Technology), which engaged 500+ participants with ₹1,00,000 in cash awards."}</E></p>
           </div>
 
           <div className="clear-both pt-4 flex flex-wrap gap-3">
@@ -313,7 +289,7 @@ export default function Icetite20Page() {
               className="inline-flex items-center gap-2 bg-[#5B2D8E] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#4a2073] transition-colors text-xs sm:text-sm shadow-sm"
             >
               <BookOpen className="w-4 h-4" />
-              <span>View IEEE Xplore Proceedings</span>
+              <span><E f="ic-ETITE20">{"View IEEE Xplore Proceedings"}</E></span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -324,21 +300,17 @@ export default function Icetite20Page() {
       <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-20 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4">
-              Key Highlights
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#002147]">
-              Highlights of ic-ETITE&apos;20
-            </h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4"><E f="ic-ETITE20">{"Key Highlights"}</E></span>
+            <h2 className="text-3xl sm:text-4xl font-black text-brand-primary"><E f="ic-ETITE20">{"Highlights of ic-ETITE'20"}</E></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {highlights.map(({ title, body }) => (
               <div key={title} className="bg-[#F7F9FC] border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-3 mb-3">
                   <CheckCircle2 className="w-5 h-5 text-[#5B2D8E] shrink-0 mt-0.5" />
-                  <h3 className="font-bold text-[#002147] text-base">{title}</h3>
+                  <h3 className="font-bold text-brand-primary text-base"><E f="ic-ETITE20">{title}</E></h3>
                 </div>
-                <p className="text-slate-600 text-sm leading-relaxed">{body}</p>
+                <p className="text-slate-600 text-sm leading-relaxed"><E f="ic-ETITE20">{body}</E></p>
               </div>
             ))}
           </div>
@@ -349,15 +321,9 @@ export default function Icetite20Page() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-12 bg-[#F7F9FC] border-b border-slate-200">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-12 px-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block mb-3">
-              Official Photo Archive
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#002147] mb-3">
-              ic-ETITE&apos;20 Photo Gallery
-            </h2>
-            <p className="text-slate-600 text-base max-w-2xl mx-auto">
-              Archival photographs from the inaugural edition — inaugural dais, keynote addresses, technical sessions, tree plantation, and international delegate gatherings.
-            </p>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-secondary bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-brand-secondary/20 inline-block mb-3"><E f="ic-ETITE20">{"Official Photo Archive"}</E></span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-brand-primary mb-3"><E f="ic-ETITE20">{"ic-ETITE'20 Photo Gallery"}</E></h2>
+            <p className="text-slate-600 text-base max-w-2xl mx-auto"><E f="ic-ETITE20">{"Archival photographs from the inaugural edition — inaugural dais, keynote addresses, technical sessions, tree plantation, and international delegate gatherings."}</E></p>
           </div>
           <Icetite20PhotoGrid />
         </div>
@@ -367,10 +333,8 @@ export default function Icetite20Page() {
       <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-20 bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4">
-              Partners & Sponsors
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#002147]">Sponsors & Support</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#5B2D8E] bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200 inline-block mb-4"><E f="ic-ETITE20">{"Partners & Sponsors"}</E></span>
+            <h2 className="text-3xl sm:text-4xl font-black text-brand-primary"><E f="ic-ETITE20">{"Sponsors & Support"}</E></h2>
           </div>
           {/* 1. Main Technical Co-Sponsors Row in a single row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -380,7 +344,7 @@ export default function Icetite20Page() {
                 className="bg-[#F7F9FC] border border-slate-200 rounded-2xl p-6 sm:p-7 flex flex-col justify-between items-center text-center shadow-xs hover:border-[#5B2D8E]/40 transition-colors min-h-[220px]"
               >
                 <div className="text-xs font-bold uppercase tracking-wider text-[#5B2D8E] mb-2">
-                  {sponsor.label}
+                  <E f="ic-ETITE20">{sponsor.label}</E>
                 </div>
 
                 <div className="my-auto py-3 flex items-center justify-center w-full min-h-[80px]">
@@ -395,8 +359,8 @@ export default function Icetite20Page() {
                   </div>
                 </div>
 
-                <div className="text-[#002147] font-semibold text-sm sm:text-base mt-2">
-                  {sponsor.name}
+                <div className="text-brand-primary font-semibold text-sm sm:text-base mt-2">
+                  <E f="ic-ETITE20">{sponsor.name}</E>
                 </div>
               </div>
             ))}
@@ -405,12 +369,8 @@ export default function Icetite20Page() {
           {/* 2. Supported By Section: Dedicated showcase with official logos */}
           <div className="bg-[#F7F9FC] border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-xs hover:border-[#5B2D8E]/40 transition-colors">
             <div className="text-center mb-6">
-              <div className="text-xs font-bold uppercase tracking-wider text-[#5B2D8E] mb-1.5">
-                SUPPORTED BY
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#002147]">
-                Technical Societies &amp; Collaborators
-              </h3>
+              <div className="text-xs font-bold uppercase tracking-wider text-[#5B2D8E] mb-1.5"><E f="ic-ETITE20">{"SUPPORTED BY"}</E></div>
+              <h3 className="text-xl sm:text-2xl font-bold text-brand-primary"><E f="ic-ETITE20">{"Technical Societies & Collaborators"}</E></h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -424,9 +384,7 @@ export default function Icetite20Page() {
                     className="max-h-16 w-auto object-contain"
                   />
                 </div>
-                <span className="text-[#002147] font-bold text-sm">
-                  Association for Computing Machinery (ACM)
-                </span>
+                <span className="text-brand-primary font-bold text-sm"><E f="ic-ETITE20">{"Association for Computing Machinery (ACM)"}</E></span>
               </div>
 
               <div className="bg-white rounded-xl border border-slate-200/80 p-6 flex flex-col items-center justify-center text-center shadow-xs hover:border-[#5B2D8E]/30 transition-colors">
@@ -439,9 +397,7 @@ export default function Icetite20Page() {
                     className="max-h-16 w-auto object-contain"
                   />
                 </div>
-                <span className="text-[#002147] font-bold text-sm">
-                  IEEE Industry Applications Society (IAS)
-                </span>
+                <span className="text-brand-primary font-bold text-sm"><E f="ic-ETITE20">{"IEEE Industry Applications Society (IAS)"}</E></span>
               </div>
             </div>
 
@@ -450,9 +406,9 @@ export default function Icetite20Page() {
               {supportedOrganizations20.map((org) => (
                 <span
                   key={org}
-                  className="px-3.5 py-1 rounded-full bg-white border border-slate-200 text-[#002147] font-semibold text-xs tracking-tight shadow-xs"
+                  className="px-3.5 py-1 rounded-full bg-white border border-slate-200 text-brand-primary font-semibold text-xs tracking-tight shadow-xs"
                 >
-                  {org}
+                  <E f="ic-ETITE20">{org}</E>
                 </span>
               ))}
             </div>

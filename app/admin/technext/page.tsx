@@ -56,7 +56,7 @@ export default async function AdminTechnextPage({ searchParams }: { searchParams
       </div>
       <div className="mb-4 flex flex-wrap gap-2">
         {["all", "pending", "approved", "rejected", "cancelled"].map((s) => (
-          <Link key={s} href={`/admin/technext?status=${s}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold capitalize ${s === status ? "bg-[#002147] text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
+          <Link key={s} href={`/admin/technext?status=${s}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold capitalize ${s === status ? "bg-brand-primary text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
             {s}
           </Link>
         ))}
@@ -68,7 +68,7 @@ export default async function AdminTechnextPage({ searchParams }: { searchParams
           {bookings.map((b) => (
             <details key={b.id} id={`b-${b.id}`} className="scroll-mt-28 rounded-2xl border border-slate-200 bg-white shadow-sm">
               <summary className="flex cursor-pointer flex-wrap items-center gap-3 px-5 py-4">
-                <span className="font-bold text-[#002147]">{b.organization_name}</span>
+                <span className="font-bold text-brand-primary">{b.organization_name}</span>
                 <span className="text-sm text-slate-500">
                   {stallLabel.get(b.stall_type) ?? b.stall_type} · {b.organization_type} · {b.city}
                 </span>
@@ -98,7 +98,7 @@ export default async function AdminTechnextPage({ searchParams }: { searchParams
                     <>
                       <dt className="text-slate-500">Website</dt>
                       <dd>
-                        <a href={b.website} target="_blank" rel="noopener noreferrer" className="text-[#004B87] underline">
+                        <a href={b.website} target="_blank" rel="noopener noreferrer" className="text-brand-secondary underline">
                           {b.website}
                         </a>
                       </dd>

@@ -56,13 +56,13 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
       {!reg && settings.visibility.conferenceRegistration && (early || settings.conference.closesAt) && (
         <div className="mb-6 flex flex-wrap gap-2 text-xs font-bold">
           {early && <span className="rounded-full bg-emerald-600 px-3 py-1.5 text-white">Early-bird pricing until {formatDeadline(eb.endsAt)}</span>}
-          {settings.conference.closesAt && <span className="rounded-full bg-[#002147] px-3 py-1.5 text-white">Registration deadline: {formatDeadline(settings.conference.closesAt)}</span>}
+          {settings.conference.closesAt && <span className="rounded-full bg-brand-primary px-3 py-1.5 text-white">Registration deadline: {formatDeadline(settings.conference.closesAt)}</span>}
         </div>
       )}
       {reg && (
         <Card className="mb-6">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="font-bold text-[#002147]">Your registration</span>
+            <span className="font-bold text-brand-primary">Your registration</span>
             <StatusBadge status={reg.status} />
           </div>
           <PaymentCard purpose="conference" refId={reg.id} amount={reg.payment_amount} currency={reg.payment_currency} status={reg.payment_status} back="/registration/apply" />
@@ -95,12 +95,12 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
                 <span className="mb-2 block text-sm font-semibold text-slate-700">Category</span>
                 <div className="space-y-2">
                   {settings.fees.map((f, i) => (
-                    <label key={f.key} className="flex cursor-pointer flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 px-4 py-3 has-[:checked]:border-[#002147] has-[:checked]:ring-2 has-[:checked]:ring-[#002147]/15">
+                    <label key={f.key} className="flex cursor-pointer flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 px-4 py-3 has-[:checked]:border-brand-primary has-[:checked]:ring-2 has-[:checked]:ring-brand-primary/15">
                       <span className="flex items-center gap-2.5">
-                        <input type="radio" name="category" value={f.key} required defaultChecked={reg ? reg.category_key === f.key : i === 0} className="accent-[#002147]" />
+                        <input type="radio" name="category" value={f.key} required defaultChecked={reg ? reg.category_key === f.key : i === 0} className="accent-brand-primary" />
                         <span className="font-semibold text-slate-800">{f.category}</span>
                       </span>
-                      <span className="text-right text-sm font-bold text-[#002147]">
+                      <span className="text-right text-sm font-bold text-brand-primary">
                         {(() => {
                           const inr = priceNow(f.inr, f.earlyInr, eb);
                           const usd = priceNow(f.usd, f.earlyUsd, eb);
@@ -131,7 +131,7 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
                 </Field>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 pt-7 text-sm font-semibold text-slate-700">
-                    <input type="checkbox" name="ieee_member" defaultChecked={reg?.ieee_member === 1} className="h-4 w-4 accent-[#002147]" /> I am an IEEE member
+                    <input type="checkbox" name="ieee_member" defaultChecked={reg?.ieee_member === 1} className="h-4 w-4 accent-brand-primary" /> I am an IEEE member
                   </label>
                   <input name="ieee_number" defaultValue={reg?.ieee_number ?? ""} placeholder="IEEE membership number" inputMode="numeric" className={inputCls} />
                 </div>
@@ -139,7 +139,7 @@ export default async function ConferenceRegisterPage({ searchParams }: { searchP
                   <input name="paper_ids" defaultValue={reg?.paper_ids ?? ""} className={inputCls} />
                 </Field>
                 <label className="flex items-center gap-2 pt-7 text-sm font-semibold text-slate-700">
-                  <input type="checkbox" name="presenting_author" defaultChecked={reg?.presenting_author === 1} className="h-4 w-4 accent-[#002147]" /> I am the presenting author
+                  <input type="checkbox" name="presenting_author" defaultChecked={reg?.presenting_author === 1} className="h-4 w-4 accent-brand-primary" /> I am the presenting author
                 </label>
                 <Field label="Paper title(s)" className="sm:col-span-2">
                   <textarea name="paper_titles" rows={2} defaultValue={reg?.paper_titles ?? ""} className={inputCls} />

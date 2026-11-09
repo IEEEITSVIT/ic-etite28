@@ -6,6 +6,8 @@ import { registrationFeesData } from "@/data/registration";
 import { NO_EARLY_BIRD, type EarlyBird, type Prize } from "@/lib/pricing";
 import { hotelsData, type Hotel } from "@/data/hotels";
 import { defaultSponsorPackages, type SponsorPackage } from "@/data/sponsorship";
+import type { FontKey } from "@/lib/fonts";
+import type { ImageOverrides, TextOverrides } from "@/lib/cms";
 
 export type { EarlyBird, Prize };
 
@@ -71,6 +73,28 @@ export interface InvoiceTemplate {
   signatory: string;
 }
 
+export const THEME_COLORS = {
+  primary: { label: "Primary (navy)", hint: "Navbar, headings, buttons", value: "#002147" },
+  primaryDark: { label: "Primary dark", hint: "Dark bands, gradients, footer", value: "#001733" },
+  primaryHover: { label: "Primary hover", hint: "Button hover", value: "#003366" },
+  secondary: { label: "Secondary (blue)", hint: "Links, highlights", value: "#004B87" },
+  accent: { label: "Accent (gold)", hint: "Highlights, active nav, badges", value: "#FFB81C" },
+  accentDark: { label: "Accent dark", hint: "Accent hover, secondary gold", value: "#F5A623" },
+  text: { label: "Body text", hint: "Main text colour", value: "#101B2E" },
+  muted: { label: "Muted text", hint: "Secondary text", value: "#4A5568" },
+  surface: { label: "Light background", hint: "Section backgrounds", value: "#FAFBFD" },
+  border: { label: "Borders", hint: "Card and divider lines", value: "#E4E7EC" },
+} as const;
+
+export type ThemeColorKey = keyof typeof THEME_COLORS;
+
+export interface Appearance {
+  colors: Record<ThemeColorKey, string>;
+  bodyFont: FontKey;
+  headingFont: FontKey;
+  fontScale: number; // 0.85 – 1.25, scales all rem-based text
+}
+
 export interface TickerItem {
   text: string;
   url: string;
@@ -113,6 +137,9 @@ export interface Settings {
   hotels: HotelsSettings;
   sponsorship: { packages: SponsorPackage[] };
   ticker: TickerSettings;
+  appearance: Appearance;
+  texts: TextOverrides; // inline page edits
+  images: ImageOverrides;
 }
 
 const shortTitles: Record<string, string> = {
@@ -193,6 +220,14 @@ export const DEFAULT_SETTINGS: Settings = {
     items: hotelsData,
   },
   sponsorship: { packages: defaultSponsorPackages },
+  appearance: {
+    colors: Object.fromEntries(Object.entries(THEME_COLORS).map(([k, v]) => [k, v.value])) as Record<ThemeColorKey, string>,
+    bodyFont: "inter",
+    headingFont: "jakarta",
+    fontScale: 1,
+  },
+  texts: {},
+  images: {},
   ticker: {
     enabled: true,
     label: "Announcements",

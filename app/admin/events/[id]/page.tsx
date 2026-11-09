@@ -74,7 +74,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
         <span className="flex flex-wrap items-center gap-2">
           <StatusBadge status={event.status === "archived" ? "archived" : event.visibility} />
           <StatusBadge status={`registration ${registrationWindow(event).replace("_", " ")}`} />
-          <Link href={`/events/${event.slug}`} target="_blank" className="inline-flex items-center gap-1 text-sm font-semibold text-[#004B87] hover:underline">
+          <Link href={`/events/${event.slug}`} target="_blank" className="inline-flex items-center gap-1 text-sm font-semibold text-brand-secondary hover:underline">
             /events/{event.slug} <ExternalLink className="h-3.5 w-3.5" />
           </Link>
         </span>
@@ -147,10 +147,10 @@ export default async function AdminEventPage({ params, searchParams }: { params:
               <textarea name="emails" rows={4} placeholder="Paste emails separated by commas, spaces or new lines" className={inputCls} />
               <div className="flex flex-wrap items-center gap-4">
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="mode" value="append" defaultChecked className="accent-[#002147]" /> Add to list
+                  <input type="radio" name="mode" value="append" defaultChecked className="accent-brand-primary" /> Add to list
                 </label>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="mode" value="replace" className="accent-[#002147]" /> Replace list
+                  <input type="radio" name="mode" value="replace" className="accent-brand-primary" /> Replace list
                 </label>
                 <SubmitButton pendingText="Saving…">Save invite list</SubmitButton>
               </div>
@@ -285,14 +285,14 @@ export default async function AdminEventPage({ params, searchParams }: { params:
             <legend className="px-1 text-sm font-semibold text-slate-700">What teams submit in this round</legend>
             <div className="flex flex-wrap gap-4 text-sm">
               <label className="flex items-center gap-1.5">
-                <input type="radio" name="sub_mode" value="default" defaultChecked={mode === "default"} className="accent-[#002147]" /> Event default fields
+                <input type="radio" name="sub_mode" value="default" defaultChecked={mode === "default"} className="accent-brand-primary" /> Event default fields
                 <span className="text-xs text-slate-500">({eventDefaults.map((f) => f.label).join(", ") || "none set"})</span>
               </label>
               <label className="flex items-center gap-1.5">
-                <input type="radio" name="sub_mode" value="custom" defaultChecked={mode === "custom"} className="accent-[#002147]" /> Fields for this round only
+                <input type="radio" name="sub_mode" value="custom" defaultChecked={mode === "custom"} className="accent-brand-primary" /> Fields for this round only
               </label>
               <label className="flex items-center gap-1.5">
-                <input type="radio" name="sub_mode" value="none" defaultChecked={mode === "none"} className="accent-[#002147]" /> No submission (e.g. on-site judging)
+                <input type="radio" name="sub_mode" value="none" defaultChecked={mode === "none"} className="accent-brand-primary" /> No submission (e.g. on-site judging)
               </label>
             </div>
             <div className="grid gap-2">
@@ -306,7 +306,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                     <option value="long">Long text</option>
                   </select>
                   <label className="flex items-center gap-1.5 text-sm text-slate-600 sm:col-span-3">
-                    <input type="checkbox" name={`sub_required_${i}`} defaultChecked={f?.required ?? false} className="accent-[#002147]" /> Required
+                    <input type="checkbox" name={`sub_required_${i}`} defaultChecked={f?.required ?? false} className="accent-brand-primary" /> Required
                   </label>
                 </div>
               ))}
@@ -369,7 +369,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
           {evaluators.length === 0 ? (
             <Empty>
               No evaluators yet. Add them under{" "}
-              <Link href="/admin/users" className="font-semibold text-[#004B87] underline">
+              <Link href="/admin/users" className="font-semibold text-brand-secondary underline">
                 Users & evaluators
               </Link>
               .
@@ -381,7 +381,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {evaluators.map((u) => (
                   <label key={u.id} className="flex items-center gap-2.5 rounded-xl border border-slate-200 px-3 py-2 text-sm">
-                    <input type="checkbox" name="evaluator" value={u.id} defaultChecked={assignedSet.has(u.id)} className="accent-[#002147]" />
+                    <input type="checkbox" name="evaluator" value={u.id} defaultChecked={assignedSet.has(u.id)} className="accent-brand-primary" />
                     <span>
                       <span className="font-semibold text-slate-800">{u.name}</span> {u.role === "admin" && <Badge>admin</Badge>}
                       <span className="block text-xs text-slate-500">{u.email}</span>
@@ -422,7 +422,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-2">
           {rounds.map((r) => (
-            <Link key={r.id} href={`${base}?tab=scores&round=${r.id}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${r.id === round.id ? "bg-[#002147] text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
+            <Link key={r.id} href={`${base}?tab=scores&round=${r.id}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${r.id === round.id ? "bg-brand-primary text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
               Round {r.seq}: {r.name}
             </Link>
           ))}
@@ -469,7 +469,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                     {criteria.map((c) => (
                       <Td key={c.key}>{b.criteria[c.key] ?? "—"}</Td>
                     ))}
-                    <Td className="font-bold text-[#002147]">{b.avg_total ?? "—"}</Td>
+                    <Td className="font-bold text-brand-primary">{b.avg_total ?? "—"}</Td>
                     <Td>{b.evaluations}</Td>
                     <Td>
                       {sub ? (
@@ -477,7 +477,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                           {fields.map((f) =>
                             sub[f.key] ? (
                               (f.type ?? "url") === "url" ? (
-                                <a key={f.key} href={sub[f.key]} target="_blank" rel="noopener noreferrer" className="text-[#004B87] underline">
+                                <a key={f.key} href={sub[f.key]} target="_blank" rel="noopener noreferrer" className="text-brand-secondary underline">
                                   {f.label}
                                 </a>
                               ) : (
@@ -510,7 +510,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
           )}
           <p className="mt-3 text-sm text-slate-500">
             Scores are the {isSum ? "sum" : "average"} of all evaluators&apos; marks (change under Rounds &amp; evaluators). Next step: email qualified teams from the{" "}
-            <Link href={`${base}?tab=emails`} className="font-semibold text-[#004B87] underline">
+            <Link href={`${base}?tab=emails`} className="font-semibold text-brand-secondary underline">
               Emails
             </Link>{" "}
             tab (audience &quot;Qualified in round {round.seq}&quot;).
@@ -526,7 +526,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                 .map((b) => (
                   <details key={b.team_id} className="rounded-xl border border-slate-200">
                     <summary className="flex cursor-pointer flex-wrap items-center gap-3 px-4 py-2.5">
-                      <span className="font-semibold text-[#002147]">{b.team_name}</span>
+                      <span className="font-semibold text-brand-primary">{b.team_name}</span>
                       <Badge>{evalsByTeam.get(b.team_id)!.length} evaluator(s)</Badge>
                       <span className="text-sm text-slate-600">
                         {isSum ? "Sum" : "Average"}: <strong>{b.avg_total}</strong>
@@ -625,7 +625,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
             {!ev.winners_published && (
               <>
                 <label className="flex items-center gap-2 text-sm font-semibold">
-                  <input type="checkbox" name="notify" defaultChecked className="accent-[#002147]" /> Email the winning teams
+                  <input type="checkbox" name="notify" defaultChecked className="accent-brand-primary" /> Email the winning teams
                 </label>
                 <input name="subject" defaultValue={winnerTpl?.subject ?? `Congratulations! {{team}} is {{rank}} at ${ev.title}`} className={inputCls} />
                 <textarea
@@ -661,7 +661,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
         <EmailComposer scope={scope} back={here} templates={templates} audiences={audiences} certKinds={certs.map((c) => c.kind)} placeholders={PLACEHOLDERS} />
         <p className="mt-4 text-sm text-slate-500">
           Queued emails are sent from{" "}
-          <Link href="/admin/email" className="font-semibold text-[#004B87] underline">
+          <Link href="/admin/email" className="font-semibold text-brand-secondary underline">
             Email & SMTP
           </Link>{" "}
           within your daily Gmail limit; anything left over goes out automatically the next day.

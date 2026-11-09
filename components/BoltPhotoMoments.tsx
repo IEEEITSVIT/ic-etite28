@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { X, Maximize2 } from "lucide-react";
 import { bolt20Photos } from "@/data/photos";
+import E from "@/components/cms/E";
 
 // Subtle alternating tilt angles for natural art gallery frame look
 const TILT_ANGLES = [
@@ -50,7 +51,7 @@ export default function BoltPhotoMoments() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-[#FAFBFD] via-white to-[#FAFBFD] border-b border-[#E2E8F0] py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-gradient-to-b from-brand-surface via-white to-brand-surface border-b border-brand-border py-16 md:py-24 relative overflow-hidden">
       {/* Decorative ambient background glows */}
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[300px] bg-[#CCFF00]/10 blur-[130px] rounded-full pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[300px] bg-sky-200/20 blur-[130px] rounded-full pointer-events-none" />
@@ -58,16 +59,14 @@ export default function BoltPhotoMoments() {
       <div className="w-full relative z-10">
         {/* Section Header: Just Heading, Centered, No Arrows */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147]">
-            Moments from BOLT Hackathon
-          </h2>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-primary"><E f="c.BoltPhotoMoments">{"Moments from BOLT Hackathon"}</E></h2>
         </div>
 
         {/* Continuous Scrolling Frames Track (Auto-scrolls & pauses on hover) */}
         <div className="relative w-full overflow-hidden py-6 group/track">
           {/* Subtle edge fades for infinite marquee smoothness */}
-          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-brand-surface via-brand-surface/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-brand-surface via-brand-surface/80 to-transparent z-20 pointer-events-none" />
 
           {/* Marquee Track: pauses on hover so user can hover over and inspect any frame */}
           <div className="flex gap-6 sm:gap-8 w-max animate-bolt-frame-scroll group-hover/track:[animation-play-state:paused] px-4">
@@ -81,7 +80,7 @@ export default function BoltPhotoMoments() {
                 >
                   {/* Physical Art Frame: tilts naturally, straightens and lifts on hover */}
                   <div
-                    className={`bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out group-hover/frame:rotate-0 group-hover/frame:-translate-y-4 group-hover/frame:scale-[1.04] group-hover/frame:border-[#002147] group-hover/frame:shadow-[0_25px_50px_rgba(0,33,71,0.24)] group-hover/frame:z-30 relative ${tilt}`}
+                    className={`bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out group-hover/frame:rotate-0 group-hover/frame:-translate-y-4 group-hover/frame:scale-[1.04] group-hover/frame:border-brand-primary group-hover/frame:shadow-[0_25px_50px_rgba(0,33,71,0.24)] group-hover/frame:z-30 relative ${tilt}`}
                   >
                     {/* Inner Photo Container (Strictly NO text) */}
                     <div className="relative aspect-[3/2] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 shadow-inner">

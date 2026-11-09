@@ -75,7 +75,7 @@ export default async function EvaluateEventPage({ params, searchParams }: { para
       <Flash ok={sp.ok} error={sp.error} />
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {rounds.map((r) => (
-          <Link key={r.id} href={`/evaluate/${eventId}?round=${r.id}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${r.id === round.id ? "bg-[#002147] text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
+          <Link key={r.id} href={`/evaluate/${eventId}?round=${r.id}`} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${r.id === round.id ? "bg-brand-primary text-white" : "border border-slate-300 bg-white text-slate-700"}`}>
             Round {r.seq}: {r.name}
           </Link>
         ))}
@@ -87,7 +87,7 @@ export default async function EvaluateEventPage({ params, searchParams }: { para
           ["done", "Scored by me"],
           ["submitted", "Has submission"],
         ].map(([k, label]) => (
-          <Link key={k} href={qs({ filter: k })} className={`rounded-full px-3 py-1 text-sm ${filter === k ? "bg-[#FFB81C] font-bold text-[#002147]" : "bg-white text-slate-600 border border-slate-200"}`}>
+          <Link key={k} href={qs({ filter: k })} className={`rounded-full px-3 py-1 text-sm ${filter === k ? "bg-brand-accent font-bold text-brand-primary" : "bg-white text-slate-600 border border-slate-200"}`}>
             {label}
           </Link>
         ))}
@@ -111,7 +111,7 @@ export default async function EvaluateEventPage({ params, searchParams }: { para
             return (
               <details key={t.id} id={`team-${t.id}`} className="group scroll-mt-28 rounded-2xl border border-slate-200 bg-white shadow-sm" open={!my && filter === "todo"}>
                 <summary className="flex cursor-pointer flex-wrap items-center gap-3 px-5 py-4">
-                  <span className="text-lg font-bold text-[#002147]">{t.name}</span>
+                  <span className="text-lg font-bold text-brand-primary">{t.name}</span>
                   <span className="text-sm text-slate-500">{t.members} member(s)</span>
                   {sub ? <Badge tone="blue">Submitted</Badge> : <Badge>No submission</Badge>}
                   {my ? <Badge tone="green">Your score {Math.round(myTotal! * 100) / 100}/{maxTotal}</Badge> : <Badge tone="amber">Not scored</Badge>}

@@ -2,6 +2,7 @@ import GallerySlideshow, {
   type GalleryItem,
 } from "@/components/GallerySlideshow";
 import { ICETITE24_PHOTOS } from "@/data/icetite24GalleryData";
+import E from "@/components/cms/E";
 
 const base = "/images/icetite24-slideshow";
 
@@ -120,9 +121,7 @@ export default function HomePhotoMomentsSlideshow() {
     <section className="bg-[#F7F9FC] border-b border-slate-200 py-10 md:py-14 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147]">
-            Moments from ic-ETITE&apos;24
-          </h2>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-primary"><E f="c.HomePhotoMomentsSlideshow">{"Moments from ic-ETITE'24"}</E></h2>
         </div>
 
         <div className="bg-white p-4 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">

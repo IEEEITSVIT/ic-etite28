@@ -1,3 +1,4 @@
+import E from "@/components/cms/E";
 export default function CampusGallery() {
   const photos = [
     { src: "/images/img1.jpg", alt: "VIT Campus View 1" },
@@ -24,9 +25,9 @@ export default function CampusGallery() {
           />
           <div className={`absolute inset-0 bg-gradient-to-br ${gradients[i]} flex items-center justify-center -z-10`}>
             <div className="text-center text-blue-600">
-              <div className="text-4xl mb-2">🏛️</div>
-              <p className="text-sm font-medium">{photo.alt}</p>
-              <p className="text-xs mt-1 opacity-70">VIT Vellore, India</p>
+              <div className="text-4xl mb-2"><E f="c.CampusGallery">{"🏛️"}</E></div>
+              <p className="text-sm font-medium"><E f="c.CampusGallery">{photo.alt}</E></p>
+              <p className="text-xs mt-1 opacity-70"><E f="c.CampusGallery">{"VIT Vellore, India"}</E></p>
             </div>
           </div>
         </div>

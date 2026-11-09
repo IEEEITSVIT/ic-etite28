@@ -23,7 +23,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
               {events.map((e) => (
                 <tr key={e.id}>
                   <Td>
-                    <div className="font-bold text-[#002147]">{e.title}</div>
+                    <div className="font-bold text-brand-primary">{e.title}</div>
                     <div className="text-xs text-slate-500">/events/{e.slug}</div>
                   </Td>
                   <Td>
@@ -35,7 +35,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                   <Td>{e.regs}</Td>
                   <Td>{e.participation === "team" ? e.teams : "—"}</Td>
                   <Td className="text-right">
-                    <Link href={`/admin/events/${e.id}`} className="font-semibold text-[#004B87] hover:underline">
+                    <Link href={`/admin/events/${e.id}`} className="font-semibold text-brand-secondary hover:underline">
                       Manage →
                     </Link>
                   </Td>
@@ -45,7 +45,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
           )}
         </Card>
         <details open={showNew === "1" || events.length === 0} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <summary className="cursor-pointer text-lg font-bold text-[#002147]">Create a new event</summary>
+          <summary className="cursor-pointer text-lg font-bold text-brand-primary">Create a new event</summary>
           <div className="mt-5">
             <EventForm />
           </div>

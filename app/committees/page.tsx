@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { Award, Globe, Building2, Cpu, Users } from "lucide-react";
 import {
   chiefPatron,
@@ -24,6 +24,7 @@ import {
   nationalAdvisoryData,
   technicalCommitteeData,
 } from "@/data/advisory";
+import E from "@/components/cms/E";
 
 interface TextMember {
   name: string;
@@ -298,7 +299,7 @@ export default function CommitteesPage() {
                 ${
                   isScrolled
                     ? "bg-white/85 backdrop-blur-[32px] backdrop-saturate-[180%] border-white/90 shadow-[0_10px_35px_rgba(0,33,71,0.16)]"
-                    : "bg-[#F8FAFC] border-[#E2E8F0] shadow-sm"
+                    : "bg-brand-surface border-brand-border shadow-sm"
                 }
               `}
               style={{
@@ -330,7 +331,7 @@ export default function CommitteesPage() {
                       whitespace-nowrap shrink-0
                       ${
                         isActive
-                          ? "bg-[#002147] text-white shadow-md"
+                          ? "bg-brand-primary text-white shadow-md"
                           : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                       }
                     `}
@@ -339,10 +340,10 @@ export default function CommitteesPage() {
                     <Icon
                       className={`
                         w-4 h-4 shrink-0 transition-colors duration-300
-                        ${isActive ? "text-[#FFB81C]" : "text-slate-400"}
+                        ${isActive ? "text-brand-accent" : "text-slate-400"}
                       `}
                     />
-                    <span>{tab.label}</span>
+                    <span><E f="committees">{tab.label}</E></span>
                   </button>
                 );
               })}
@@ -354,9 +355,7 @@ export default function CommitteesPage() {
         {activeTab === "organizing" && (
           <div className="animate-in fade-in duration-200 space-y-16">
             <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-8 sm:mb-10">
-                Organizing Committee
-              </h1>
+              <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-brand-secondary tracking-tight mb-8 sm:mb-10"><E f="committees">{"Organizing Committee"}</E></h1>
 
               {/* 2-Column Responsive Layout for Executive Leadership */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-8 sm:gap-y-10">
@@ -364,8 +363,8 @@ export default function CommitteesPage() {
                 <div className="space-y-8 sm:space-y-10">
                   {executiveLeadershipLeft.map((section) => (
                     <section key={section.title} className="space-y-2">
-                      <h2 className="text-xl sm:text-2xl font-bold text-[#004B87] tracking-tight">
-                        {section.title}
+                      <h2 className="text-xl sm:text-2xl font-bold text-brand-secondary tracking-tight">
+                        <E f="committees">{section.title}</E>
                       </h2>
                       <div className="space-y-1.5 pt-1">
                         {section.members.map((member) => (
@@ -373,7 +372,7 @@ export default function CommitteesPage() {
                             key={member.name}
                             className="text-[15px] sm:text-[15.5px] leading-relaxed text-[#222]"
                           >
-                            <span className="font-bold text-black">{member.name}</span>
+                            <span className="font-bold text-black"><E f="committees">{member.name}</E></span>
                             {member.affiliation ? `, ${member.affiliation}` : ""}
                           </div>
                         ))}
@@ -386,8 +385,8 @@ export default function CommitteesPage() {
                 <div className="space-y-8 sm:space-y-10">
                   {executiveLeadershipRight.map((section) => (
                     <section key={section.title} className="space-y-2">
-                      <h2 className="text-xl sm:text-2xl font-bold text-[#004B87] tracking-tight">
-                        {section.title}
+                      <h2 className="text-xl sm:text-2xl font-bold text-brand-secondary tracking-tight">
+                        <E f="committees">{section.title}</E>
                       </h2>
                       <div className="space-y-1.5 pt-1">
                         {section.members.map((member) => (
@@ -395,7 +394,7 @@ export default function CommitteesPage() {
                             key={member.name}
                             className="text-[15px] sm:text-[15.5px] leading-relaxed text-[#222]"
                           >
-                            <span className="font-bold text-black">{member.name}</span>
+                            <span className="font-bold text-black"><E f="committees">{member.name}</E></span>
                             {member.affiliation ? `, ${member.affiliation}` : ""}
                           </div>
                         ))}
@@ -408,15 +407,13 @@ export default function CommitteesPage() {
 
             {/* Functional & Departmental Committees */}
             <div className="pt-12 border-t border-slate-200">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#004B87] tracking-tight mb-8">
-                Committees &amp; Coordinators
-              </h2>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-secondary tracking-tight mb-8"><E f="committees">{"Committees & Coordinators"}</E></h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-10">
                 {functionalCommittees.map((group) => (
                   <section key={group.title} className="space-y-2">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h3 className="text-xl sm:text-2xl font-bold text-[#004B87] tracking-tight">
-                        {group.title}
+                      <h3 className="text-xl sm:text-2xl font-bold text-brand-secondary tracking-tight">
+                        <E f="committees">{group.title}</E>
                       </h3>
                       {group.title.includes("BOLT") && (
                         <div className="relative h-6 w-20 shrink-0">
@@ -435,7 +432,7 @@ export default function CommitteesPage() {
                           key={member.name}
                           className="text-[15px] sm:text-[15.5px] leading-relaxed text-[#222]"
                         >
-                          <span className="font-bold text-black">{member.name}</span>
+                          <span className="font-bold text-black"><E f="committees">{member.name}</E></span>
                           {member.affiliation ? `, ${member.affiliation}` : ""}
                         </div>
                       ))}
@@ -450,14 +447,12 @@ export default function CommitteesPage() {
         {/* 2. TAB: INTERNATIONAL ADVISORY */}
         {activeTab === "international" && (
           <div className="animate-in fade-in duration-200">
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-8 sm:mb-10">
-              International Advisory Board
-            </h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-brand-secondary tracking-tight mb-8 sm:mb-10"><E f="committees">{"International Advisory Board"}</E></h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-4">
               <div className="space-y-3">
                 {intlCol1.map((m) => (
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                     {m.country ? `, ${m.country}` : ""}
                   </div>
@@ -466,7 +461,7 @@ export default function CommitteesPage() {
               <div className="space-y-3">
                 {intlCol2.map((m) => (
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                     {m.country ? `, ${m.country}` : ""}
                   </div>
@@ -479,14 +474,12 @@ export default function CommitteesPage() {
         {/* 3. TAB: NATIONAL ADVISORY */}
         {activeTab === "national" && (
           <div className="animate-in fade-in duration-200">
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-8 sm:mb-10">
-              National Advisory Board
-            </h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-brand-secondary tracking-tight mb-8 sm:mb-10"><E f="committees">{"National Advisory Board"}</E></h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-4">
               <div className="space-y-3">
                 {natCol1.map((m) => (
                   <div key={`${m.name}-${m.institution}`} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                   </div>
                 ))}
@@ -494,7 +487,7 @@ export default function CommitteesPage() {
               <div className="space-y-3">
                 {natCol2.map((m) => (
                   <div key={`${m.name}-${m.institution}`} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                   </div>
                 ))}
@@ -506,14 +499,12 @@ export default function CommitteesPage() {
         {/* 4. TAB: TECHNICAL COMMITTEE */}
         {activeTab === "technical" && (
           <div className="animate-in fade-in duration-200">
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-8 sm:mb-10">
-              Technical Committee
-            </h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-brand-secondary tracking-tight mb-8 sm:mb-10"><E f="committees">{"Technical Committee"}</E></h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-4">
               <div className="space-y-3">
                 {techCol1.map((m) => (
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                     {m.location ? `, ${m.location}` : ""}
                     {m.country ? `, ${m.country}` : ""}
@@ -523,7 +514,7 @@ export default function CommitteesPage() {
               <div className="space-y-3">
                 {techCol2.map((m) => (
                   <div key={m.name} className="text-[14.5px] sm:text-[15px] leading-relaxed text-[#222]">
-                    <span className="font-bold text-black">{m.name}</span>
+                    <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
                     {m.institution ? `, ${m.institution}` : ""}
                     {m.location ? `, ${m.location}` : ""}
                     {m.country ? `, ${m.country}` : ""}
@@ -537,17 +528,13 @@ export default function CommitteesPage() {
         {/* 5. TAB: STUDENT COMMITTEE */}
         {activeTab === "student" && (
           <div className="animate-in fade-in duration-200">
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-[#004B87] tracking-tight mb-3">
-              Student Committee &amp; IEEE ITS Chapter
-            </h1>
-            <p className="text-base text-slate-600 mb-8 sm:mb-10">
-              Student leadership, engineering development team, and volunteer coordinators powering ic-ETITE&apos;28.
-            </p>
+            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-brand-secondary tracking-tight mb-3"><E f="committees">{"Student Committee & IEEE ITS Chapter"}</E></h1>
+            <p className="text-base text-slate-600 mb-8 sm:mb-10"><E f="committees">{"Student leadership, engineering development team, and volunteer coordinators powering ic-ETITE'28."}</E></p>
             <div className="flex flex-col items-center gap-4">
               {studentLeads.map((m) => (
                 <div key={m.name} className="text-[15px] leading-relaxed text-[#222] text-center">
-                  <span className="font-bold text-black">{m.name}</span>
-                  {`, ${m.affiliation}`}
+                  <span className="font-bold text-black"><E f="committees">{m.name}</E></span>
+                  <E f="committees">{`, ${m.affiliation}`}</E>
                 </div>
               ))}
             </div>

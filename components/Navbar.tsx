@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, ExternalLink, Zap, LogIn, LayoutDashboard } from "lucide-react";
+import E from "@/components/cms/E";
 
 interface DropdownItem {
   label: string;
@@ -190,7 +191,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
         {/* =========================================================================
             TIER 1: TOP NAV BAR (PRESERVING ALL LOGOS & EVENT TAGS AS THEY ARE)
         ========================================================================= */}
-        <div className="relative z-30 w-full bg-[#002147] border-b border-white/15 py-2.5 sm:py-3 shadow-sm">
+        <div className="relative z-30 w-full bg-brand-primary border-b border-white/15 py-2.5 sm:py-3 shadow-sm">
           <div
             className="relative w-full max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-8 flex items-center justify-between gap-3"
             aria-label="Conference Identity & University Host"
@@ -222,7 +223,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                 title="IEEE Information Theory Society"
                 className="hidden min-[360px]:flex items-center shrink-0 hover:opacity-90 transition-opacity"
               >
-                <div className="relative h-8 sm:h-9 md:h-10 w-8 sm:w-9 md:w-10 rounded-full overflow-hidden border border-white/20 shadow-xs bg-[#00142E]">
+                <div className="relative h-8 sm:h-9 md:h-10 w-8 sm:w-9 md:w-10 rounded-full overflow-hidden border border-white/20 shadow-xs bg-brand-primary-dark">
                   <Image
                     src="/logos/ieee-its-circle-logo.png"
                     alt="IEEE Information Theory Society Emblem"
@@ -236,12 +237,8 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
 
             {/* CENTER: Conference Dates (xl+ only; below that it collides with the event tags) */}
             <div className="hidden xl:flex absolute left-1/2 -translate-x-1/2 flex-col items-center justify-center text-center pointer-events-none">
-              <span className="text-xl 2xl:text-2xl font-black tracking-wide text-[#FFB81C] uppercase whitespace-nowrap drop-shadow-sm font-serif">
-                10–11 February 2028
-              </span>
-              <span className="text-[11px] sm:text-xs lg:text-sm text-white/90 font-semibold tracking-wider uppercase whitespace-nowrap">
-                VIT Vellore, Tamil Nadu, India
-              </span>
+              <span className="text-xl 2xl:text-2xl font-black tracking-wide text-brand-accent uppercase whitespace-nowrap drop-shadow-sm font-serif"><E f="c.Navbar">{"10–11 February 2028"}</E></span>
+              <span className="text-[11px] sm:text-xs lg:text-sm text-white/90 font-semibold tracking-wider uppercase whitespace-nowrap"><E f="c.Navbar">{"VIT Vellore, Tamil Nadu, India"}</E></span>
             </div>
 
             {/* RIGHT: TechNext '28, BOLT 3.0 Tags, VIT Official Logo, Mobile Menu Button
@@ -270,7 +267,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
               {visibility.bolt && (
               <Link
                 href="/hackathon"
-                className="hidden lg:flex items-center justify-center h-8 sm:h-9 px-2.5 sm:px-3 rounded-full bg-[#00142E] hover:bg-[#00244D] border border-[#CCFF00] shadow-[0_0_12px_rgba(204,255,0,0.28)] transition-all hover:scale-105 shrink-0"
+                className="hidden lg:flex items-center justify-center h-8 sm:h-9 px-2.5 sm:px-3 rounded-full bg-brand-primary-dark hover:bg-[#00244D] border border-[#CCFF00] shadow-[0_0_12px_rgba(204,255,0,0.28)] transition-all hover:scale-105 shrink-0"
                 title="Register for BOLT 3.0 National Flagship Hackathon"
               >
                 <div className="relative h-4 sm:h-5 w-14 sm:w-20">
@@ -310,7 +307,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                 aria-label="Toggle navigation menu"
                 aria-expanded={mobileOpen}
               >
-                {mobileOpen ? <X className="w-6 h-6 text-[#FFB81C]" /> : <Menu className="w-6 h-6 text-white" />}
+                {mobileOpen ? <X className="w-6 h-6 text-brand-accent" /> : <Menu className="w-6 h-6 text-white" />}
               </button>
             </div>
           </div>
@@ -329,7 +326,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
           }`}
         >
           <nav
-            className="w-full h-12 bg-[#001733] border-b-2 border-[#FFB81C]/30 shadow-lg"
+            className="w-full h-12 bg-brand-primary-dark border-b-2 border-brand-accent/30 shadow-lg"
             aria-label="Conference Secondary Navigation"
           >
             <div className="w-full h-full max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-6 xl:px-8 flex items-center justify-center">
@@ -354,15 +351,15 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                         href={item.href}
                         className={`relative inline-flex items-center gap-1 py-1.5 px-3 lg:px-2.5 xl:px-4 rounded-full text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold tracking-wide transition-all whitespace-nowrap shrink-0 ${
                           active
-                            ? "bg-[#002D5C] text-[#FFB81C] border border-[#FFB81C]/60 shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
+                            ? "bg-[#002D5C] text-brand-accent border border-brand-accent/60 shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
                             : "text-white/95 hover:text-white hover:bg-white/10"
                         }`}
                       >
-                        <span>{item.label}</span>
+                        <span><E f="c.Navbar">{item.label}</E></span>
                         {item.hasDropdown && (
                           <ChevronDown
                             className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 opacity-80 ${
-                              isOpen ? "rotate-180 text-[#FFB81C]" : ""
+                              isOpen ? "rotate-180 text-brand-accent" : ""
                             }`}
                           />
                         )}
@@ -373,7 +370,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                         <div
                           className={`absolute top-full ${
                             item.alignRight ? "right-0" : "left-0"
-                          } w-max max-w-[calc(100vw-32px)] min-w-[240px] sm:min-w-[260px] p-2 bg-[#00142E] border-2 border-white/20 rounded-2xl shadow-2xl transition-all duration-200 z-50 mt-1.5 ${
+                          } w-max max-w-[calc(100vw-32px)] min-w-[240px] sm:min-w-[260px] p-2 bg-brand-primary-dark border-2 border-white/20 rounded-2xl shadow-2xl transition-all duration-200 z-50 mt-1.5 ${
                             isOpen
                               ? "opacity-100 visible translate-y-0"
                               : "opacity-0 invisible -translate-y-2 pointer-events-none"
@@ -388,15 +385,15 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                                   rel="noopener noreferrer"
                                   className="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm xl:text-[14.5px] font-semibold text-white/90 hover:text-white hover:bg-white/15 transition-colors"
                                 >
-                                  <span>{subItem.label}</span>
-                                  <ExternalLink className="w-3.5 h-3.5 text-[#FFB81C]" />
+                                  <span><E f="c.Navbar">{subItem.label}</E></span>
+                                  <ExternalLink className="w-3.5 h-3.5 text-brand-accent" />
                                 </a>
                               ) : (
                                 <Link
                                   href={subItem.href}
-                                  className="block px-3.5 py-2.5 rounded-lg text-sm xl:text-[14.5px] font-semibold text-white/90 hover:text-[#FFB81C] hover:bg-white/15 transition-colors"
+                                  className="block px-3.5 py-2.5 rounded-lg text-sm xl:text-[14.5px] font-semibold text-white/90 hover:text-brand-accent hover:bg-white/15 transition-colors"
                                 >
-                                  {subItem.label}
+                                  <E f="c.Navbar">{subItem.label}</E>
                                 </Link>
                               )}
                             </div>
@@ -409,13 +406,13 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                 <li className="shrink-0 pl-1 xl:pl-2">
                   <Link
                     href={loggedIn ? "/dashboard" : "/login"}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#FFB81C] px-3.5 xl:px-4 py-1.5 text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold text-[#002147] shadow-sm transition hover:bg-[#F5A623]"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-brand-accent px-3.5 xl:px-4 py-1.5 text-[12.5px] lg:text-[13px] xl:text-[14px] font-bold text-brand-primary shadow-sm transition hover:bg-brand-accent-dark"
                   >
                     {loggedIn ? <LayoutDashboard className="h-3.5 w-3.5" /> : <LogIn className="h-3.5 w-3.5" />}
                     {loggedIn ? "Dashboard" : (
                       <>
-                        <span className="xl:hidden">Login</span>
-                        <span className="hidden xl:inline">Login / Register</span>
+                        <span className="xl:hidden"><E f="c.Navbar">{"Login"}</E></span>
+                        <span className="hidden xl:inline"><E f="c.Navbar">{"Login / Register"}</E></span>
                       </>
                     )}
                   </Link>
@@ -430,14 +427,14 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
         ========================================================================= */}
         {mobileOpen && (
           <div
-            className="lg:hidden absolute inset-x-0 top-full h-[calc(100dvh-56px)] sm:h-[calc(100dvh-64px)] bg-[#00142E] border-t border-white/15 text-white shadow-2xl z-40 overflow-y-auto animate-in slide-in-from-top-2 duration-200"
+            className="lg:hidden absolute inset-x-0 top-full h-[calc(100dvh-56px)] sm:h-[calc(100dvh-64px)] bg-brand-primary-dark border-t border-white/15 text-white shadow-2xl z-40 overflow-y-auto animate-in slide-in-from-top-2 duration-200"
           >
             <div className="container-x py-6 space-y-6 pb-24">
               {/* Co-located Events Highlights in Mobile Drawer */}
               <div className="space-y-3">
                 {/* BOLT 3.0 Card */}
                 {visibility.bolt && (
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00142E] to-[#002244] border border-[#CCFF00]/50 shadow-md flex items-center justify-between gap-3">
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-primary-dark to-[#002244] border border-[#CCFF00]/50 shadow-md flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-7 w-20 shrink-0">
                       <Image
@@ -449,23 +446,21 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-[#CCFF00] tracking-wide">BOLT 3.0 Hackathon</p>
-                      <p className="text-xs text-white/70">National Flagship 24h Sprint</p>
+                      <p className="text-sm font-black text-[#CCFF00] tracking-wide"><E f="c.Navbar">{"BOLT 3.0 Hackathon"}</E></p>
+                      <p className="text-xs text-white/70"><E f="c.Navbar">{"National Flagship 24h Sprint"}</E></p>
                     </div>
                   </div>
                   <Link
                     href="/hackathon"
                     onClick={() => setMobileOpen(false)}
-                    className="px-3 py-1.5 rounded-lg bg-[#CCFF00] text-[#001C3D] font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors shrink-0"
-                  >
-                    Explore
-                  </Link>
+                    className="px-3 py-1.5 rounded-lg bg-[#CCFF00] text-brand-primary-dark font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors shrink-0"
+                  ><E f="c.Navbar">{"Explore"}</E></Link>
                 </div>
                 )}
 
                 {/* TechNext '28 Card */}
                 {visibility.technext && (
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-[#001733] to-[#002244] border border-[#F37021]/50 shadow-md flex items-center justify-between gap-3">
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-primary-dark to-[#002244] border border-[#F37021]/50 shadow-md flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-6 w-24 shrink-0">
                       <Image
@@ -477,17 +472,15 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-[#F37021] tracking-wide">TechNext &apos;28 Expo</p>
-                      <p className="text-xs text-white/70">Industrial Expo &amp; Stalls</p>
+                      <p className="text-sm font-black text-[#F37021] tracking-wide"><E f="c.Navbar">{"TechNext '28 Expo"}</E></p>
+                      <p className="text-xs text-white/70"><E f="c.Navbar">{"Industrial Expo & Stalls"}</E></p>
                     </div>
                   </div>
                   <Link
                     href="/technext"
                     onClick={() => setMobileOpen(false)}
                     className="px-3 py-1.5 rounded-lg bg-[#84E320] text-[#0B0324] font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors shrink-0"
-                  >
-                    Explore
-                  </Link>
+                  ><E f="c.Navbar">{"Explore"}</E></Link>
                 </div>
                 )}
               </div>
@@ -508,11 +501,11 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                           }}
                           className={`flex-1 py-3.5 px-4 rounded-xl transition-colors font-bold ${
                             active
-                              ? "bg-white/15 text-[#FFB81C]"
+                              ? "bg-white/15 text-brand-accent"
                               : "text-white/90 hover:bg-white/10 hover:text-white"
                           }`}
                         >
-                          {item.label}
+                          <E f="c.Navbar">{item.label}</E>
                         </Link>
 
                         {/* Dropdown Expand Toggle for Mobile */}
@@ -520,12 +513,12 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                           <button
                             type="button"
                             onClick={() => toggleMobileDropdown(item.label)}
-                            className="p-3 text-white/60 hover:text-[#FFB81C] transition-colors"
+                            className="p-3 text-white/60 hover:text-brand-accent transition-colors"
                             aria-label={`Toggle ${item.label} sub-menu`}
                           >
                             <ChevronDown
                               className={`w-5 h-5 transition-transform duration-200 ${
-                                isExpanded ? "rotate-180 text-[#FFB81C]" : ""
+                                isExpanded ? "rotate-180 text-brand-accent" : ""
                               }`}
                             />
                           </button>
@@ -534,7 +527,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
 
                       {/* Expandable Sub-items */}
                       {item.hasDropdown && item.dropdownItems && isExpanded && (
-                        <div className="ml-4 pl-3 border-l-2 border-[#FFB81C]/40 py-2 space-y-2 animate-in fade-in-50 duration-150">
+                        <div className="ml-4 pl-3 border-l-2 border-brand-accent/40 py-2 space-y-2 animate-in fade-in-50 duration-150">
                           {item.dropdownItems.map((sub) => (
                             <div key={sub.label}>
                               {sub.external ? (
@@ -545,16 +538,16 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                                   onClick={() => setMobileOpen(false)}
                                   className="flex items-center justify-between py-2.5 px-3.5 rounded-lg text-sm sm:text-base font-medium text-white/80 hover:text-white hover:bg-white/10"
                                 >
-                                  <span>{sub.label}</span>
-                                  <ExternalLink className="w-4 h-4 text-[#FFB81C]" />
+                                  <span><E f="c.Navbar">{sub.label}</E></span>
+                                  <ExternalLink className="w-4 h-4 text-brand-accent" />
                                 </a>
                               ) : (
                                 <Link
                                   href={sub.href}
                                   onClick={() => setMobileOpen(false)}
-                                  className="block py-2.5 px-3.5 rounded-lg text-sm sm:text-base font-medium text-white/80 hover:text-[#FFB81C] hover:bg-white/10"
+                                  className="block py-2.5 px-3.5 rounded-lg text-sm sm:text-base font-medium text-white/80 hover:text-brand-accent hover:bg-white/10"
                                 >
-                                  {sub.label}
+                                  <E f="c.Navbar">{sub.label}</E>
                                 </Link>
                               )}
                             </div>
@@ -571,7 +564,7 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                 <Link
                   href={loggedIn ? "/dashboard" : "/login"}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between p-4 rounded-xl bg-[#FFB81C] text-[#002147] font-black hover:bg-[#F5A623] transition-colors"
+                  className="flex items-center justify-between p-4 rounded-xl bg-brand-accent text-brand-primary font-black hover:bg-brand-accent-dark transition-colors"
                 >
                   <span>{loggedIn ? "My dashboard" : "Login / Register"}</span>
                   {loggedIn ? <LayoutDashboard className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
@@ -582,17 +575,17 @@ export default function Navbar({ visibility = { bolt: true, technext: true } }: 
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white"
                 >
-                  <span className="font-bold">IEEE ITS Student Chapter Portal</span>
+                  <span className="font-bold"><E f="c.Navbar">{"IEEE ITS Student Chapter Portal"}</E></span>
                   <ExternalLink className="w-4 h-4 text-[#72EFDD]" />
                 </a>
 
                 <Link
                   href="/call-for-papers#submit"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between p-4 rounded-xl bg-[#F5A623] text-[#002147] font-black hover:bg-[#FFB81C] transition-colors"
+                  className="flex items-center justify-between p-4 rounded-xl bg-brand-accent-dark text-brand-primary font-black hover:bg-brand-accent transition-colors"
                 >
-                  <span>Submit Manuscript on CMT</span>
-                  <span className="font-black text-lg">→</span>
+                  <span><E f="c.Navbar">{"Submit Manuscript on CMT"}</E></span>
+                  <span className="font-black text-lg"><E f="c.Navbar">{"→"}</E></span>
                 </Link>
               </div>
             </div>

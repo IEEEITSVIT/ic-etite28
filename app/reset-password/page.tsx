@@ -20,7 +20,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
         <Field label="Confirm new password">
           <input name="confirm" type="password" required minLength={8} autoComplete="new-password" className={inputCls} />
         </Field>
-        <SubmitButton pendingText="Saving…" className="w-full rounded-full bg-[#002147] px-5 py-3 text-sm font-bold text-white hover:bg-[#003366] disabled:opacity-60">
+        <SubmitButton pendingText="Saving…" className="w-full rounded-full bg-brand-primary px-5 py-3 text-sm font-bold text-white hover:bg-brand-primary-hover disabled:opacity-60">
           Update password
         </SubmitButton>
       </form>

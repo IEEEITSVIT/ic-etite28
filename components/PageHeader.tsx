@@ -1,6 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { ChevronRight, Award } from "lucide-react";
+import E from "@/components/cms/E";
 
 interface PageHeaderProps {
   badge: string;
@@ -18,7 +19,7 @@ export default function PageHeader({
   bgImage = "/images/frame_15.webp",
 }: PageHeaderProps) {
   return (
-    <div className="relative bg-[#002147] text-white py-10 md:py-16 overflow-hidden border-b border-white/15 select-none">
+    <div className="relative bg-brand-primary text-white py-10 md:py-16 overflow-hidden border-b border-white/15 select-none">
       {/* Background Image with Dark Navy Gradient Overlay matching vit.ac.in */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -48,27 +49,25 @@ export default function PageHeader({
       <div className="container-x relative z-10">
         {/* Breadcrumb matching vit.ac.in format */}
         <nav className="flex items-center gap-2 text-xs font-medium text-white/70 mb-4" aria-label="Breadcrumb">
-          <Link href="/" className="hover:text-white transition-colors">
-            Home
-          </Link>
+          <Link href="/" className="hover:text-white transition-colors"><E f="c.PageHeader">{"Home"}</E></Link>
           <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          <span className="text-[#FFB81C] font-semibold">{breadcrumb || title}</span>
+          <span className="text-brand-accent font-semibold">{breadcrumb || title}</span>
         </nav>
 
         {/* Institutional Pill Tag */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF4DB] border border-[#F5A623]/50 text-[#002147] text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
-          <Award className="w-3.5 h-3.5 text-[#F5A623]" />
-          <span>{badge}</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF4DB] border border-brand-accent-dark/50 text-brand-primary text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+          <Award className="w-3.5 h-3.5 text-brand-accent-dark" />
+          <span><E f="c.PageHeader">{badge}</E></span>
         </div>
 
         {/* Main H1 Heading with vit.ac.in font format and generous spacing */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white max-w-3xl leading-[1.15] mb-4 drop-shadow">
-          {title}
+          <E f="c.PageHeader">{title}</E>
         </h1>
 
         {subtitle && (
           <p className="text-sm sm:text-base md:text-lg text-white/85 max-w-2xl leading-relaxed font-normal">
-            {subtitle}
+            <E f="c.PageHeader">{subtitle}</E>
           </p>
         )}
       </div>

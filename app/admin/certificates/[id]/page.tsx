@@ -166,10 +166,10 @@ export default async function CertificateBatchPage({ params, searchParams }: { p
               <p className="text-xs text-slate-500">Placeholders: {"{{name}} {{email}} {{event}} {{portalUrl}}"} {columns.map((c) => `{{${c}}}`).join(" ")}. The PDF is generated when each email is sent.</p>
               <div className="flex flex-wrap items-center gap-4">
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="only_new" value="1" defaultChecked className="accent-[#002147]" /> Only people not emailed yet
+                  <input type="radio" name="only_new" value="1" defaultChecked className="accent-brand-primary" /> Only people not emailed yet
                 </label>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="only_new" value="0" className="accent-[#002147]" /> Everyone
+                  <input type="radio" name="only_new" value="0" className="accent-brand-primary" /> Everyone
                 </label>
                 <SubmitButton className={btnGold} pendingText="Queuing…" confirm="Queue certificate emails?">
                   Queue certificate emails

@@ -68,7 +68,7 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
                 <input name="port" type="number" defaultValue={smtp.port} className={inputCls} />
               </Field>
               <label className="flex items-center gap-2 pt-7 text-sm font-semibold">
-                <input type="checkbox" name="secure" defaultChecked={smtp.secure} className="accent-[#002147]" /> SSL (465)
+                <input type="checkbox" name="secure" defaultChecked={smtp.secure} className="accent-brand-primary" /> SSL (465)
               </label>
             </div>
             <Field label="Username (Gmail address)">
@@ -112,13 +112,13 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
             return (
               <details key={k} className="rounded-xl border border-slate-200">
                 <summary className="flex cursor-pointer flex-wrap items-center gap-2 px-4 py-3">
-                  <span className="font-bold text-[#002147]">{def.label}</span>
+                  <span className="font-bold text-brand-primary">{def.label}</span>
                   <StatusBadge status={t.enabled ? "sent" : "hidden"} />
                   <span className="text-xs text-slate-500">{def.when}</span>
                 </summary>
                 <div className="space-y-2 border-t border-slate-100 p-4">
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <input type="checkbox" name={`${k}_enabled`} defaultChecked={t.enabled} className="accent-[#002147]" /> Send this notice
+                    <input type="checkbox" name={`${k}_enabled`} defaultChecked={t.enabled} className="accent-brand-primary" /> Send this notice
                   </label>
                   <input name={`${k}_subject`} defaultValue={t.subject} required className={inputCls} />
                   <textarea name={`${k}_body`} defaultValue={t.body} required rows={7} className={`${inputCls} font-mono text-sm`} />

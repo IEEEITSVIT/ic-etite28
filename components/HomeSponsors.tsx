@@ -1,3 +1,4 @@
+import E from "@/components/cms/E";
 // Sponsor logos in rectangle format with fallback placeholders
 const technicalCoSponsors = [
   { name: "IEEE", logo: "/logos/ieee-logo.svg", url: "https://www.ieee.org", bg: "bg-blue-50" },
@@ -28,7 +29,7 @@ function SponsorLogo({ s, size = "normal" }: { s: Sponsor; size?: "large" | "nor
           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
         />
       ) : null}
-      <span className="text-xs font-semibold text-gray-500 text-center leading-tight">{s.name}</span>
+      <span className="text-xs font-semibold text-gray-500 text-center leading-tight"><E f="c.HomeSponsors">{s.name}</E></span>
     </a>
   );
 }
@@ -40,14 +41,14 @@ export default function HomeSponsors() {
 
         {/* Technical Sponsor */}
         <div className="text-center mb-10">
-          <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-2">Technical Sponsorship</p>
-          <h3 className="text-2xl font-extrabold text-gray-900 mb-6">IEEE</h3>
+          <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-2"><E f="c.HomeSponsors">{"Technical Sponsorship"}</E></p>
+          <h3 className="text-2xl font-extrabold text-gray-900 mb-6"><E f="c.HomeSponsors">{"IEEE"}</E></h3>
           <div className="flex justify-center">
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl px-12 py-6 flex items-center gap-4 max-w-sm">
-              <div className="text-4xl font-black text-blue-800">IEEE</div>
+              <div className="text-4xl font-black text-blue-800"><E f="c.HomeSponsors">{"IEEE"}</E></div>
               <div className="text-left">
-                <p className="font-bold text-blue-900 text-sm">Institute of Electrical &amp; Electronics Engineers</p>
-                <p className="text-xs text-blue-600">Technical Sponsor</p>
+                <p className="font-bold text-blue-900 text-sm"><E f="c.HomeSponsors">{"Institute of Electrical & Electronics Engineers"}</E></p>
+                <p className="text-xs text-blue-600"><E f="c.HomeSponsors">{"Technical Sponsor"}</E></p>
               </div>
             </div>
           </div>
@@ -57,14 +58,14 @@ export default function HomeSponsors() {
 
         {/* Supported By */}
         <div className="text-center mb-6">
-          <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-2">Organizing Society</p>
-          <h3 className="text-xl font-bold text-gray-800 mb-6">Academic &amp; Professional Chapters</h3>
+          <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-2"><E f="c.HomeSponsors">{"Organizing Society"}</E></p>
+          <h3 className="text-xl font-bold text-gray-800 mb-6"><E f="c.HomeSponsors">{"Academic & Professional Chapters"}</E></h3>
           <div className="flex justify-center gap-6 flex-wrap">
             {supportedBy.map((s) => (
               <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
                 className={`${s.bg} border border-gray-200 rounded-lg p-5 flex flex-col items-center justify-center gap-2 hover:shadow-md transition-shadow min-w-[200px] min-h-[100px]`}>
-                <div className="text-2xl font-black text-blue-800">IEEE</div>
-                <p className="text-xs font-semibold text-gray-700 text-center leading-tight">{s.name}</p>
+                <div className="text-2xl font-black text-blue-800"><E f="c.HomeSponsors">{"IEEE"}</E></div>
+                <p className="text-xs font-semibold text-gray-700 text-center leading-tight"><E f="c.HomeSponsors">{s.name}</E></p>
               </a>
             ))}
           </div>

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { ICETITE20_GALLERY_PHOTOS } from "@/data/icetite20GalleryData";
+import E from "@/components/cms/E";
 
 const INITIAL_COUNT = 16;
 const BATCH_SIZE = 16;
@@ -59,7 +60,7 @@ export default function Icetite20PhotoGrid() {
             type="button"
             key={photo.src}
             onClick={() => setSelectedIndex(index)}
-            className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 focus:outline-hidden focus:ring-2 focus:ring-[#002147] cursor-pointer"
+            className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 focus:outline-hidden focus:ring-2 focus:ring-brand-primary cursor-pointer"
             aria-label={`View photo ${index + 1}`}
           >
             <Image
@@ -72,8 +73,8 @@ export default function Icetite20PhotoGrid() {
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-108"
             />
             {/* Subtle Hover Overlay */}
-            <div className="absolute inset-0 bg-[#002147]/0 group-hover:bg-[#002147]/25 transition-colors duration-300 flex items-center justify-center">
-              <span className="w-10 h-10 rounded-full bg-white/90 text-[#002147] shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
+            <div className="absolute inset-0 bg-brand-primary/0 group-hover:bg-brand-primary/25 transition-colors duration-300 flex items-center justify-center">
+              <span className="w-10 h-10 rounded-full bg-white/90 text-brand-primary shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
                 <Maximize2 className="w-4 h-4" />
               </span>
             </div>
@@ -91,10 +92,8 @@ export default function Icetite20PhotoGrid() {
                 Math.min(prev + BATCH_SIZE, ICETITE20_GALLERY_PHOTOS.length),
               )
             }
-            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#002147] text-white font-semibold text-sm hover:bg-[#003366] active:scale-95 shadow-md hover:shadow-lg transition-all cursor-pointer"
-          >
-            Load More Photos
-          </button>
+            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-brand-primary text-white font-semibold text-sm hover:bg-brand-primary-hover active:scale-95 shadow-md hover:shadow-lg transition-all cursor-pointer"
+          ><E f="c.Icetite20PhotoGrid">{"Load More Photos"}</E></button>
         </div>
       )}
 

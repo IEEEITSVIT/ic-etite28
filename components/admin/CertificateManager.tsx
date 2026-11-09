@@ -224,7 +224,7 @@ export default function CertificateManager({
               key={k}
               type="button"
               onClick={() => setKind(k)}
-              className={`rounded-full px-4 py-1.5 text-sm font-semibold ${k === kind ? "bg-[#002147] text-white" : "border border-slate-300 bg-white text-slate-700"}`}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold ${k === kind ? "bg-brand-primary text-white" : "border border-slate-300 bg-white text-slate-700"}`}
             >
               {k === "winner" ? "Winner" : "Participation"} {t ? (t.released ? "· released" : "· draft") : "· no template"}
             </button>
@@ -268,7 +268,7 @@ export default function CertificateManager({
                   <div
                     key={i}
                     onPointerDown={startDrag(i)}
-                    className={`absolute cursor-move whitespace-nowrap rounded px-0.5 leading-none ${i === selected ? "outline outline-2 outline-[#FFB81C]" : "outline outline-1 outline-dashed outline-sky-400/70"}`}
+                    className={`absolute cursor-move whitespace-nowrap rounded px-0.5 leading-none ${i === selected ? "outline outline-2 outline-brand-accent" : "outline outline-1 outline-dashed outline-sky-400/70"}`}
                     style={{
                       left: `${f.x * 100}%`,
                       top: `${f.y * 100}%`,
@@ -291,9 +291,9 @@ export default function CertificateManager({
           <div className="space-y-3">
             <div className="max-h-[520px] space-y-2 overflow-y-auto pr-1">
               {layout.fields.map((f, i) => (
-                <div key={i} className={`rounded-xl border p-3 ${i === selected ? "border-[#FFB81C] bg-amber-50/40" : "border-slate-200"}`} onClick={() => setSelected(i)}>
+                <div key={i} className={`rounded-xl border p-3 ${i === selected ? "border-brand-accent bg-amber-50/40" : "border-slate-200"}`} onClick={() => setSelected(i)}>
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                    <input type="checkbox" checked={f.enabled} onChange={(e) => update(i, { enabled: e.target.checked })} className="accent-[#002147]" />
+                    <input type="checkbox" checked={f.enabled} onChange={(e) => update(i, { enabled: e.target.checked })} className="accent-brand-primary" />
                     {f.label}
                   </label>
                   {i === selected && f.enabled && (

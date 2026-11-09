@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/session";
-import { getSettings, saveSetting, type DateItem, type EarlyBird, type FeeTier, type Prize, type StallType } from "@/lib/settings";
+import { DEFAULT_SETTINGS, THEME_COLORS, getSettings, saveSetting, type DateItem, type EarlyBird, type FeeTier, type Prize, type StallType, type ThemeColorKey } from "@/lib/settings";
+import { FONT_OPTIONS, type FontKey } from "@/lib/fonts";
 import { bool, guarded, num, str } from "@/lib/portal/actions";
 import { PortalError } from "@/lib/portal/events";
 import { slugify } from "@/lib/portal/ids";
@@ -371,5 +372,47 @@ export async function saveTickerAction(fd: FormData) {
     );
     refreshPublic();
     return bool(fd, "enabled") && items.length ? "Scrolling announcement bar updated." : "Announcement bar hidden.";
+  });
+}
+
+export async function saveAppearanceAction(fd: FormData) {
+  const admin = await requireAdmin(BACK);
+  await guarded(BACK + "#appearance", async () => {
+    if (str(fd, "reset", 2) === "1") {
+      await saveSetting("appearance", DEFAULT_SETTINGS.appearance, admin.id);
+      revalidatePath("/", "layout");
+      return "Appearance reset to the original theme.";
+    }
+    const colors = {} as Record<ThemeColorKey, string>;
+    for (const key of Object.keys(THEME_COLORS) as ThemeColorKey[]) {
+      const v = str(fd, `color_${key}`, 7);
+      if (!/^#[0-9a-f]{6}$/i.test(v)) throw new PortalError(`${THEME_COLORS[key].label} must be a colour like #002147.`);
+      colors[key] = v.toUpperCase();
+    }
+    const font = (k: string, fallback: FontKey) => (k in FONT_OPTIONS ? (k as FontKey) : fallback);
+    const scale = num(fd, "fontScale", 1);
+    if (scale < 0.85 || scale > 1.25) throw new PortalError("Text size must be between 85% and 125%.");
+    await saveSetting(
+      "appearance",
+      { colors, bodyFont: font(str(fd, "bodyFont", 20), "inter"), headingFont: font(str(fd, "headingFont", 20), "jakarta"), fontScale: Math.round(scale * 100) / 100 },
+      admin.id
+    );
+    revalidatePath("/", "layout");
+    return "Appearance updated across the website.";
+  });
+}
+
+// Resets one inline page edit (text or image) from Admin → Page content.
+export async function resetContentAction(fd: FormData) {
+  const admin = await requireAdmin("/admin/content");
+  await guarded("/admin/content", async () => {
+    const type = str(fd, "type", 10) === "image" ? "images" : "texts";
+    const key = str(fd, "key", 300);
+    const current = (await getSettings())[type] as Record<string, unknown>;
+    const next = { ...current };
+    delete next[key];
+    await saveSetting(type, next as never, admin.id);
+    revalidatePath("/", "layout");
+    return type === "images" ? "Original image restored." : "Text restored to the original.";
   });
 }

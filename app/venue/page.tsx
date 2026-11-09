@@ -12,7 +12,7 @@ import PageHeader from "@/components/PageHeader";
 
 export default function VenuePage() {
   return (
-    <div className="bg-white min-h-screen text-[#002147]">
+    <div className="bg-white min-h-screen text-brand-primary">
       <PageHeader
         badge="Host University Campus & Arrival Guide"
         title="Conference Venue & Travel"

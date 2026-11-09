@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import { getSettings } from "@/lib/settings";
 import type { SponsorStyle } from "@/data/sponsorship";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import {
   Crown,
   Award,
@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import E from "@/components/cms/E";
 
 export const metadata: Metadata = pageMetadata("/sponsorship", {
   title: "Sponsorship Packages & Corporate Partnerships | ic-ETITE",
@@ -28,10 +29,10 @@ export const metadata: Metadata = pageMetadata("/sponsorship", {
 const STYLES: Record<SponsorStyle, { icon: typeof Crown; headerBg: string; accentColor: string; borderColor: string; buttonBg: string }> = {
   platinum: {
     icon: Crown,
-    headerBg: "bg-gradient-to-br from-[#001733] via-[#002B5B] to-[#001733]",
-    accentColor: "text-[#FFB81C]",
-    borderColor: "border-[#FFB81C] ring-2 ring-[#FFB81C]/25 shadow-xl",
-    buttonBg: "bg-[#002147] hover:bg-[#003366] text-[#FFB81C] border border-[#FFB81C]/30",
+    headerBg: "bg-gradient-to-br from-brand-primary-dark via-[#002B5B] to-brand-primary-dark",
+    accentColor: "text-brand-accent",
+    borderColor: "border-brand-accent ring-2 ring-brand-accent/25 shadow-xl",
+    buttonBg: "bg-brand-primary hover:bg-brand-primary-hover text-brand-accent border border-brand-accent/30",
   },
   gold: {
     icon: Award,
@@ -45,7 +46,7 @@ const STYLES: Record<SponsorStyle, { icon: typeof Crown; headerBg: string; accen
     headerBg: "bg-gradient-to-br from-[#1E293B] via-[#334155] to-[#0F172A]",
     accentColor: "text-slate-200",
     borderColor: "border-slate-300 hover:border-slate-400 shadow-md",
-    buttonBg: "bg-[#002147] hover:bg-[#003366] text-white",
+    buttonBg: "bg-brand-primary hover:bg-brand-primary-hover text-white",
   },
   bronze: {
     icon: Medal,
@@ -60,7 +61,7 @@ export default async function SponsorshipPage() {
   const { sponsorship } = await getSettings();
   const sponsorTiers = sponsorship.packages.map((p) => ({ ...p, ...STYLES[p.style] ?? STYLES.silver, isPopular: p.popular }));
   return (
-    <div className="bg-[#FAFBFD] min-h-screen text-[#002147]">
+    <div className="bg-brand-surface min-h-screen text-brand-primary">
       {/* ── HERO BANNER ── */}
       <PageHeader
         badge="Corporate Partnerships · Global Visibility"
@@ -74,15 +75,9 @@ export default async function SponsorshipPage() {
         {/* ── SPONSORSHIP PACKAGES SECTION ── */}
         <section id="packages" className="space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
-              Sponsorship Packages &amp; Entitlements
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#002147] tracking-tight">
-              Select Your Sponsorship Tier
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
-              Tailored sponsorship packages designed to maximize corporate visibility, talent pipeline acquisition, and thought leadership at VIT Vellore.
-            </p>
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-secondary bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-brand-secondary/20 inline-block"><E f="sponsorship">{"Sponsorship Packages & Entitlements"}</E></span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-primary tracking-tight"><E f="sponsorship">{"Select Your Sponsorship Tier"}</E></h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto"><E f="sponsorship">{"Tailored sponsorship packages designed to maximize corporate visibility, talent pipeline acquisition, and thought leadership at VIT Vellore."}</E></p>
           </div>
 
           {/* Pricing Tier Cards Grid */}
@@ -96,9 +91,9 @@ export default async function SponsorshipPage() {
                 >
                   {/* Highlight Ribbon for Title Sponsor */}
                   {tier.isPopular && (
-                    <div className="bg-[#FFB81C] text-[#002147] text-center py-2 text-xs font-black uppercase tracking-widest border-b border-[#E5A717] shadow-xs flex items-center justify-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 fill-[#002147]" />
-                      <span>★ Most Comprehensive Package</span>
+                    <div className="bg-brand-accent text-brand-primary text-center py-2 text-xs font-black uppercase tracking-widest border-b border-[#E5A717] shadow-xs flex items-center justify-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 fill-brand-primary" />
+                      <span><E f="sponsorship">{"★ Most Comprehensive Package"}</E></span>
                     </div>
                   )}
 
@@ -107,38 +102,34 @@ export default async function SponsorshipPage() {
                     <div className="flex items-center justify-between gap-3 mb-3">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold tracking-wide">
                         <TierIcon className={`w-3.5 h-3.5 ${tier.accentColor}`} />
-                        <span>{tier.badge}</span>
+                        <span><E f="sponsorship">{tier.badge}</E></span>
                       </span>
                     </div>
 
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
-                      {tier.name}
+                      <E f="sponsorship">{tier.name}</E>
                     </h3>
                     <p className="text-xs text-white/80 mt-1.5 leading-relaxed font-normal">
-                      {tier.tagline}
+                      <E f="sponsorship">{tier.tagline}</E>
                     </p>
 
                     <div className="mt-5 pt-4 border-t border-white/15 flex items-baseline gap-2 whitespace-nowrap">
                       <span className="text-2xl sm:text-[26px] xl:text-3xl font-serif font-black text-white tracking-tight whitespace-nowrap">
-                        {tier.price}
+                        <E f="sponsorship">{tier.price}</E>
                       </span>
-                      <span className="text-[10px] sm:text-xs font-semibold text-white/70 uppercase tracking-wide whitespace-nowrap">
-                        + Applicable GST
-                      </span>
+                      <span className="text-[10px] sm:text-xs font-semibold text-white/70 uppercase tracking-wide whitespace-nowrap"><E f="sponsorship">{"+ Applicable GST"}</E></span>
                     </div>
                   </div>
 
                   {/* Benefits List */}
                   <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-6">
                     <div className="space-y-4">
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
-                        Included Entitlements &amp; Benefits:
-                      </p>
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2"><E f="sponsorship">{"Included Entitlements & Benefits:"}</E></p>
                       <ul className="space-y-3 text-xs sm:text-[13px] text-slate-700 font-normal">
                         {tier.benefits.map((benefit, idx) => (
                           <li key={idx} className="flex items-start gap-2.5 leading-relaxed">
-                            <CheckCircle2 className="w-4 h-4 text-[#004B87] shrink-0 mt-0.5" />
-                            <span>{benefit}</span>
+                            <CheckCircle2 className="w-4 h-4 text-brand-secondary shrink-0 mt-0.5" />
+                            <span><E f="sponsorship">{benefit}</E></span>
                           </li>
                         ))}
                       </ul>
@@ -153,7 +144,7 @@ export default async function SponsorshipPage() {
                         className={`w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md hover:scale-[1.02] ${tier.buttonBg}`}
                       >
                         <Mail className="w-4 h-4" />
-                        <span>Inquire for {tier.name}</span>
+                        <span><E f="sponsorship">{"Inquire for "}</E><E f="sponsorship">{tier.name}</E></span>
                       </a>
                     </div>
                   </div>
@@ -166,98 +157,68 @@ export default async function SponsorshipPage() {
         {/* ── PARTNERS & SPONSORS SECTIONS (KEPT BLANK PER INSTRUCTION) ── */}
         <section id="partners" className="pt-8 border-t border-slate-200 space-y-14">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#004B87] bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-[#004B87]/20 inline-block">
-              Institutional &amp; Technical Backing
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#002147]">
-              Conference Partners &amp; Patrons
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Corporate and academic sponsors are announced on a rolling basis following committee reviews.
-            </p>
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-secondary bg-[#EBF3F8] px-3.5 py-1.5 rounded-full border border-brand-secondary/20 inline-block"><E f="sponsorship">{"Institutional & Technical Backing"}</E></span>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-brand-primary"><E f="sponsorship">{"Conference Partners & Patrons"}</E></h2>
+            <p className="text-xs sm:text-sm text-slate-500"><E f="sponsorship">{"Corporate and academic sponsors are announced on a rolling basis following committee reviews."}</E></p>
           </div>
 
           {/* 1. TECHNICAL CO-SPONSOR */}
           <div className="flex flex-col items-center text-center space-y-5">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-[#002147] underline decoration-[#004B87] underline-offset-8">
-              TECHNICAL CO-SPONSOR
-            </h3>
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-brand-primary underline decoration-brand-secondary underline-offset-8"><E f="sponsorship">{"TECHNICAL CO-SPONSOR"}</E></h3>
             {/* Blank placeholder frame as requested */}
             <div className="w-full max-w-2xl min-h-[100px] border-2 border-dashed border-slate-300 rounded-2xl flex items-center justify-center p-6 bg-slate-50/70">
-              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase">
-                To Be Announced
-              </span>
+              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase"><E f="sponsorship">{"To Be Announced"}</E></span>
             </div>
           </div>
 
           {/* 2. TITLE SPONSOR */}
           <div className="flex flex-col items-center text-center space-y-5">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-[#002147] underline decoration-[#004B87] underline-offset-8">
-              TITLE SPONSOR
-            </h3>
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-brand-primary underline decoration-brand-secondary underline-offset-8"><E f="sponsorship">{"TITLE SPONSOR"}</E></h3>
             {/* Blank placeholder frame as requested */}
             <div className="w-full max-w-2xl min-h-[100px] border-2 border-dashed border-slate-300 rounded-2xl flex items-center justify-center p-6 bg-slate-50/70">
-              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase">
-                To Be Announced
-              </span>
+              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase"><E f="sponsorship">{"To Be Announced"}</E></span>
             </div>
           </div>
 
           {/* 3. TECHNOLOGY PARTNER AND CO-TITLE SPONSOR */}
           <div className="flex flex-col items-center text-center space-y-5">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-[#002147] underline decoration-[#004B87] underline-offset-8">
-              TECHNOLOGY PARTNER AND CO-TITLE SPONSOR
-            </h3>
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-brand-primary underline decoration-brand-secondary underline-offset-8"><E f="sponsorship">{"TECHNOLOGY PARTNER AND CO-TITLE SPONSOR"}</E></h3>
             {/* Blank placeholder frame as requested */}
             <div className="w-full max-w-2xl min-h-[100px] border-2 border-dashed border-slate-300 rounded-2xl flex items-center justify-center p-6 bg-slate-50/70">
-              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase">
-                To Be Announced
-              </span>
+              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase"><E f="sponsorship">{"To Be Announced"}</E></span>
             </div>
           </div>
 
           {/* 4. SUPPORTED BY */}
           <div className="flex flex-col items-center text-center space-y-5">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-[#002147] underline decoration-[#004B87] underline-offset-8">
-              SUPPORTED BY
-            </h3>
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-brand-primary underline decoration-brand-secondary underline-offset-8"><E f="sponsorship">{"SUPPORTED BY"}</E></h3>
             {/* Blank placeholder frame as requested */}
             <div className="w-full max-w-3xl min-h-[120px] border-2 border-dashed border-slate-300 rounded-2xl flex items-center justify-center p-6 bg-slate-50/70">
-              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase">
-                To Be Announced
-              </span>
+              <span className="text-xs sm:text-sm text-slate-400 font-semibold tracking-wide uppercase"><E f="sponsorship">{"To Be Announced"}</E></span>
             </div>
           </div>
         </section>
 
         {/* ── BROCHURES & CONTACT SECRETARIAT ── */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#002147] to-[#001733] text-white shadow-xl border border-white/15">
+        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-brand-primary to-brand-primary-dark text-white shadow-xl border border-white/15">
           <div className="grid md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-8 space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#CCFF00] bg-white/10 px-3 py-1 rounded-full border border-white/20 inline-block">
-                Sponsorship Secretariat &amp; Inquiries
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
-                Interested in Custom Sponsorship or Event Co-Hosting?
-              </h3>
-              <p className="text-sm text-white/80 leading-relaxed font-normal max-w-2xl">
-                We offer tailored exhibition booths at <strong>TechNext Expo</strong>, customized challenge statements for the <strong>BOLT Hackathon</strong>, and branded keynote halls. Reach out to our organizing committee to receive customized proposals.
-              </p>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#CCFF00] bg-white/10 px-3 py-1 rounded-full border border-white/20 inline-block"><E f="sponsorship">{"Sponsorship Secretariat & Inquiries"}</E></span>
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight"><E f="sponsorship">{"Interested in Custom Sponsorship or Event Co-Hosting?"}</E></h3>
+              <p className="text-sm text-white/80 leading-relaxed font-normal max-w-2xl"><E f="sponsorship">{"We offer tailored exhibition booths at "}</E><strong><E f="sponsorship">{"TechNext Expo"}</E></strong><E f="sponsorship">{", customized challenge statements for the "}</E><strong><E f="sponsorship">{"BOLT Hackathon"}</E></strong><E f="sponsorship">{", and branded keynote halls. Reach out to our organizing committee to receive customized proposals."}</E></p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-medium text-white/90">
                 <div className="flex items-center gap-1.5">
-                  <Mail className="w-4 h-4 text-[#FFB81C]" />
+                  <Mail className="w-4 h-4 text-brand-accent" />
                   <a
                     href="mailto:icetiteconference@vit.ac.in"
                     className="hover:underline font-bold text-white"
-                  >
-                    icetiteconference@vit.ac.in
-                  </a>
+                  ><E f="sponsorship">{"icetiteconference@vit.ac.in"}</E></a>
                 </div>
-                <span>•</span>
+                <span><E f="sponsorship">{"•"}</E></span>
                 <div className="flex items-center gap-1.5">
                   <Building2 className="w-4 h-4 text-[#CCFF00]" />
-                  <span>SCORE, VIT Vellore, Tamil Nadu 632014</span>
+                  <span><E f="sponsorship">{"SCORE, VIT Vellore, Tamil Nadu 632014"}</E></span>
                 </div>
               </div>
             </div>
@@ -267,10 +228,10 @@ export default async function SponsorshipPage() {
                 href="https://icetite.vit.ac.in/docs/CONF_BROCHURE_INR.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-[#004B87] hover:bg-[#003366] text-white font-bold text-xs sm:text-sm transition-all shadow-md border border-white/20 hover:scale-[1.02]"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-brand-secondary hover:bg-brand-primary-hover text-white font-bold text-xs sm:text-sm transition-all shadow-md border border-white/20 hover:scale-[1.02]"
               >
                 <Download className="w-4 h-4 text-[#CCFF00]" />
-                <span>Download Sponsorship Brochure (PDF)</span>
+                <span><E f="sponsorship">{"Download Sponsorship Brochure (PDF)"}</E></span>
               </a>
 
               <a
@@ -278,8 +239,8 @@ export default async function SponsorshipPage() {
                 download="ic-ETITE'28.pdf"
                 className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm transition-all border border-white/25 hover:scale-[1.02]"
               >
-                <FileText className="w-4 h-4 text-[#FFB81C]" />
-                <span>Download Conference Brochure (PDF)</span>
+                <FileText className="w-4 h-4 text-brand-accent" />
+                <span><E f="sponsorship">{"Download Conference Brochure (PDF)"}</E></span>
               </a>
             </div>
           </div>

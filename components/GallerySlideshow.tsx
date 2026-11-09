@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,6 +14,7 @@ import {
   Sparkles,
   Layers,
 } from "lucide-react";
+import E from "@/components/cms/E";
 
 export interface GalleryItem {
   id: string;
@@ -366,22 +367,18 @@ export default function GallerySlideshow({
             onClick={() => setActiveCategory("all")}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
               activeCategory === "all"
-                ? "bg-[#002147] text-white shadow-sm"
+                ? "bg-brand-primary text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
-          >
-            All Moments
-          </button>
+          ><E f="c.GallerySlideshow">{"All Moments"}</E></button>
           <button
             onClick={() => setActiveCategory("2020")}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
               activeCategory === "2020"
-                ? "bg-[#004B87] text-white shadow-sm"
+                ? "bg-brand-secondary text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
-          >
-            ic-ETITE&apos;20 Inaugural
-          </button>
+          ><E f="c.GallerySlideshow">{"ic-ETITE'20 Inaugural"}</E></button>
           <button
             onClick={() => setActiveCategory("2024")}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
@@ -389,9 +386,7 @@ export default function GallerySlideshow({
                 ? "bg-[#DE6D1B] text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
-          >
-            ic-ETITE&apos;24 Conclave
-          </button>
+          ><E f="c.GallerySlideshow">{"ic-ETITE'24 Conclave"}</E></button>
         </div>
       )}
 
@@ -419,8 +414,8 @@ export default function GallerySlideshow({
           {/* Top Info Bar */}
           <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
             <div className="flex items-center gap-2 pointer-events-auto">
-              <span className="px-3 py-1 rounded-full bg-[#001C3D]/90 backdrop-blur-md text-[#FFB81C] text-xs font-bold border border-white/20 shadow-md">
-                {activeItem.edition}
+              <span className="px-3 py-1 rounded-full bg-brand-primary-dark/90 backdrop-blur-md text-brand-accent text-xs font-bold border border-white/20 shadow-md">
+                <E f="c.GallerySlideshow">{activeItem.edition}</E>
               </span>
             </div>
 
@@ -446,14 +441,14 @@ export default function GallerySlideshow({
           <button
             onClick={prevSlide}
             aria-label="Previous Photo"
-            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#002147] text-white flex items-center justify-center border border-white/30 backdrop-blur-md shadow-lg transition-all z-20 hover:scale-110 active:scale-95"
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-brand-primary text-white flex items-center justify-center border border-white/30 backdrop-blur-md shadow-lg transition-all z-20 hover:scale-110 active:scale-95"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next Photo"
-            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#002147] text-white flex items-center justify-center border border-white/30 backdrop-blur-md shadow-lg transition-all z-20 hover:scale-110 active:scale-95"
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-brand-primary text-white flex items-center justify-center border border-white/30 backdrop-blur-md shadow-lg transition-all z-20 hover:scale-110 active:scale-95"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -477,13 +472,13 @@ export default function GallerySlideshow({
             <div className={`${detailsExpanded ? "block" : "hidden"} sm:block mt-3`}>
               <div className="flex items-center gap-1.5 text-xs text-amber-300 mb-1 font-medium">
                 <MapPin className="w-3.5 h-3.5 shrink-0" />
-                <span>{activeItem.location}</span>
+                <span><E f="c.GallerySlideshow">{activeItem.location}</E></span>
               </div>
               <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight drop-shadow-md">
-                {activeItem.title}
+                <E f="c.GallerySlideshow">{activeItem.title}</E>
               </h3>
               <p className="text-xs sm:text-sm text-slate-200 mt-1.5 max-w-3xl leading-relaxed drop-shadow-sm">
-                {activeItem.caption}
+                <E f="c.GallerySlideshow">{activeItem.caption}</E>
               </p>
             </div>
           </div>
@@ -492,7 +487,7 @@ export default function GallerySlideshow({
         {/* Slideshow Progress Bar */}
         <div className="h-1 w-full bg-white/10 relative overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-[#F5A623] to-[#FFB81C] transition-all duration-300"
+            className="h-full bg-gradient-to-r from-brand-accent-dark to-brand-accent transition-all duration-300"
             style={{ width: `${((currentIndex + 1) / filteredItems.length) * 100}%` }}
           />
         </div>
@@ -506,7 +501,7 @@ export default function GallerySlideshow({
             onClick={() => setCurrentIndex(idx)}
             className={`relative flex-shrink-0 w-20 h-14 sm:w-24 sm:h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
               idx === currentIndex
-                ? "border-[#F5A623] ring-2 ring-[#F5A623]/40 scale-105"
+                ? "border-brand-accent-dark ring-2 ring-brand-accent-dark/40 scale-105"
                 : "border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400"
             }`}
             title={item.title}
@@ -539,17 +534,15 @@ export default function GallerySlideshow({
               />
             </div>
             <div className="text-center text-white mt-4 max-w-2xl px-4">
-              <h4 className="text-lg font-bold text-[#FFB81C]">{activeItem.title}</h4>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1">{activeItem.caption}</p>
+              <h4 className="text-lg font-bold text-brand-accent"><E f="c.GallerySlideshow">{activeItem.title}</E></h4>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1"><E f="c.GallerySlideshow">{activeItem.caption}</E></p>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setLightboxOpen(false);
                 }}
                 className="mt-3 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-xs font-semibold"
-              >
-                Close Preview (Esc)
-              </button>
+              ><E f="c.GallerySlideshow">{"Close Preview (Esc)"}</E></button>
             </div>
           </div>
         </div>

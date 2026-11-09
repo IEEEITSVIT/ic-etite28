@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { ArrowLeft, Menu, X, Zap } from "lucide-react";
+import E from "@/components/cms/E";
 
 export default function BoltNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -17,7 +18,7 @@ export default function BoltNavbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#002147] border-b border-white/15 shadow-xl backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full bg-brand-primary border-b border-white/15 shadow-xl backdrop-blur-md">
       <nav
         className="w-full max-w-[1700px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4"
         aria-label="BOLT 3.0 Navigation"
@@ -46,7 +47,7 @@ export default function BoltNavbar() {
               href={link.href}
               className="text-sm font-semibold text-white/85 hover:text-[#CCFF00] px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all"
             >
-              {link.label}
+              <E f="c.BoltNavbar">{link.label}</E>
             </Link>
           ))}
         </div>
@@ -83,11 +84,9 @@ export default function BoltNavbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden bg-[#001733] border-t border-[#CCFF00]/30 px-6 py-5 shadow-2xl space-y-3">
+        <div className="lg:hidden bg-brand-primary-dark border-t border-[#CCFF00]/30 px-6 py-5 shadow-2xl space-y-3">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#CCFF00]">
-              BOLT 3.0 Hackathon Navigation
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#CCFF00]"><E f="c.BoltNavbar">{"BOLT 3.0 Hackathon Navigation"}</E></span>
           </div>
 
           <div className="flex flex-col gap-1">
@@ -98,7 +97,7 @@ export default function BoltNavbar() {
                 onClick={() => setMobileOpen(false)}
                 className="py-2.5 px-3 rounded-lg text-sm font-semibold text-white hover:text-[#CCFF00] hover:bg-white/10"
               >
-                {link.label}
+                <E f="c.BoltNavbar">{link.label}</E>
               </Link>
             ))}
           </div>
@@ -107,10 +106,10 @@ export default function BoltNavbar() {
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className="w-full py-3 px-4 rounded-xl bg-[#004B87] text-white font-bold text-sm flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 rounded-xl bg-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2"
             >
               <ArrowLeft className="w-4 h-4 text-[#CCFF00]" />
-              <span>Back to ic-ETITE&apos;28 Home</span>
+              <span><E f="c.BoltNavbar">{"Back to ic-ETITE'28 Home"}</E></span>
             </Link>
           </div>
         </div>

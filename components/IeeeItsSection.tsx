@@ -1,6 +1,7 @@
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { conferenceData } from "@/data/conference";
 import { Network, Sparkles, Binary, ExternalLink, Lightbulb } from "lucide-react";
+import E from "@/components/cms/E";
 
 export default function IeeeItsSection() {
   const { ieeeItsInfo } = conferenceData;
@@ -23,23 +24,17 @@ export default function IeeeItsSection() {
                 />
               </div>
 
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#004B87] font-semibold">
-                IEEE Student Branch Chapter
-              </span>
-              <h3 className="text-base font-bold text-[#1a1714] mt-1">
-                IEEE Information Theory Society, VIT
-              </h3>
-              <p className="text-xs text-[#6b6560] mt-1">
-                Vellore Institute of Technology, Vellore, India
-              </p>
+              <span className="text-[10px] font-mono tracking-widest uppercase text-brand-secondary font-semibold"><E f="c.IeeeItsSection">{"IEEE Student Branch Chapter"}</E></span>
+              <h3 className="text-base font-bold text-[#1a1714] mt-1"><E f="c.IeeeItsSection">{"IEEE Information Theory Society, VIT"}</E></h3>
+              <p className="text-xs text-[#6b6560] mt-1"><E f="c.IeeeItsSection">{"Vellore Institute of Technology, Vellore, India"}</E></p>
 
               <a
                 href="https://ieee-its-vit.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#004B87] hover:underline transition-colors"
+                className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-secondary hover:underline transition-colors"
               >
-                <span>Visit Chapter Portal</span>
+                <span><E f="c.IeeeItsSection">{"Visit Chapter Portal"}</E></span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -48,33 +43,27 @@ export default function IeeeItsSection() {
             <div className="lg:col-span-8 flex flex-col space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-6 h-px bg-[#137547]" />
-                <span className="font-mono text-[11px] tracking-widest uppercase text-[#137547]">
-                  Organizing Student Chapter
-                </span>
+                <span className="font-mono text-[11px] tracking-widest uppercase text-[#137547]"><E f="c.IeeeItsSection">{"Organizing Student Chapter"}</E></span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1714] tracking-tight">
-                Pioneering Foundations in Information Theory & Scientific Innovation
-              </h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1714] tracking-tight"><E f="c.IeeeItsSection">{"Pioneering Foundations in Information Theory & Scientific Innovation"}</E></h2>
 
               <p className="text-sm sm:text-base text-[#6b6560] leading-relaxed">
-                {ieeeItsInfo.description}
+                <E f="c.IeeeItsSection">{ieeeItsInfo.description}</E>
               </p>
 
               <p className="text-sm text-[#6b6560] leading-relaxed">
-                {ieeeItsInfo.mission}
+                <E f="c.IeeeItsSection">{ieeeItsInfo.mission}</E>
               </p>
 
               {/* Pillars list */}
               <div className="pt-2">
-                <p className="font-mono text-[10px] tracking-widest uppercase text-[#9c968f] mb-3">
-                  Core Scientific Activities:
-                </p>
+                <p className="font-mono text-[10px] tracking-widest uppercase text-[#9c968f] mb-3"><E f="c.IeeeItsSection">{"Core Scientific Activities:"}</E></p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#1a1714]">
                   {ieeeItsInfo.pillars.map((pillar) => (
                     <div key={pillar} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-[#e8e4dc]">
                       <Lightbulb className="w-3.5 h-3.5 text-[#137547] shrink-0" />
-                      <span className="font-medium">{pillar}</span>
+                      <span className="font-medium"><E f="c.IeeeItsSection">{pillar}</E></span>
                     </div>
                   ))}
                 </div>

@@ -5,12 +5,12 @@ import { CheckCircle2, AlertCircle } from "lucide-react";
 // Shared building blocks for the portal (login, dashboard, evaluator and admin pages).
 
 export const inputCls =
-  "w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-slate-400 focus:border-[#004B87] focus:outline-none focus:ring-2 focus:ring-[#004B87]/20 disabled:bg-slate-100";
+  "w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-slate-400 focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 disabled:bg-slate-100";
 export const labelCls = "block text-sm font-semibold text-slate-700 mb-1.5";
 export const btnPrimary =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-[#002147] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#003366] disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-primary-hover disabled:opacity-60";
 export const btnGold =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-[#FFB81C] px-5 py-2.5 text-sm font-bold text-[#002147] shadow-sm transition hover:bg-[#F5A623] disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-brand-accent px-5 py-2.5 text-sm font-bold text-brand-primary shadow-sm transition hover:bg-brand-accent-dark disabled:opacity-60";
 export const btnSecondary =
   "inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-60";
 export const btnDanger =
@@ -34,7 +34,7 @@ export function PortalPage({
       <div className={`${width} mx-auto px-4 sm:px-6 py-8 sm:py-10`}>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#002147] tracking-tight">{title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">{title}</h1>
             {subtitle && <div className="mt-1 text-slate-600 text-[15px]">{subtitle}</div>}
           </div>
           {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
@@ -50,7 +50,7 @@ export function Card({ title, actions, children, className = "" }: { title?: Rea
     <section className={`rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm ${className}`}>
       {(title || actions) && (
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          {title && <h2 className="text-lg font-bold text-[#002147]">{title}</h2>}
+          {title && <h2 className="text-lg font-bold text-brand-primary">{title}</h2>}
           {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
         </div>
       )}
@@ -92,7 +92,7 @@ const BADGE_TONES: Record<string, string> = {
   red: "bg-red-50 text-red-700 border-red-200",
   blue: "bg-sky-50 text-sky-800 border-sky-200",
   slate: "bg-slate-100 text-slate-700 border-slate-200",
-  navy: "bg-[#002147] text-white border-[#002147]",
+  navy: "bg-brand-primary text-white border-brand-primary",
 };
 
 export function Badge({ tone = "slate", children }: { tone?: keyof typeof BADGE_TONES; children: ReactNode }) {
@@ -160,7 +160,7 @@ export function Tabs({ items, active }: { items: { href: string; label: string; 
           key={t.key}
           href={t.href}
           className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-semibold transition ${
-            t.key === active ? "bg-[#002147] text-white" : "text-slate-600 hover:bg-slate-100"
+            t.key === active ? "bg-brand-primary text-white" : "text-slate-600 hover:bg-slate-100"
           }`}
         >
           {t.label}
@@ -174,7 +174,7 @@ export function Stat({ label, value, hint }: { label: string; value: ReactNode; 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</div>
-      <div className="mt-1 text-2xl font-extrabold text-[#002147]">{value}</div>
+      <div className="mt-1 text-2xl font-extrabold text-brand-primary">{value}</div>
       {hint && <div className="mt-0.5 text-xs text-slate-500">{hint}</div>}
     </div>
   );

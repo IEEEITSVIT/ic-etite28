@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import {
   Camera,
   Maximize2,
@@ -16,6 +16,7 @@ import {
   Layers,
 } from "lucide-react";
 import { ICETITE24_PHOTOS, Icetite24Photo } from "@/data/icetite24GalleryData";
+import E from "@/components/cms/E";
 
 type CategoryFilter = "all" | "dais" | "hackathon" | "expo" | "networking" | "keynote";
 
@@ -95,11 +96,11 @@ export default function Icetite24FullGallery() {
               onClick={() => setSelectedCategory(cat.id as CategoryFilter)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 selectedCategory === cat.id
-                  ? "bg-[#002147] text-white shadow-sm"
-                  : "bg-slate-100 text-slate-600 hover:text-[#002147] hover:bg-slate-200"
+                  ? "bg-brand-primary text-white shadow-sm"
+                  : "bg-slate-100 text-slate-600 hover:text-brand-primary hover:bg-slate-200"
               }`}
             >
-              {cat.label}
+              <E f="c.Icetite24FullGallery">{cat.label}</E>
             </button>
           ))}
         </div>
@@ -112,7 +113,7 @@ export default function Icetite24FullGallery() {
             placeholder="Search moments, topics..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-2 rounded-xl text-xs bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#004B87] focus:bg-white text-slate-800 transition-all"
+            className="w-full pl-9 pr-8 py-2 rounded-xl text-xs bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-secondary focus:bg-white text-slate-800 transition-all"
           />
           {searchQuery && (
             <button
@@ -129,17 +130,15 @@ export default function Icetite24FullGallery() {
       {filteredPhotos.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
           <Camera className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-700">No matching photographs found</h3>
-          <p className="text-xs text-slate-500 mt-1">Try resetting the filter or search query</p>
+          <h3 className="text-base font-bold text-slate-700"><E f="c.Icetite24FullGallery">{"No matching photographs found"}</E></h3>
+          <p className="text-xs text-slate-500 mt-1"><E f="c.Icetite24FullGallery">{"Try resetting the filter or search query"}</E></p>
           <button
             onClick={() => {
               setSelectedCategory("all");
               setSearchQuery("");
             }}
-            className="mt-4 px-4 py-2 rounded-xl bg-[#002147] text-white text-xs font-bold hover:bg-[#003366] transition-colors"
-          >
-            Reset Filters
-          </button>
+            className="mt-4 px-4 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold hover:bg-brand-primary-hover transition-colors"
+          ><E f="c.Icetite24FullGallery">{"Reset Filters"}</E></button>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -147,7 +146,7 @@ export default function Icetite24FullGallery() {
             <div
               key={photo.id}
               onClick={() => openLightbox(photo)}
-              className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:border-[#004B87] hover:-translate-y-1"
+              className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:border-brand-secondary hover:-translate-y-1"
             >
               {/* Photo Box with 3:2 Ratio */}
               <div className="relative aspect-[3/2] w-full overflow-hidden bg-slate-100">
@@ -164,9 +163,9 @@ export default function Icetite24FullGallery() {
                 {/* Badge Tag */}
                 {photo.badge && (
                   <div className="absolute top-3 left-3 z-10">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#00142E]/85 backdrop-blur-md text-[#38BDF8] text-[10.5px] font-bold border border-white/20 tracking-wide">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-brand-primary-dark/85 backdrop-blur-md text-[#38BDF8] text-[10.5px] font-bold border border-white/20 tracking-wide">
                       <Sparkles className="w-2.5 h-2.5 text-[#38BDF8]" />
-                      {photo.badge}
+                      <E f="c.Icetite24FullGallery">{photo.badge}</E>
                     </span>
                   </div>
                 )}
@@ -181,10 +180,10 @@ export default function Icetite24FullGallery() {
                 {/* Bottom Overlay Info on Image */}
                 <div className="absolute inset-x-0 bottom-0 p-4 z-10 text-white">
                   <span className="text-[10px] font-bold tracking-wider uppercase text-sky-300 drop-shadow-sm block mb-0.5">
-                    {photo.categoryLabel}
+                    <E f="c.Icetite24FullGallery">{photo.categoryLabel}</E>
                   </span>
                   <h3 className="font-bold text-sm sm:text-base text-white leading-snug drop-shadow-md group-hover:text-sky-200 transition-colors line-clamp-1">
-                    {photo.title}
+                    <E f="c.Icetite24FullGallery">{photo.title}</E>
                   </h3>
                 </div>
               </div>
@@ -192,17 +191,15 @@ export default function Icetite24FullGallery() {
               {/* Card Footer Details */}
               <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
                 <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed mb-4">
-                  {photo.caption}
+                  <E f="c.Icetite24FullGallery">{photo.caption}</E>
                 </p>
 
                 <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
                   <span className="inline-flex items-center gap-1.5 truncate max-w-[210px]">
-                    <MapPin className="w-3.5 h-3.5 text-[#004B87] shrink-0" />
-                    <span className="truncate">{photo.location}</span>
+                    <MapPin className="w-3.5 h-3.5 text-brand-secondary shrink-0" />
+                    <span className="truncate"><E f="c.Icetite24FullGallery">{photo.location}</E></span>
                   </span>
-                  <span className="text-[#004B87] font-bold group-hover:translate-x-0.5 transition-transform shrink-0">
-                    Enlarge &rarr;
-                  </span>
+                  <span className="text-brand-secondary font-bold group-hover:translate-x-0.5 transition-transform shrink-0"><E f="c.Icetite24FullGallery">{"Enlarge →"}</E></span>
                 </div>
               </div>
             </div>
@@ -217,17 +214,17 @@ export default function Icetite24FullGallery() {
           onClick={closeLightbox}
         >
           <div
-            className="relative max-w-5xl w-full bg-[#00142E] rounded-2xl overflow-hidden border border-white/20 shadow-2xl flex flex-col max-h-[94vh]"
+            className="relative max-w-5xl w-full bg-brand-primary-dark rounded-2xl overflow-hidden border border-white/20 shadow-2xl flex flex-col max-h-[94vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-black/50 text-white">
               <div className="flex items-center gap-2.5 truncate">
-                <span className="bg-[#00A3FF] text-[#00142E] text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0">
-                  {activePhoto.edition}
+                <span className="bg-[#00A3FF] text-brand-primary-dark text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0">
+                  <E f="c.Icetite24FullGallery">{activePhoto.edition}</E>
                 </span>
                 <span className="text-white/80 text-xs sm:text-sm truncate font-medium">
-                  {activePhoto.title}
+                  <E f="c.Icetite24FullGallery">{activePhoto.title}</E>
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -281,21 +278,19 @@ export default function Icetite24FullGallery() {
             <div className="p-5 bg-[#001838] border-t border-white/10 text-white">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                 <h4 className="font-bold text-base sm:text-lg text-white">
-                  {activePhoto.title}
+                  <E f="c.Icetite24FullGallery">{activePhoto.title}</E>
                 </h4>
                 <div className="flex items-center gap-3 text-xs text-white/70">
                   <span className="flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-[#00A3FF]" />
-                    {activePhoto.location}
+                    <E f="c.Icetite24FullGallery">{activePhoto.location}</E>
                   </span>
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#00A3FF]" />
-                    22–23 Feb 2024
-                  </span>
+                    <Calendar className="w-3.5 h-3.5 text-[#00A3FF]" /><E f="c.Icetite24FullGallery">{"22–23 Feb 2024"}</E></span>
                 </div>
               </div>
               <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
-                {activePhoto.caption}
+                <E f="c.Icetite24FullGallery">{activePhoto.caption}</E>
               </p>
             </div>
           </div>

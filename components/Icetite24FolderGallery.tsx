@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import {
   FOLDER_GALLERY_CATEGORIES,
   FOLDER_GALLERY_PHOTOS,
   type FolderGalleryPhoto,
 } from "@/data/icetite24FolderGalleryData";
 import { getIcetite24PhotoTitle } from "@/data/icetite24PhotoTitles";
+import E from "@/components/cms/E";
 
 export default function Icetite24FolderGallery() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -83,23 +84,14 @@ export default function Icetite24FolderGallery() {
 
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-8 text-center">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.25em] text-blue-600">
-            IC-ETITE’24 Memories
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Conference Photo Gallery
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-gray-600">
-            Explore moments from the inaugural ceremony, technical sessions,
-            keynote talks, hackathon, panel discussions, dinner and valedictory.
-          </p>
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.25em] text-blue-600"><E f="c.Icetite24FolderGallery">{"IC-ETITE’24 Memories"}</E></p>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"><E f="c.Icetite24FolderGallery">{"Conference Photo Gallery"}</E></h2>
+          <p className="mx-auto mt-3 max-w-2xl text-gray-600"><E f="c.Icetite24FolderGallery">{"Explore moments from the inaugural ceremony, technical sessions, keynote talks, hackathon, panel discussions, dinner and valedictory."}</E></p>
         </div>
 
         <div className="mb-5 mt-4 flex justify-center sm:justify-end">
           <div className="relative w-full max-w-xs">
-            <label htmlFor="gallery-search" className="sr-only">
-              Search photos
-            </label>
+            <label htmlFor="gallery-search" className="sr-only"><E f="c.Icetite24FolderGallery">{"Search photos"}</E></label>
             <input
               id="gallery-search"
               type="search"
@@ -108,9 +100,7 @@ export default function Icetite24FolderGallery() {
               placeholder="Search moments..."
               className="w-full rounded-full border border-slate-200 bg-white/90 py-2.5 pl-4 pr-10 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
-              ⌕
-            </span>
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"><E f="c.Icetite24FolderGallery">{"⌕"}</E></span>
           </div>
         </div>
 
@@ -123,9 +113,7 @@ export default function Icetite24FolderGallery() {
               ? "bg-blue-700 text-white shadow"
               : "border border-slate-200 bg-white/80 text-slate-700 shadow-sm hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800"
           }`}
-        >
-          All Photos
-        </button>
+        ><E f="c.Icetite24FolderGallery">{"All Photos"}</E></button>
 
         {FOLDER_GALLERY_CATEGORIES.map((category) => (
           <button
@@ -138,7 +126,7 @@ export default function Icetite24FolderGallery() {
                 : "border border-slate-200 bg-white/80 text-slate-700 shadow-sm hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800"
             }`}
           >
-            {category.label}
+            <E f="c.Icetite24FolderGallery">{category.label}</E>
           </button>
         ))}
       </div>
@@ -169,16 +157,13 @@ export default function Icetite24FolderGallery() {
                     (category) => category.slug === photo.category,
                   )?.label ?? photo.category}
                 </span>
-                <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/20 text-white opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-hover:opacity-100">
-                  ↗
-                </span>
+                <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/20 text-white opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-hover:opacity-100"><E f="c.Icetite24FolderGallery">{"↗"}</E></span>
               </div>
               <div className="min-h-[100px] p-5">
                 <h3 className="line-clamp-2 text-base font-semibold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-blue-800">
                   {getIcetite24PhotoTitle(photo.src, photo.title)}
                 </h3>
-                <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors group-hover:text-blue-700">
-                  View photo <span aria-hidden="true">↗</span>
+                <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors group-hover:text-blue-700"><E f="c.Icetite24FolderGallery">{"View photo "}</E><span aria-hidden="true"><E f="c.Icetite24FolderGallery">{"↗"}</E></span>
                 </p>
               </div>
             </button>
@@ -186,10 +171,8 @@ export default function Icetite24FolderGallery() {
         </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-gray-300 px-6 py-16 text-center">
-          <p className="text-lg font-semibold text-gray-800">No photos found</p>
-          <p className="mt-2 text-gray-600">
-            Try another search or choose a different category.
-          </p>
+          <p className="text-lg font-semibold text-gray-800"><E f="c.Icetite24FolderGallery">{"No photos found"}</E></p>
+          <p className="mt-2 text-gray-600"><E f="c.Icetite24FolderGallery">{"Try another search or choose a different category."}</E></p>
           <button
             type="button"
             onClick={() => {
@@ -197,9 +180,7 @@ export default function Icetite24FolderGallery() {
               setActiveCategory("all");
             }}
             className="mt-4 rounded-full bg-blue-700 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800"
-          >
-            Clear filters
-          </button>
+          ><E f="c.Icetite24FolderGallery">{"Clear filters"}</E></button>
         </div>
       )}
 
@@ -211,9 +192,7 @@ export default function Icetite24FolderGallery() {
               setVisiblePhotoCount((count) => count + 12)
             }
             className="rounded-full bg-blue-700 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-blue-800"
-          >
-            Load more photos
-          </button>
+          ><E f="c.Icetite24FolderGallery">{"Load more photos"}</E></button>
         </div>
       )}
 
@@ -230,9 +209,7 @@ export default function Icetite24FolderGallery() {
             onClick={closeLightbox}
             aria-label="Close photo viewer"
             className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25"
-          >
-            ×
-          </button>
+          ><E f="c.Icetite24FolderGallery">{"×"}</E></button>
 
           <button
             type="button"
@@ -242,9 +219,7 @@ export default function Icetite24FolderGallery() {
             }}
             aria-label="Previous photo"
             className="absolute left-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-6"
-          >
-            ‹
-          </button>
+          ><E f="c.Icetite24FolderGallery">{"‹"}</E></button>
 
           <div
             className="flex max-h-full w-full max-w-6xl flex-col items-center"
@@ -278,9 +253,7 @@ export default function Icetite24FolderGallery() {
             }}
             aria-label="Next photo"
             className="absolute right-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-6"
-          >
-            ›
-          </button>
+          ><E f="c.Icetite24FolderGallery">{"›"}</E></button>
         </div>
       )}
       </div>

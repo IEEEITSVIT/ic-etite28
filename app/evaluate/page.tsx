@@ -37,7 +37,7 @@ export default async function EvaluatePage({ searchParams }: { searchParams: Pro
           {events.map((e) => (
             <Link key={e.id} href={`/evaluate/${e.id}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md">
               <div>
-                <div className="text-lg font-extrabold text-[#002147]">{e.title}</div>
+                <div className="text-lg font-extrabold text-brand-primary">{e.title}</div>
                 <div className="mt-1 flex items-center gap-2 text-sm text-slate-500">
                   {e.teams} {e.participation === "team" ? "teams" : "participants"} <StatusBadge status={e.visibility} />
                 </div>

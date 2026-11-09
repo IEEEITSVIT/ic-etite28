@@ -14,6 +14,16 @@ Accounts, admin CMS, events (BOLT), evaluation, emails, certificates, TechNext s
 
 Schema: `db/migrations/0001_init.sql`.
 
+## Editing the website (CMS)
+
+Everything public is editable by admins, without code:
+
+- **Any text or image, in place** — log in as admin, open any page and click **Edit page** (bottom-left). Click a text to rewrite it (Enter saves, Esc cancels); the toolbar changes its size, colour or boldness, hides it, or restores the original. Click an image to upload a replacement. Edits are live immediately for everyone. Admin → *Page content* lists every edit with reset buttons.
+- **Appearance** — Site content → *Appearance*: the ten theme colours (primary, accent, text, backgrounds, borders…), heading and body fonts (9 Google fonts) and overall text size, with a live preview and “Reset to original”.
+- **Structured content** — Site content: important dates and countdown, fees and early bird, deadlines, prizes, visibility of BOLT/TechNext, the announcement bar, sponsorship packages, invoice template, payment links; Admin → *Hotels*; events, rounds and certificates in their own sections.
+
+How it works: `scripts/cms-codemod.mjs` wraps page text in `<E>` and swaps `next/image` for `components/cms/EImage`, which read overrides (`texts`, `images` settings) and become editable in edit mode. Run it again after adding new pages or components (`node scripts/cms-codemod.mjs`). Theme colours are CSS variables used through Tailwind `brand-*` classes.
+
 ## Roles and URLs
 
 | Who | URL | What |

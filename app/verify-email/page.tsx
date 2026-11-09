@@ -40,7 +40,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
             className={`${inputCls} text-center text-2xl font-bold tracking-[0.5em]`}
           />
         </Field>
-        <SubmitButton pendingText="Verifying…" className="w-full rounded-full bg-[#002147] px-5 py-3 text-sm font-bold text-white hover:bg-[#003366] disabled:opacity-60">
+        <SubmitButton pendingText="Verifying…" className="w-full rounded-full bg-brand-primary px-5 py-3 text-sm font-bold text-white hover:bg-brand-primary-hover disabled:opacity-60">
           Verify email
         </SubmitButton>
       </form>

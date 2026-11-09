@@ -62,7 +62,7 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
       {b && (
         <Card className="mb-6">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-bold text-[#002147]">{b.organization_name}</span>
+            <span className="font-bold text-brand-primary">{b.organization_name}</span>
             <StatusBadge status={b.status} />
             <StatusBadge status={b.payment_status} />
           </div>
@@ -74,7 +74,7 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
       {!b && open && (isEarlyBird(eb) || settings.technext.closesAt) && (
         <div className="mb-6 flex flex-wrap gap-2 text-xs font-bold">
           {isEarlyBird(eb) && <span className="rounded-full bg-emerald-600 px-3 py-1.5 text-white">Early-bird prices until {formatDeadline(eb.endsAt)}</span>}
-          {settings.technext.closesAt && <span className="rounded-full bg-[#002147] px-3 py-1.5 text-white">Booking deadline: {formatDeadline(settings.technext.closesAt)}</span>}
+          {settings.technext.closesAt && <span className="rounded-full bg-brand-primary px-3 py-1.5 text-white">Booking deadline: {formatDeadline(settings.technext.closesAt)}</span>}
         </div>
       )}
       {!editable && !b ? (
@@ -93,10 +93,10 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
                 <span className="mb-2 block text-sm font-semibold text-slate-700">Stall type</span>
                 <div className="grid gap-3 sm:grid-cols-3">
                   {settings.technext.stallTypes.map((s, i) => (
-                    <label key={s.key} className="flex cursor-pointer flex-col gap-1 rounded-xl border border-slate-200 p-4 has-[:checked]:border-[#002147] has-[:checked]:ring-2 has-[:checked]:ring-[#002147]/15">
+                    <label key={s.key} className="flex cursor-pointer flex-col gap-1 rounded-xl border border-slate-200 p-4 has-[:checked]:border-brand-primary has-[:checked]:ring-2 has-[:checked]:ring-brand-primary/15">
                       <span className="flex items-center gap-2">
-                        <input type="radio" name="stall_type" value={s.key} required defaultChecked={b ? b.stall_type === s.key : i === 0} className="accent-[#002147]" />
-                        <span className="font-bold text-[#002147]">{s.label}</span>
+                        <input type="radio" name="stall_type" value={s.key} required defaultChecked={b ? b.stall_type === s.key : i === 0} className="accent-brand-primary" />
+                        <span className="font-bold text-brand-primary">{s.label}</span>
                       </span>
                       <span className="text-xs text-slate-500">
                         {s.size} · {s.description}
@@ -165,7 +165,7 @@ export default async function TechnextRegisterPage({ searchParams }: { searchPar
                 </Field>
                 <div className="space-y-4">
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <input type="checkbox" name="power_required" defaultChecked={b ? b.power_required === 1 : true} className="h-4 w-4 accent-[#002147]" /> Power supply required
+                    <input type="checkbox" name="power_required" defaultChecked={b ? b.power_required === 1 : true} className="h-4 w-4 accent-brand-primary" /> Power supply required
                   </label>
                   <Field label="GSTIN (optional, for invoice)">
                     <input name="gst_number" maxLength={15} defaultValue={b?.gst_number ?? ""} className={`${inputCls} uppercase`} />

@@ -26,7 +26,7 @@ export default async function EventsPage() {
             return (
               <Link key={e.id} href={`/events/${e.slug}`} className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                 <div className="mb-2 flex items-center justify-between gap-3">
-                  <h2 className="text-xl font-extrabold text-[#002147] group-hover:text-[#004B87]">{e.title}</h2>
+                  <h2 className="text-xl font-extrabold text-brand-primary group-hover:text-brand-secondary">{e.title}</h2>
                   <StatusBadge status={w === "open" ? "registration open" : w === "not_open" ? "opens soon" : "closed"} />
                 </div>
                 {e.tagline && <p className="mb-4 text-slate-600">{e.tagline}</p>}

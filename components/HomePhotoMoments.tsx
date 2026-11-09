@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import {
   X,
   Maximize2,
@@ -13,6 +13,7 @@ import {
   type Icetite24Photo,
 } from "@/data/icetite24GalleryData";
 import { ICETITE24_MAIN_PHOTOS } from "@/data/icetite24MainPhotos";
+import E from "@/components/cms/E";
 
 type HomeMomentPhoto = Pick<
   Icetite24Photo,
@@ -95,7 +96,7 @@ export default function HomePhotoMoments({
   };
 
   return (
-    <section className="bg-gradient-to-b from-[#FAFBFD] via-white to-[#FAFBFD] border-b border-[#E2E8F0] py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-gradient-to-b from-brand-surface via-white to-brand-surface border-b border-brand-border py-16 md:py-24 relative overflow-hidden">
       {/* Decorative ambient background glows */}
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[300px] bg-sky-200/20 blur-[130px] rounded-full pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[300px] bg-amber-100/30 blur-[130px] rounded-full pointer-events-none" />
@@ -105,9 +106,7 @@ export default function HomePhotoMoments({
         {/* Optional Section Heading */}
         {showHeading && (
           <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 px-4">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147]">
-              Moments from ic-ETITE&apos;24
-            </h2>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-primary"><E f="c.HomePhotoMoments">{"Moments from ic-ETITE'24"}</E></h2>
           </div>
         )}
 
@@ -115,8 +114,8 @@ export default function HomePhotoMoments({
         <div className="relative w-full overflow-hidden py-6 group/track">
 
           {/* Left and right edge fades */}
-          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAFBFD] via-[#FAFBFD]/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-brand-surface via-brand-surface/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-brand-surface via-brand-surface/80 to-transparent z-20 pointer-events-none" />
 
           {/* Left arrow: reverse the marquee direction */}
           <button
@@ -217,15 +216,15 @@ export default function HomePhotoMoments({
             {/* Photo Caption Footer */}
             <div className="p-4 sm:p-5 bg-slate-900 border-t border-white/10 text-white">
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FFB81C] text-[#002147] text-[11px] font-bold uppercase tracking-wider">
-                  {activePhoto.badge}
+                <span className="px-2.5 py-0.5 rounded-full bg-brand-accent text-brand-primary text-[11px] font-bold uppercase tracking-wider">
+                  <E f="c.HomePhotoMoments">{activePhoto.badge}</E>
                 </span>
                 <h3 className="font-semibold text-sm sm:text-base text-white">
-                  {activePhoto.title}
+                  <E f="c.HomePhotoMoments">{activePhoto.title}</E>
                 </h3>
               </div>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {activePhoto.caption}
+                <E f="c.HomePhotoMoments">{activePhoto.caption}</E>
               </p>
             </div>
           </div>

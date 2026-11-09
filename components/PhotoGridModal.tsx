@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/cms/EImage";
 import { PhotoItem } from "@/data/photos";
 import { X, ChevronLeft, ChevronRight, ZoomIn, Camera } from "lucide-react";
+import E from "@/components/cms/E";
 
 interface PhotoGridModalProps {
   photos: PhotoItem[];
@@ -38,18 +39,18 @@ export default function PhotoGridModal({ photos, title, subtitle, theme = "light
             className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold mb-2 uppercase tracking-wider ${
               isDark
                 ? "bg-white/10 border border-white/20 text-[#CCFF00]"
-                : "bg-[#EBF3F8] border border-[#004B87]/30 text-[#004B87]"
+                : "bg-[#EBF3F8] border border-brand-secondary/30 text-brand-secondary"
             }`}
           >
-            <Camera className={`w-3.5 h-3.5 ${isDark ? "text-[#CCFF00]" : "text-[#004B87]"}`} />
-            <span>Official Photo Archive</span>
+            <Camera className={`w-3.5 h-3.5 ${isDark ? "text-[#CCFF00]" : "text-brand-secondary"}`} />
+            <span><E f="c.PhotoGridModal">{"Official Photo Archive"}</E></span>
           </div>
           <h2
             className={`text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight ${
-              isDark ? "text-white" : "text-[#002147]"
+              isDark ? "text-white" : "text-brand-primary"
             }`}
           >
-            {title}
+            <E f="c.PhotoGridModal">{title}</E>
           </h2>
           {subtitle && (
             <p
@@ -57,7 +58,7 @@ export default function PhotoGridModal({ photos, title, subtitle, theme = "light
                 isDark ? "text-white/80" : "text-slate-600"
               }`}
             >
-              {subtitle}
+              <E f="c.PhotoGridModal">{subtitle}</E>
             </p>
           )}
         </div>
@@ -69,7 +70,7 @@ export default function PhotoGridModal({ photos, title, subtitle, theme = "light
           <div
             key={item.id}
             onClick={() => openModal(idx)}
-            className="group relative rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-200 hover:border-[#004B87] shadow-sm hover:shadow-lg transition-all cursor-pointer aspect-[4/3]"
+            className="group relative rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-200 hover:border-brand-secondary shadow-sm hover:shadow-lg transition-all cursor-pointer aspect-[4/3]"
           >
             <Image
               src={item.src}
@@ -103,8 +104,7 @@ export default function PhotoGridModal({ photos, title, subtitle, theme = "light
           >
             {/* Top Close Bar */}
             <div className="w-full flex items-center justify-between pb-3 text-white">
-              <div className="text-xs sm:text-sm font-medium text-white/80">
-                Photo {selectedIndex + 1} of {photos.length}
+              <div className="text-xs sm:text-sm font-medium text-white/80"><E f="c.PhotoGridModal">{"Photo "}</E>{selectedIndex + 1}<E f="c.PhotoGridModal">{" of "}</E><E f="c.PhotoGridModal">{photos.length}</E>
               </div>
               <button
                 onClick={closeModal}

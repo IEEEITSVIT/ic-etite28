@@ -86,7 +86,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
       <Flash ok={ok} error={error} />
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Conference registration */}
-        <Card title={<span className="flex items-center gap-2"><Ticket className="h-5 w-5 text-[#004B87]" /> ic-ETITE&apos;28 registration</span>}>
+        <Card title={<span className="flex items-center gap-2"><Ticket className="h-5 w-5 text-brand-secondary" /> ic-ETITE&apos;28 registration</span>}>
           {conference ? (
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
@@ -101,7 +101,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
                 status={conference.payment_status}
                 back="/dashboard"
               />
-              <Link href="/registration/apply" className="text-sm font-semibold text-[#004B87] hover:underline">
+              <Link href="/registration/apply" className="text-sm font-semibold text-brand-secondary hover:underline">
                 View or edit registration
               </Link>
             </div>
@@ -137,7 +137,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
                     back="/dashboard"
                   />
                 )}
-                <Link href="/technext/register" className="text-sm font-semibold text-[#004B87] hover:underline">
+                <Link href="/technext/register" className="text-sm font-semibold text-brand-secondary hover:underline">
                   View or edit booking
                 </Link>
               </div>
@@ -163,7 +163,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
               {myEvents.map((e) => (
                 <li key={e.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <div>
-                    <Link href={`/events/${e.slug}`} className="font-bold text-[#002147] hover:underline">
+                    <Link href={`/events/${e.slug}`} className="font-bold text-brand-primary hover:underline">
                       {e.title}
                     </Link>
                     <div className="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-slate-600">
@@ -198,7 +198,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: SP
               {invoices.map((inv) => (
                 <li key={inv.id} className="flex flex-wrap items-center justify-between gap-3 py-2.5">
                   <div>
-                    <div className="font-mono text-sm font-bold text-[#002147]">{inv.number}</div>
+                    <div className="font-mono text-sm font-bold text-brand-primary">{inv.number}</div>
                     <div className="text-xs text-slate-500">
                       {(JSON.parse(inv.items) as { description: string }[]).map((i) => i.description).join("; ")} · {formatMoney(inv.amount, inv.currency)}
                     </div>

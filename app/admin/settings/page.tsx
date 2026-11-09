@@ -11,6 +11,9 @@ import {
   saveVisibilityAction,
 } from "@/app/actions/admin-settings";
 import { EarlyBirdFields, PrizeFields } from "@/components/admin/CmsFields";
+import AppearanceEditor from "@/components/admin/AppearanceEditor";
+import { FONT_OPTIONS } from "@/lib/fonts";
+import { THEME_COLORS } from "@/lib/settings";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Card, Field, Flash, PortalPage, inputCls } from "@/components/portal/ui";
 
@@ -20,7 +23,7 @@ const BLANK_ROWS = 2;
 function Toggle({ name, label, hint, checked }: { name: string; label: string; hint: string; checked: boolean }) {
   return (
     <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
-      <input type="checkbox" name={name} defaultChecked={checked} className="mt-1 h-4 w-4 accent-[#002147]" />
+      <input type="checkbox" name={name} defaultChecked={checked} className="mt-1 h-4 w-4 accent-brand-primary" />
       <span>
         <span className="block font-semibold text-slate-800">{label}</span>
         <span className="block text-sm text-slate-500">{hint}</span>
@@ -47,6 +50,17 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
     >
       <Flash ok={ok} error={error} />
       <div className="space-y-6">
+        <Card title="Appearance: colours, fonts and text size">
+          <AppearanceEditor
+            colors={s.appearance.colors}
+            meta={THEME_COLORS}
+            fonts={FONT_OPTIONS}
+            bodyFont={s.appearance.bodyFont}
+            headingFont={s.appearance.headingFont}
+            fontScale={s.appearance.fontScale}
+          />
+        </Card>
+
         <Card title="Visibility">
           <form id="visibility" action={saveVisibilityAction} className="space-y-4 scroll-mt-28">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -72,10 +86,10 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
             <input type="hidden" name="tick_count" value={tickRows.length} />
             <div className="flex flex-wrap items-end gap-4">
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                <input type="checkbox" name="enabled" defaultChecked={s.ticker.enabled} className="h-4 w-4 accent-[#002147]" /> Show the bar on the website
+                <input type="checkbox" name="enabled" defaultChecked={s.ticker.enabled} className="h-4 w-4 accent-brand-primary" /> Show the bar on the website
               </label>
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                <input type="checkbox" name="dismissible" defaultChecked={s.ticker.dismissible} className="h-4 w-4 accent-[#002147]" /> Visitors can close it
+                <input type="checkbox" name="dismissible" defaultChecked={s.ticker.dismissible} className="h-4 w-4 accent-brand-primary" /> Visitors can close it
               </label>
               <Field label="Label" className="w-48">
                 <input name="label" defaultValue={s.ticker.label} placeholder="Announcements" className={small} />
@@ -94,7 +108,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                   <input name={`tick_text_${i}`} defaultValue={t?.text ?? ""} placeholder="Announcement text" className={`${small} md:col-span-6`} />
                   <input name={`tick_url_${i}`} defaultValue={t?.url ?? ""} placeholder="Link: /registration or https://…" className={`${small} md:col-span-4`} />
                   <label className="flex items-center gap-1.5 text-sm text-slate-600 md:col-span-1">
-                    <input type="checkbox" name={`tick_new_${i}`} defaultChecked={t?.isNew ?? false} className="accent-[#002147]" /> New
+                    <input type="checkbox" name={`tick_new_${i}`} defaultChecked={t?.isNew ?? false} className="accent-brand-primary" /> New
                   </label>
                   {t && (
                     <label className="flex items-center gap-1.5 text-sm text-red-600 md:col-span-1">
@@ -126,7 +140,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                   <input name={`date_shortlabel_${i}`} defaultValue={d?.shortDate ?? ""} placeholder="Short display (05 Oct 2027)" className={`${small} md:col-span-3`} />
                   <input name={`date_desc_${i}`} defaultValue={d?.description ?? ""} placeholder="Description" className={`${small} md:col-span-6`} />
                   <label className="flex items-center gap-2 text-sm text-slate-600 md:col-span-2">
-                    <input type="checkbox" name={`date_key_${i}`} defaultChecked={d?.isKeyMilestone ?? false} className="accent-[#002147]" /> Key milestone
+                    <input type="checkbox" name={`date_key_${i}`} defaultChecked={d?.isKeyMilestone ?? false} className="accent-brand-primary" /> Key milestone
                   </label>
                   {d && (
                     <label className="flex items-center gap-2 text-sm text-red-600 md:col-span-1">
@@ -169,7 +183,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                   <input name={`fee_eusd_${i}`} inputMode="numeric" defaultValue={f?.earlyUsd ?? ""} placeholder="—" title="Early-bird USD" className={`${small} md:col-span-1`} />
                   <div className="flex flex-wrap gap-3 md:col-span-2">
                     <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                      <input type="checkbox" name={`fee_ieee_${i}`} defaultChecked={f?.isIeeeDiscount ?? false} className="accent-[#002147]" /> IEEE
+                      <input type="checkbox" name={`fee_ieee_${i}`} defaultChecked={f?.isIeeeDiscount ?? false} className="accent-brand-primary" /> IEEE
                     </label>
                     {f && (
                       <label className="flex items-center gap-1.5 text-sm text-red-600">
@@ -278,7 +292,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
                     <option value="bronze">Bronze style</option>
                   </select>
                   <label className="flex items-center gap-1.5 text-sm text-slate-600 md:col-span-2">
-                    <input type="checkbox" name={`pkg_popular_${i}`} defaultChecked={p?.popular ?? false} className="accent-[#002147]" /> Highlight
+                    <input type="checkbox" name={`pkg_popular_${i}`} defaultChecked={p?.popular ?? false} className="accent-brand-primary" /> Highlight
                   </label>
                   {p && (
                     <label className="flex items-center gap-1.5 text-sm text-red-600 md:col-span-1">
@@ -298,7 +312,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
         <Card
           title="Invoice template"
           actions={
-            <a href="/api/admin/invoices/preview" target="_blank" className="text-sm font-semibold text-[#004B87] hover:underline">
+            <a href="/api/admin/invoices/preview" target="_blank" className="text-sm font-semibold text-brand-secondary hover:underline">
               Preview sample invoice →
             </a>
           }

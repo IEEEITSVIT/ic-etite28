@@ -46,7 +46,7 @@ export default function EventForm({ event }: { event?: EventRow }) {
       </div>
 
       <fieldset className="grid gap-4 rounded-2xl border border-slate-200 p-4 md:grid-cols-3">
-        <legend className="px-2 text-sm font-bold text-[#002147]">Access & registration</legend>
+        <legend className="px-2 text-sm font-bold text-brand-primary">Access & registration</legend>
         <Field label="Visibility" hint="Hidden: admins only. Unlisted: anyone with the link.">
           <select name="visibility" defaultValue={event?.visibility ?? "hidden"} className={inputCls}>
             <option value="hidden">Hidden</option>
@@ -88,7 +88,7 @@ export default function EventForm({ event }: { event?: EventRow }) {
       </fieldset>
 
       <fieldset className="space-y-3 rounded-2xl border border-slate-200 p-4">
-        <legend className="px-2 text-sm font-bold text-[#002147]">Default submission fields (up to 6)</legend>
+        <legend className="px-2 text-sm font-bold text-brand-primary">Default submission fields (up to 6)</legend>
         <p className="text-sm text-slate-500">Used by every round unless that round sets its own fields (Rounds &amp; evaluators). Leave a label empty to remove the field.</p>
         {rows.map((f, i) => (
           <div key={i} className="grid gap-2 sm:grid-cols-12 sm:items-center">
@@ -100,14 +100,14 @@ export default function EventForm({ event }: { event?: EventRow }) {
               <option value="long">Long text</option>
             </select>
             <label className="flex items-center gap-2 text-sm text-slate-600 sm:col-span-3">
-              <input type="checkbox" name={`field_required_${i}`} defaultChecked={f?.required ?? false} className="accent-[#002147]" /> Required
+              <input type="checkbox" name={`field_required_${i}`} defaultChecked={f?.required ?? false} className="accent-brand-primary" /> Required
             </label>
           </div>
         ))}
       </fieldset>
 
       <fieldset className="grid gap-4 rounded-2xl border border-slate-200 p-4 md:grid-cols-4">
-        <legend className="px-2 text-sm font-bold text-[#002147]">Fee, payment & results</legend>
+        <legend className="px-2 text-sm font-bold text-brand-primary">Fee, payment & results</legend>
         <Field label="Fee (0 = free)">
           <input name="fee_amount" type="number" min={0} defaultValue={event?.fee_amount ?? 0} className={inputCls} />
         </Field>

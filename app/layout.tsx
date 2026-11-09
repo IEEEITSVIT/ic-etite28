@@ -1,17 +1,50 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { FONT_OPTIONS, fontVariables } from "@/lib/fonts";
+import { THEME_COLORS, type Appearance, type ThemeColorKey } from "@/lib/settings";
 import "./globals.css";
 import AppNavbar from "@/components/AppNavbar";
 import TickerBar from "@/components/TickerBar";
+import CmsProvider from "@/components/cms/CmsProvider";
+import EditBar from "@/components/cms/EditBar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import StartupAnimation from "@/components/StartupAnimation";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { getSettings } from "@/lib/settings";
 
-// Self-hosted at build time: Inter for body text, Plus Jakarta Sans for headings.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
+const CSS_VAR: Record<ThemeColorKey, string> = {
+  primary: "--c-primary",
+  primaryDark: "--c-primary-dark",
+  primaryHover: "--c-primary-hover",
+  secondary: "--c-secondary",
+  accent: "--c-accent",
+  accentDark: "--c-accent-dark",
+  text: "--c-text",
+  muted: "--c-muted",
+  surface: "--c-surface",
+  border: "--c-border",
+};
+
+const hexToRgb = (hex: string) => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return null;
+  const n = parseInt(m[1], 16);
+  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+};
+
+// Admin-chosen theme as CSS variables (colours as RGB triplets so Tailwind opacity works).
+function themeCss(a: Appearance) {
+  const vars: string[] = [];
+  for (const key of Object.keys(THEME_COLORS) as ThemeColorKey[]) {
+    const rgb = hexToRgb(a.colors[key] ?? THEME_COLORS[key].value);
+    if (rgb) vars.push(`${CSS_VAR[key]}: ${rgb};`);
+  }
+  const font = (k: string, fallback: string) => FONT_OPTIONS[k as keyof typeof FONT_OPTIONS]?.cssVar ?? fallback;
+  vars.push(`--font-body: var(${font(a.bodyFont, "--font-inter")});`);
+  vars.push(`--font-heading: var(${font(a.headingFont, "--font-jakarta")});`);
+  vars.push(`--font-scale: ${Math.min(1.25, Math.max(0.85, Number(a.fontScale) || 1))};`);
+  return `:root{${vars.join("")}}`;
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -91,10 +124,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { visibility, ticker } = await getSettings();
+  const { visibility, ticker, appearance, texts, images } = await getSettings();
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head>
+        <style id="theme-vars" dangerouslySetInnerHTML={{ __html: themeCss(appearance) }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -152,15 +186,18 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className="min-h-screen flex flex-col bg-white text-[#101B2E] antialiased"
+        className="min-h-screen flex flex-col bg-white text-brand-text antialiased"
         suppressHydrationWarning
       >
-        <StartupAnimation />
-        <TickerBar ticker={ticker} />
-        <AppNavbar visibility={visibility} />
-        <main className="flex-1">{children}</main>
-        <Footer visibility={visibility} />
-        <BackToTop />
+        <CmsProvider texts={texts} images={images}>
+          <StartupAnimation />
+          <TickerBar ticker={ticker} />
+          <AppNavbar visibility={visibility} />
+          <main className="flex-1">{children}</main>
+          <Footer visibility={visibility} />
+          <BackToTop />
+          <EditBar />
+        </CmsProvider>
       </body>
     </html>
   );

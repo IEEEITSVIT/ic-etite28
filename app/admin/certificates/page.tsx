@@ -30,7 +30,7 @@ export default async function CertificateBatchesPage({ searchParams }: { searchP
               {batches.map((b) => (
                 <tr key={b.id}>
                   <Td>
-                    <div className="font-bold text-[#002147]">{b.title}</div>
+                    <div className="font-bold text-brand-primary">{b.title}</div>
                     {b.event_label && <div className="text-xs text-slate-500">{b.event_label}</div>}
                   </Td>
                   <Td>{b.recipients}</Td>
@@ -40,7 +40,7 @@ export default async function CertificateBatchesPage({ searchParams }: { searchP
                   </Td>
                   <Td className="whitespace-nowrap text-xs">{fmtIst(b.created_at)}</Td>
                   <Td className="text-right">
-                    <Link href={`/admin/certificates/${b.id}`} className="font-semibold text-[#004B87] hover:underline">
+                    <Link href={`/admin/certificates/${b.id}`} className="font-semibold text-brand-secondary hover:underline">
                       Open →
                     </Link>
                   </Td>

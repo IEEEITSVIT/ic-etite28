@@ -18,7 +18,7 @@ export default function AuthShell({
   footer?: ReactNode;
 }) {
   return (
-    <div className="min-h-[75vh] bg-gradient-to-br from-[#001733] via-[#002147] to-[#0D2E5C] px-4 py-12 sm:py-16">
+    <div className="min-h-[75vh] bg-gradient-to-br from-brand-primary-dark via-brand-primary to-[#0D2E5C] px-4 py-12 sm:py-16">
       <div className="mx-auto w-full max-w-md">
         <div className="mb-6 flex justify-center">
           <div className="relative h-12 w-52">
@@ -26,7 +26,7 @@ export default function AuthShell({
           </div>
         </div>
         <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
-          <h1 className="text-2xl font-extrabold text-[#002147]">{title}</h1>
+          <h1 className="text-2xl font-extrabold text-brand-primary">{title}</h1>
           {subtitle && <p className="mt-1.5 text-[15px] text-slate-600">{subtitle}</p>}
           <div className="mt-6">
             <Flash ok={ok} error={error} />

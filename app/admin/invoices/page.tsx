@@ -31,7 +31,7 @@ export default async function AdminInvoicesPage({ searchParams }: { searchParams
           <Table head={["Number", "Date", "Billed to", "For", "Amount", ""]}>
             {invoices.map((i) => (
               <tr key={i.id}>
-                <Td className="font-mono text-xs font-bold text-[#002147]">{i.number}</Td>
+                <Td className="font-mono text-xs font-bold text-brand-primary">{i.number}</Td>
                 <Td className="whitespace-nowrap text-xs">{fmtIst(i.issued_at)}</Td>
                 <Td>
                   <div className="font-semibold">{i.bill_name}</div>

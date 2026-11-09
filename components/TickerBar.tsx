@@ -30,12 +30,12 @@ export default function TickerBar({ ticker }: { ticker: TickerSettings }) {
   const track = [...base, ...base];
 
   return (
-    <div className="ticker-bar relative z-[60] flex h-9 items-center overflow-hidden bg-[#FFB81C] text-[#002147] select-none" role="region" aria-label={ticker.label || "Announcements"}>
+    <div className="ticker-bar relative z-[60] flex h-9 items-center overflow-hidden bg-brand-accent text-brand-primary select-none" role="region" aria-label={ticker.label || "Announcements"}>
       {ticker.label && (
-        <div className="relative z-10 flex h-full shrink-0 items-center gap-1.5 bg-[#002147] px-3 text-[11px] font-black uppercase tracking-wider text-[#FFB81C] sm:px-4 sm:text-xs">
+        <div className="relative z-10 flex h-full shrink-0 items-center gap-1.5 bg-brand-primary px-3 text-[11px] font-black uppercase tracking-wider text-brand-accent sm:px-4 sm:text-xs">
           <Megaphone className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">{ticker.label}</span>
-          <span className="absolute -right-2 top-0 h-full w-2 bg-gradient-to-r from-[#002147] to-transparent" />
+          <span className="absolute -right-2 top-0 h-full w-2 bg-gradient-to-r from-brand-primary to-transparent" />
         </div>
       )}
       <div className="ticker-viewport relative h-full min-w-0 flex-1 overflow-hidden">
@@ -63,7 +63,7 @@ export default function TickerBar({ ticker }: { ticker: TickerSettings }) {
                 ) : (
                   <span className={cls}>{content}</span>
                 )}
-                <span className="text-[#002147]/40">◆</span>
+                <span className="text-brand-primary/40">◆</span>
               </span>
             );
           })}
@@ -79,7 +79,7 @@ export default function TickerBar({ ticker }: { ticker: TickerSettings }) {
               sessionStorage.setItem(key, "1");
             } catch {}
           }}
-          className="relative z-10 flex h-full shrink-0 items-center bg-[#FFB81C] px-2.5 text-[#002147]/70 hover:text-[#002147]"
+          className="relative z-10 flex h-full shrink-0 items-center bg-brand-accent px-2.5 text-brand-primary/70 hover:text-brand-primary"
         >
           <X className="h-4 w-4" />
         </button>

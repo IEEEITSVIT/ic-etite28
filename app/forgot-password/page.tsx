@@ -16,7 +16,7 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
       ok={ok}
       error={error}
       footer={
-        <Link href="/login" className="font-bold text-[#FFB81C] hover:underline">
+        <Link href="/login" className="font-bold text-brand-accent hover:underline">
           Back to login
         </Link>
       }
@@ -25,7 +25,7 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
         <Field label="Email">
           <input name="email" type="email" required autoComplete="email" className={inputCls} />
         </Field>
-        <SubmitButton pendingText="Sending…" className="w-full rounded-full bg-[#002147] px-5 py-3 text-sm font-bold text-white hover:bg-[#003366] disabled:opacity-60">
+        <SubmitButton pendingText="Sending…" className="w-full rounded-full bg-brand-primary px-5 py-3 text-sm font-bold text-white hover:bg-brand-primary-hover disabled:opacity-60">
           Send reset link
         </SubmitButton>
       </form>

@@ -29,7 +29,7 @@ export default function PaymentCard({
       <div className="flex items-start gap-3">
         <CreditCard className="mt-0.5 h-5 w-5 text-amber-700" />
         <div>
-          <div className="flex flex-wrap items-center gap-2 font-bold text-[#002147]">
+          <div className="flex flex-wrap items-center gap-2 font-bold text-brand-primary">
             {formatMoney(amount, currency)} <StatusBadge status={status} />
           </div>
           <p className="text-sm text-slate-600">

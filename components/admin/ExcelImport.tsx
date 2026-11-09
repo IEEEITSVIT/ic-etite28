@@ -201,10 +201,10 @@ export default function ExcelImport({ batchId, hasRecipients }: { batchId: strin
             {hasRecipients && (
               <>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="mode" value="replace" defaultChecked className="accent-[#002147]" /> Replace current list
+                  <input type="radio" name="mode" value="replace" defaultChecked className="accent-brand-primary" /> Replace current list
                 </label>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="radio" name="mode" value="append" className="accent-[#002147]" /> Add to current list
+                  <input type="radio" name="mode" value="append" className="accent-brand-primary" /> Add to current list
                 </label>
               </>
             )}

@@ -9,10 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Theme colours editable in admin → Site content → Appearance (CSS variables set in app/layout.tsx).
+        brand: {
+          primary: "rgb(var(--c-primary) / <alpha-value>)",
+          "primary-dark": "rgb(var(--c-primary-dark) / <alpha-value>)",
+          "primary-hover": "rgb(var(--c-primary-hover) / <alpha-value>)",
+          secondary: "rgb(var(--c-secondary) / <alpha-value>)",
+          accent: "rgb(var(--c-accent) / <alpha-value>)",
+          "accent-dark": "rgb(var(--c-accent-dark) / <alpha-value>)",
+          text: "rgb(var(--c-text) / <alpha-value>)",
+          muted: "rgb(var(--c-muted) / <alpha-value>)",
+          surface: "rgb(var(--c-surface) / <alpha-value>)",
+          border: "rgb(var(--c-border) / <alpha-value>)",
+        },
         ink: {
-          DEFAULT: "#101B2E",
-          soft: "#4A5568",
-          muted: "#4A5568",
+          DEFAULT: "rgb(var(--c-text) / <alpha-value>)",
+          soft: "rgb(var(--c-muted) / <alpha-value>)",
+          muted: "rgb(var(--c-muted) / <alpha-value>)",
           faint: "#718096",
           inverse: "#ffffff",
         },
@@ -55,17 +68,17 @@ const config: Config = {
           light: "#1D5C82",
         },
         ieee: {
-          blue: "#004B87",
+          blue: "rgb(var(--c-secondary) / <alpha-value>)",
           dark: "#101B2E",
           light: "#EBF3F8",
         },
         vit: {
-          DEFAULT: "#002147",
-          navy: "#002147",
-          navyDark: "#001733",
-          blue: "#003366",
+          DEFAULT: "rgb(var(--c-primary) / <alpha-value>)",
+          navy: "rgb(var(--c-primary) / <alpha-value>)",
+          navyDark: "rgb(var(--c-primary-dark) / <alpha-value>)",
+          blue: "rgb(var(--c-primary-hover) / <alpha-value>)",
           royal: "#0D2E5C",
-          gold: "#F5A623",
+          gold: "rgb(var(--c-accent-dark) / <alpha-value>)",
           goldDark: "#D98200",
           goldLight: "#FFF4DB",
           red: "#FF0050",
@@ -79,7 +92,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "var(--font-inter)",
+          "var(--font-body)",
           "Inter",
           "ui-sans-serif",
           "system-ui",
@@ -90,7 +103,7 @@ const config: Config = {
           "sans-serif",
         ],
         serif: [
-          "var(--font-jakarta)",
+          "var(--font-heading)",
           '"Plus Jakarta Sans"',
           "Inter",
           "ui-sans-serif",
@@ -102,7 +115,7 @@ const config: Config = {
           "sans-serif",
         ],
         display: [
-          "var(--font-jakarta)",
+          "var(--font-heading)",
           '"Plus Jakarta Sans"',
           "Inter",
           "ui-sans-serif",

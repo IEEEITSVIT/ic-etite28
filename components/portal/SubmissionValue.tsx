@@ -5,7 +5,7 @@ export default function SubmissionValue({ field, value }: { field: SubmissionFie
   if (!value) return <span className="text-slate-400">—</span>;
   if ((field.type ?? "url") === "url") {
     return (
-      <a href={value} target="_blank" rel="noopener noreferrer" className="break-all text-[#004B87] underline">
+      <a href={value} target="_blank" rel="noopener noreferrer" className="break-all text-brand-secondary underline">
         {value}
       </a>
     );

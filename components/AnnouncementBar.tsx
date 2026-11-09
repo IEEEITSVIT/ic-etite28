@@ -55,7 +55,7 @@ export default function AnnouncementBar() {
       {/* VIT.AC.IN OFFICIAL TOP UTILITY BAR */}
       <div
         id="vit-top-bar"
-        className="bg-[#001C3D] text-white text-[12.5px] border-b border-white/10 z-50 select-none relative"
+        className="bg-brand-primary-dark text-white text-[12.5px] border-b border-white/10 z-50 select-none relative"
       >
         <div className="container-x flex items-center justify-between gap-4 py-2">
           {/* Left: Yellow Announcements Button (Exact vit.ac.in style) + Ticker */}
@@ -63,10 +63,10 @@ export default function AnnouncementBar() {
             {/* Announcements Dropdown Trigger */}
             <button
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FFB81C] hover:bg-[#F5A623] text-[#001C3D] font-bold text-xs tracking-tight transition-colors shadow-sm shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-brand-accent hover:bg-brand-accent-dark text-brand-primary-dark font-bold text-xs tracking-tight transition-colors shadow-sm shrink-0"
               aria-label="Open Announcements Drawer"
             >
-              <Volume2 className="w-3.5 h-3.5 fill-[#001C3D]" />
+              <Volume2 className="w-3.5 h-3.5 fill-brand-primary-dark" />
               <span>Announcements</span>
               <ChevronDown className="w-3 h-3 stroke-[2.5]" />
             </button>
@@ -127,7 +127,7 @@ export default function AnnouncementBar() {
             <div className="relative">
               <button
                 onClick={() => setCampusDropdownOpen(!campusDropdownOpen)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#FFB81C] hover:bg-[#F5A623] text-[#001C3D] font-bold text-xs tracking-tight transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-brand-accent hover:bg-brand-accent-dark text-brand-primary-dark font-bold text-xs tracking-tight transition-colors shadow-sm"
                 aria-expanded={campusDropdownOpen}
               >
                 <Building className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export default function AnnouncementBar() {
                     href="https://vit.ac.in"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-[#002147] hover:bg-slate-50"
+                    className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-brand-primary hover:bg-slate-50"
                   >
                     <span>Vellore Campus (Host)</span>
                     <ExternalLink className="w-3 h-3 opacity-50" />
@@ -197,12 +197,12 @@ export default function AnnouncementBar() {
           />
 
           {/* Drawer Content */}
-          <div className="relative w-full max-w-md bg-white h-full shadow-2xl z-10 flex flex-col overflow-hidden text-[#002147] animate-in slide-in-from-left duration-300">
+          <div className="relative w-full max-w-md bg-white h-full shadow-2xl z-10 flex flex-col overflow-hidden text-brand-primary animate-in slide-in-from-left duration-300">
             {/* Drawer Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 bg-[#F8FAFC]">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 bg-brand-surface">
               <div className="flex items-center gap-2">
-                <Volume2 className="w-5 h-5 text-[#002147]" />
-                <h2 className="text-xl font-bold text-[#002147] tracking-tight">Announcements</h2>
+                <Volume2 className="w-5 h-5 text-brand-primary" />
+                <h2 className="text-xl font-bold text-brand-primary tracking-tight">Announcements</h2>
               </div>
               <button
                 onClick={() => setDrawerOpen(false)}
@@ -216,7 +216,7 @@ export default function AnnouncementBar() {
             {/* Drawer Body with categories matching vit.ac.in */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 text-sm">
               {/* Featured Hackathon Highlight */}
-              <div className="p-4 rounded-xl bg-[#001C3D] text-white border border-[#CCFF00]/30 shadow-md">
+              <div className="p-4 rounded-xl bg-brand-primary-dark text-white border border-[#CCFF00]/30 shadow-md">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[#CCFF00]">
                     ⚡ Flagship Hackathon
@@ -243,33 +243,33 @@ export default function AnnouncementBar() {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Research &amp; CFP</h3>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <Link
                       href="/call-for-papers"
                       onClick={() => setDrawerOpen(false)}
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       Call for Papers: ic-ETITE&apos;28 Submissions Open for IEEE Xplore®{" "}
                       <span className="text-[#DE6D1B] font-bold text-[10px]">[NEW]</span>
                     </Link>
                   </li>
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <Link
                       href="/important-dates"
                       onClick={() => setDrawerOpen(false)}
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       Paper Submission Deadline: 05 October 2027{" "}
                       <span className="text-[#DE6D1B] font-bold text-[10px]">[NEW]</span>
                     </Link>
                   </li>
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <Link
                       href="/tracks"
                       onClick={() => setDrawerOpen(false)}
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       8 Research Tracks in AI, 6G, Cyber Security &amp; VLSI
                     </Link>
@@ -282,35 +282,35 @@ export default function AnnouncementBar() {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">University Honors</h3>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <a
                       href="https://vit.ac.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       NIRF 2024: VIT Ranked #10 in Engineering across India{" "}
                       <span className="text-[#DE6D1B] font-bold text-[10px]">[NEW]</span>
                     </a>
                   </li>
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <a
                       href="https://vit.ac.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       NAAC A++ Grade Accreditation with 3.66 / 4.0 Score
                     </a>
                   </li>
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <a
                       href="https://vit.ac.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       QS World University Rankings 2026: #86 in CS &amp; IS
                     </a>
@@ -323,21 +323,21 @@ export default function AnnouncementBar() {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">General Support</h3>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <Link
                       href="/venue"
                       onClick={() => setDrawerOpen(false)}
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       Campus Directions, Katpadi Railway Station &amp; Accommodation
                     </Link>
                   </li>
                   <li className="flex items-start gap-2 text-xs">
-                    <span className="text-[#002147] font-bold">➔</span>
+                    <span className="text-brand-primary font-bold">➔</span>
                     <Link
                       href="/contact"
                       onClick={() => setDrawerOpen(false)}
-                      className="text-slate-800 hover:text-[#002147] hover:underline font-medium"
+                      className="text-slate-800 hover:text-brand-primary hover:underline font-medium"
                     >
                       Conference Help Desk &amp; Inquiries
                     </Link>
@@ -347,13 +347,13 @@ export default function AnnouncementBar() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="p-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-between text-xs text-slate-500">
+            <div className="p-4 border-t border-slate-200 bg-brand-surface flex items-center justify-between text-xs text-slate-500">
               <span>Vellore Institute of Technology</span>
               <a
                 href="https://vit.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#002147] font-bold hover:underline inline-flex items-center gap-1"
+                className="text-brand-primary font-bold hover:underline inline-flex items-center gap-1"
               >
                 <span>vit.ac.in</span>
                 <ExternalLink className="w-3 h-3" />

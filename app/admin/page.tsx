@@ -24,10 +24,10 @@ export default async function AdminHome() {
   const tile = (href: string, title: string, body: React.ReactNode) => (
     <Link href={href} className="group flex items-start justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
       <div>
-        <div className="font-bold text-[#002147]">{title}</div>
+        <div className="font-bold text-brand-primary">{title}</div>
         <div className="mt-1 text-sm text-slate-600">{body}</div>
       </div>
-      <ArrowRight className="h-5 w-5 shrink-0 text-slate-300 group-hover:text-[#002147]" />
+      <ArrowRight className="h-5 w-5 shrink-0 text-slate-300 group-hover:text-brand-primary" />
     </Link>
   );
 

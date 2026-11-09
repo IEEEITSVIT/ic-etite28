@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme tokens (RGB triplets). Defaults below; admin → Site content → Appearance overrides them. */
+:root {
+  --c-primary: 0 33 71;        /* #002147 */
+  --c-primary-dark: 0 23 51;   /* #001733 */
+  --c-primary-hover: 0 51 102; /* #003366 */
+  --c-secondary: 0 75 135;     /* #004B87 */
+  --c-accent: 255 184 28;      /* #FFB81C */
+  --c-accent-dark: 245 166 35; /* #F5A623 */
+  --c-text: 16 27 46;          /* #101B2E */
+  --c-muted: 74 85 104;        /* #4A5568 */
+  --c-surface: 250 251 253;    /* #FAFBFD */
+  --c-border: 228 231 236;     /* #E4E7EC */
+  --font-scale: 1;
+  --font-body: var(--font-inter);
+  --font-heading: var(--font-jakarta);
+}
+
 html {
   overflow-x: hidden;
   max-width: 100vw;
@@ -11,7 +28,7 @@ html {
 }
 
 body {
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: var(--font-body), Inter, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   max-width: 100vw;
@@ -22,7 +39,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: var(--font-body), Inter, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
 }
 
@@ -225,20 +242,20 @@ h1, h2, h3, h4, h5, h6 {
 html {
   scroll-behavior: smooth;
   color-scheme: light;
-  font-size: 17.5px;
+  font-size: calc(17.5px * var(--font-scale));
   overflow-x: clip;
   max-width: 100vw;
 }
 
 @media (min-width: 640px) {
   html {
-    font-size: 18px;
+    font-size: calc(18px * var(--font-scale));
   }
 }
 
 @media (min-width: 1024px) {
   html {
-    font-size: 18.5px;
+    font-size: calc(18.5px * var(--font-scale));
   }
 }
 
@@ -257,7 +274,7 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: var(--font-body), Inter, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -275,7 +292,7 @@ p {
 h1, h2, h3, h4,
 .font-serif,
 .font-display {
-  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-heading), "Plus Jakarta Sans", var(--font-body), system-ui, sans-serif;
 }
 
 ::selection {

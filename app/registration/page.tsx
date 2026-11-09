@@ -14,7 +14,7 @@ import PageHeader from "@/components/PageHeader";
 export default async function RegistrationPage() {
   const settings = await getSettings();
   return (
-    <div className="bg-white min-h-screen text-[#002147]">
+    <div className="bg-white min-h-screen text-brand-primary">
       <PageHeader
         badge="Delegate Portal & Author Registration"
         title="Conference Registration & Fees"

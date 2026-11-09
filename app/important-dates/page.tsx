@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata("/important-dates", {
 export default async function ImportantDatesPage() {
   const settings = await getSettings();
   return (
-    <div className="bg-white min-h-screen text-[#002147]">
+    <div className="bg-white min-h-screen text-brand-primary">
       <PageHeader
         badge="Official Milestone Schedule"
         title="Important Dates & Timeline"

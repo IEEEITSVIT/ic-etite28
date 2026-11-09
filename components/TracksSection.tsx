@@ -15,6 +15,7 @@ import {
   BookOpen,
   X,
 } from "lucide-react";
+import E from "@/components/cms/E";
 
 interface TrackTheme {
   icon: typeof Database;
@@ -44,19 +45,19 @@ const trackThemeConfig: Record<string, TrackTheme> = {
     cardBg: "bg-[#F0F5FA]",
     cardBorder: "border-[#B8D5ED]",
     cardHoverBg: "hover:bg-[#E6F0FA]",
-    activeRing: "ring-4 ring-[#002147]/15",
-    activeBorder: "border-[#002147]",
+    activeRing: "ring-4 ring-brand-primary/15",
+    activeBorder: "border-brand-primary",
     bannerBg: "bg-gradient-to-br from-[#E6F0FA] via-[#EDF4FC] to-[#F2F7FC]",
-    bannerText: "text-[#002147]",
+    bannerText: "text-brand-primary",
     bannerSubtitle: "text-[#1E3A5F]",
-    badgeBg: "bg-[#002147]/10",
-    badgeText: "text-[#002147]",
-    badgeBorder: "border-[#002147]/20",
-    tagColor: "bg-[#002147] text-white",
+    badgeBg: "bg-brand-primary/10",
+    badgeText: "text-brand-primary",
+    badgeBorder: "border-brand-primary/20",
+    tagColor: "bg-brand-primary text-white",
     topicCardBg: "bg-white",
     topicBorder: "border-[#D0E2F2]",
-    topicHoverBorder: "hover:border-[#002147]",
-    topicIconColor: "text-[#002147]",
+    topicHoverBorder: "hover:border-brand-primary",
+    topicIconColor: "text-brand-primary",
     accentColor: "#002147",
     lightBg: "bg-[#F4F8FC]",
   },
@@ -65,19 +66,19 @@ const trackThemeConfig: Record<string, TrackTheme> = {
     cardBg: "bg-[#F0F9FA]",
     cardBorder: "border-[#A5DFE8]",
     cardHoverBg: "hover:bg-[#E0F3F7]",
-    activeRing: "ring-4 ring-[#004B87]/15",
-    activeBorder: "border-[#004B87]",
+    activeRing: "ring-4 ring-brand-secondary/15",
+    activeBorder: "border-brand-secondary",
     bannerBg: "bg-gradient-to-br from-[#E0F3F7] via-[#ECF9FB] to-[#F0FAFB]",
-    bannerText: "text-[#004B87]",
+    bannerText: "text-brand-secondary",
     bannerSubtitle: "text-[#13557A]",
-    badgeBg: "bg-[#004B87]/10",
-    badgeText: "text-[#004B87]",
-    badgeBorder: "border-[#004B87]/20",
-    tagColor: "bg-[#004B87] text-white",
+    badgeBg: "bg-brand-secondary/10",
+    badgeText: "text-brand-secondary",
+    badgeBorder: "border-brand-secondary/20",
+    tagColor: "bg-brand-secondary text-white",
     topicCardBg: "bg-white",
     topicBorder: "border-[#C0E7EE]",
-    topicHoverBorder: "hover:border-[#004B87]",
-    topicIconColor: "text-[#004B87]",
+    topicHoverBorder: "hover:border-brand-secondary",
+    topicIconColor: "text-brand-secondary",
     accentColor: "#004B87",
     lightBg: "bg-[#F3FAF8]",
   },
@@ -201,31 +202,26 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
   };
 
   return (
-    <section id="tracks" className="py-8 sm:py-12 bg-[#FAFBFD] border-b border-[#E2E8F0] scroll-mt-24">
+    <section id="tracks" className="py-8 sm:py-12 bg-brand-surface border-b border-brand-border scroll-mt-24">
       <div className="container-x">
         {/* Section Header Controls */}
         <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002147]/5 border border-[#002147]/15 text-xs font-bold text-[#002147] uppercase tracking-wider mb-4">
-            <Layers className="w-3.5 h-3.5 text-[#F5A623]" />
-            <span>4 Pillars · {totalTopicsCount}+ Indicative Research Specializations</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/5 border border-brand-primary/15 text-xs font-bold text-brand-primary uppercase tracking-wider mb-4">
+            <Layers className="w-3.5 h-3.5 text-brand-accent-dark" />
+            <span><E f="c.TracksSection">{"4 Pillars · "}</E><E f="c.TracksSection">{totalTopicsCount}</E><E f="c.TracksSection">{"+ Indicative Research Specializations"}</E></span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#002147] mb-3">
-            Technical Research Tracks
-          </h2>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-primary mb-3"><E f="c.TracksSection">{"Technical Research Tracks"}</E></h2>
 
-          <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto mb-8">
-            Authors are invited to submit original, high-impact research papers aligned with any of
-            the 4 core tracks. All accepted papers will be submitted for inclusion into{" "}
-            <strong>IEEE Xplore®</strong>.
-          </p>
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto mb-8"><E f="c.TracksSection">{"Authors are invited to submit original, high-impact research papers aligned with any of the 4 core tracks. All accepted papers will be submitted for inclusion into"}</E><E f="c.TracksSection">{" "}</E>
+            <strong><E f="c.TracksSection">{"IEEE Xplore®"}</E></strong><E f="c.TracksSection">{"."}</E></p>
 
           {/* =========================================================================
               COMMON UNIVERSAL SEARCH BAR FOR ALL TRACKS
           ========================================================================= */}
           <div className="relative max-w-2xl mx-auto">
-            <div className="relative flex items-center shadow-md rounded-2xl bg-white border-2 border-slate-300 focus-within:border-[#002147] focus-within:ring-4 focus-within:ring-[#002147]/10 transition-all">
-              <Search className="w-5 h-5 text-[#002147] ml-4 shrink-0" />
+            <div className="relative flex items-center shadow-md rounded-2xl bg-white border-2 border-slate-300 focus-within:border-brand-primary focus-within:ring-4 focus-within:ring-brand-primary/10 transition-all">
+              <Search className="w-5 h-5 text-brand-primary ml-4 shrink-0" />
               <input
                 type="text"
                 value={searchQuery}
@@ -248,9 +244,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
             {/* Live Search Match Status */}
             {searchQuery.trim() && (
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
-                <span className="font-semibold text-slate-700">
-                  Found <strong className="text-[#002147]">{totalMatchingTopics}</strong> topic{totalMatchingTopics === 1 ? "" : "s"} matching &quot;{searchQuery}&quot;
-                </span>
+                <span className="font-semibold text-slate-700"><E f="c.TracksSection">{"Found "}</E><strong className="text-brand-primary"><E f="c.TracksSection">{totalMatchingTopics}</E></strong><E f="c.TracksSection">{" topic"}</E>{totalMatchingTopics === 1 ? "" : "s"}<E f="c.TracksSection">{" matching \""}</E><E f="c.TracksSection">{searchQuery}</E><E f="c.TracksSection">{"\""}</E></span>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {searchResults.map(({ track, isMatch, totalMatches }) => {
                     const theme = trackThemeConfig[track.id] || trackThemeConfig.it;
@@ -264,11 +258,11 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                           setViewMode("focused");
                         }}
                         className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1 ${theme.cardBg} ${theme.cardBorder} ${
-                          activeTrack?.id === track.id ? "ring-2 ring-[#002147]" : ""
+                          activeTrack?.id === track.id ? "ring-2 ring-brand-primary" : ""
                         }`}
                       >
-                        <span>{track.shortCode}:</span>
-                        <span>{totalMatches}</span>
+                        <span><E f="c.TracksSection">{track.shortCode}</E><E f="c.TracksSection">{":"}</E></span>
+                        <span><E f="c.TracksSection">{totalMatches}</E></span>
                       </button>
                     );
                   })}
@@ -319,7 +313,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                     <span
                       className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider font-mono ${theme.tagColor}`}
                     >
-                      {track.number}
+                      <E f="c.TracksSection">{track.number}</E>
                     </span>
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center bg-white/80 border border-black/5 shadow-2xs`}
@@ -333,12 +327,12 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                     className="font-serif text-lg sm:text-xl font-bold leading-snug mb-1"
                     style={{ color: theme.accentColor }}
                   >
-                    {track.title}
+                    <E f="c.TracksSection">{track.title}</E>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 font-medium">
                     {searchQuery.trim() ? (
-                      <span className="font-bold text-[#002147]">
-                        {matchesCount} matched topic{matchesCount === 1 ? "" : "s"}
+                      <span className="font-bold text-brand-primary">
+                        <E f="c.TracksSection">{matchesCount}</E><E f="c.TracksSection">{" matched topic"}</E>{matchesCount === 1 ? "" : "s"}
                       </span>
                     ) : (
                       `${track.topics.length} Research Topics`
@@ -347,15 +341,13 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-black/10 flex items-center justify-between text-xs font-semibold">
-                  <span className={isActive ? "font-bold text-[#002147]" : "text-slate-600"}>
+                  <span className={isActive ? "font-bold text-brand-primary" : "text-slate-600"}>
                     {isActive ? "Viewing Track" : "Explore Track"}
                   </span>
                   <span
                     className="text-sm font-bold transition-transform group-hover:translate-x-1"
                     style={{ color: theme.accentColor }}
-                  >
-                    →
-                  </span>
+                  ><E f="c.TracksSection">{"→"}</E></span>
                 </div>
               </button>
             );
@@ -369,30 +361,24 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
               onClick={() => setViewMode("focused")}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 viewMode === "focused"
-                  ? "bg-[#002147] text-white shadow-sm"
+                  ? "bg-brand-primary text-white shadow-sm"
                   : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
               }`}
-            >
-              Focused Track View
-            </button>
+            ><E f="c.TracksSection">{"Focused Track View"}</E></button>
             <button
               onClick={() => setViewMode("all")}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 viewMode === "all"
-                  ? "bg-[#002147] text-white shadow-sm"
+                  ? "bg-brand-primary text-white shadow-sm"
                   : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
               }`}
-            >
-              All 4 Tracks Grid
-            </button>
+            ><E f="c.TracksSection">{"All 4 Tracks Grid"}</E></button>
           </div>
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="text-xs text-slate-500 hover:text-[#002147] underline font-medium"
-            >
-              Reset Search
-            </button>
+              className="text-xs text-slate-500 hover:text-brand-primary underline font-medium"
+            ><E f="c.TracksSection">{"Reset Search"}</E></button>
           )}
         </div>
 
@@ -410,17 +396,17 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="max-w-3xl">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 text-xs font-bold font-mono uppercase tracking-widest mb-3 border border-black/10 shadow-2xs">
-                      <span style={{ color: theme.accentColor }}>{activeTrack.number}</span>
-                      <span>·</span>
-                      <span className="text-slate-600">{activeTrack.shortCode}</span>
+                      <span style={{ color: theme.accentColor }}><E f="c.TracksSection">{activeTrack.number}</E></span>
+                      <span><E f="c.TracksSection">{"·"}</E></span>
+                      <span className="text-slate-600"><E f="c.TracksSection">{activeTrack.shortCode}</E></span>
                     </div>
 
                     <h3 className={`font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight ${theme.bannerText} mb-3`}>
-                      {activeTrack.title}
+                      <E f="c.TracksSection">{activeTrack.title}</E>
                     </h3>
 
                     <p className={`text-sm sm:text-base md:text-lg leading-relaxed font-normal ${theme.bannerSubtitle}`}>
-                      {activeTrack.description}
+                      <E f="c.TracksSection">{activeTrack.description}</E>
                     </p>
                   </div>
 
@@ -430,14 +416,14 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                       onClick={handleScrollToSubmit}
                       className="btn-gold py-3 px-6 text-sm font-bold inline-flex items-center justify-center gap-2 text-center shadow-md hover:scale-105 transition-transform"
                     >
-                      <span>Submit to this Track</span>
+                      <span><E f="c.TracksSection">{"Submit to this Track"}</E></span>
                     </Link>
                     <Link
                       href="/call-for-papers"
                       className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-800 border border-slate-200 transition-colors text-center shadow-2xs"
                     >
-                      <span>Submission Guidelines</span>
-                      <span>→</span>
+                      <span><E f="c.TracksSection">{"Submission Guidelines"}</E></span>
+                      <span><E f="c.TracksSection">{"→"}</E></span>
                     </Link>
                   </div>
                 </div>
@@ -448,16 +434,11 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                 <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-black/10">
                   <div className="flex items-center gap-2">
                     <BookOpen className="w-5 h-5" style={{ color: theme.accentColor }} />
-                    <h4 className="text-base sm:text-lg font-bold text-[#002147]">
-                      Indicative Research Topics &amp; Domains
-                    </h4>
+                    <h4 className="text-base sm:text-lg font-bold text-brand-primary"><E f="c.TracksSection">{"Indicative Research Topics & Domains"}</E></h4>
                     <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${theme.badgeBg} ${theme.badgeText} border ${theme.badgeBorder}`}>
-                      {activeTrack.topics.length} topics
-                    </span>
+                      <E f="c.TracksSection">{activeTrack.topics.length}</E><E f="c.TracksSection">{" topics"}</E></span>
                   </div>
-                  <span className="text-xs text-slate-500 hidden sm:inline">
-                    Scope is not restricted to listed keywords
-                  </span>
+                  <span className="text-xs text-slate-500 hidden sm:inline"><E f="c.TracksSection">{"Scope is not restricted to listed keywords"}</E></span>
                 </div>
 
                 {/* Topics Grid with Pastel Borders & Icons */}
@@ -471,7 +452,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                         className={`w-5 h-5 shrink-0 mt-0.5 transition-transform group-hover:scale-110 ${theme.topicIconColor}`}
                       />
                       <span className="text-sm sm:text-base font-semibold text-slate-800 leading-snug">
-                        {topic}
+                        <E f="c.TracksSection">{topic}</E>
                       </span>
                     </div>
                   ))}
@@ -499,20 +480,20 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase font-mono ${theme.tagColor}`}>
-                          {track.number}
+                          <E f="c.TracksSection">{track.number}</E>
                         </span>
                         <span className="text-xs font-mono font-bold text-slate-600">
-                          {track.shortCode}
+                          <E f="c.TracksSection">{track.shortCode}</E>
                         </span>
                       </div>
                       <h3
                         className="font-serif text-2xl sm:text-3xl font-bold mt-1"
                         style={{ color: theme.accentColor }}
                       >
-                        {track.title}
+                        <E f="c.TracksSection">{track.title}</E>
                       </h3>
                       <p className="text-sm sm:text-base text-slate-700 mt-1 max-w-3xl leading-relaxed">
-                        {track.description}
+                        <E f="c.TracksSection">{track.description}</E>
                       </p>
                     </div>
                     <Link
@@ -520,7 +501,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                       onClick={handleScrollToSubmit}
                       className="btn-gold text-xs py-2.5 px-4 inline-flex items-center gap-1.5 shrink-0 self-start sm:self-center font-bold shadow-sm"
                     >
-                      <span>Submit to Track</span>
+                      <span><E f="c.TracksSection">{"Submit to Track"}</E></span>
                     </Link>
                   </div>
 
@@ -533,7 +514,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
                         <CheckCircle2
                           className={`w-4 h-4 shrink-0 mt-0.5 ${theme.topicIconColor}`}
                         />
-                        <span>{topic}</span>
+                        <span><E f="c.TracksSection">{topic}</E></span>
                       </div>
                     ))}
                   </div>
@@ -549,7 +530,7 @@ export default function TracksSection({ isPreview = false }: { isPreview?: boole
               href="/tracks"
               className="btn-primary inline-flex items-center gap-2 py-3 px-6 text-sm font-bold"
             >
-              <span>Explore All 4 Research Tracks in Detail</span>
+              <span><E f="c.TracksSection">{"Explore All 4 Research Tracks in Detail"}</E></span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

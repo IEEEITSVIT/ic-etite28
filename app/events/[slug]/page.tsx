@@ -170,14 +170,14 @@ export default async function EventPage({ params, searchParams }: { params: Para
                     <div className="grid gap-5 sm:grid-cols-2">
                       <form action={createTeamAction} className="space-y-3 rounded-xl border border-slate-200 p-4">
                         <input type="hidden" name="slug" value={slug} />
-                        <h3 className="font-bold text-[#002147]">Create a team</h3>
+                        <h3 className="font-bold text-brand-primary">Create a team</h3>
                         <p className="text-sm text-slate-600">You become team lead and get a code to share.</p>
                         <input name="team_name" required minLength={2} maxLength={60} placeholder="Team name" className={inputCls} />
                         <SubmitButton pendingText="Creating…">Create team</SubmitButton>
                       </form>
                       <form action={joinTeamAction} className="space-y-3 rounded-xl border border-slate-200 p-4">
                         <input type="hidden" name="slug" value={slug} />
-                        <h3 className="font-bold text-[#002147]">Join a team</h3>
+                        <h3 className="font-bold text-brand-primary">Join a team</h3>
                         <p className="text-sm text-slate-600">Enter the code your team lead shared.</p>
                         <input name="code" required maxLength={12} placeholder="Team code" className={`${inputCls} uppercase tracking-widest`} />
                         <SubmitButton className={btnGold} pendingText="Joining…">
@@ -187,13 +187,13 @@ export default async function EventPage({ params, searchParams }: { params: Para
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[#002147] p-4 text-white">
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-brand-primary p-4 text-white">
                         <div>
                           <div className="text-xs font-semibold uppercase tracking-wider text-white/70">Team</div>
                           <div className="text-xl font-extrabold">{team.name}</div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-white/10 px-4 py-1.5 font-mono text-lg font-bold tracking-[0.25em] text-[#FFB81C]">{team.code}</span>
+                          <span className="rounded-full bg-white/10 px-4 py-1.5 font-mono text-lg font-bold tracking-[0.25em] text-brand-accent">{team.code}</span>
                           <CopyButton value={team.code} label="Copy code" />
                         </div>
                       </div>
@@ -263,7 +263,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
                         key={round.id}
                         title={
                           <span className="flex items-center gap-2">
-                            <FileText className="h-5 w-5 text-[#004B87]" /> Round {round.seq}: {round.name}
+                            <FileText className="h-5 w-5 text-brand-secondary" /> Round {round.seq}: {round.name}
                           </span>
                         }
                         actions={
@@ -319,7 +319,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
 
                         {round.scores_published === 1 && (
                           <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                            <h3 className="mb-2 font-bold text-[#002147]">Your scores</h3>
+                            <h3 className="mb-2 font-bold text-brand-primary">Your scores</h3>
                             {scoreRows.length === 0 ? (
                               <p className="text-sm text-slate-600">Your team was not scored in this round.</p>
                             ) : (
@@ -327,17 +327,17 @@ export default async function EventPage({ params, searchParams }: { params: Para
                                 {perCriterion.map((c) => (
                                   <div key={c.key} className="flex justify-between rounded-lg bg-white px-3 py-2 text-sm">
                                     <span className="text-slate-600">{c.label}</span>
-                                    <span className="font-bold text-[#002147]">
+                                    <span className="font-bold text-brand-primary">
                                       {c.value ?? "—"}
                                       {!isSum && <> / {c.max}</>}
                                     </span>
                                   </div>
                                 ))}
-                                <div className="flex justify-between rounded-lg bg-[#002147] px-3 py-2 text-sm text-white sm:col-span-2">
+                                <div className="flex justify-between rounded-lg bg-brand-primary px-3 py-2 text-sm text-white sm:col-span-2">
                                   <span>
                                     Total ({isSum ? "sum" : "average"} of {scoreRows.length} evaluator{scoreRows.length > 1 ? "s" : ""})
                                   </span>
-                                  <span className="font-extrabold text-[#FFB81C]">
+                                  <span className="font-extrabold text-brand-accent">
                                     {total}
                                     {!isSum && <> / {criteria.reduce((a, c) => a + c.max, 0)}</>}
                                   </span>
@@ -379,7 +379,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
             <ul className="space-y-3 text-sm text-slate-700">
               {(event.starts_at || event.ends_at) && (
                 <li className="flex gap-2.5">
-                  <Calendar className="h-4 w-4 shrink-0 text-[#004B87]" />
+                  <Calendar className="h-4 w-4 shrink-0 text-brand-secondary" />
                   <span>
                     {fmtIst(event.starts_at)}
                     {event.ends_at && <> → {fmtIst(event.ends_at)}</>}
@@ -388,11 +388,11 @@ export default async function EventPage({ params, searchParams }: { params: Para
               )}
               {event.venue && (
                 <li className="flex gap-2.5">
-                  <MapPin className="h-4 w-4 shrink-0 text-[#004B87]" /> {event.venue}
+                  <MapPin className="h-4 w-4 shrink-0 text-brand-secondary" /> {event.venue}
                 </li>
               )}
               <li className="flex gap-2.5">
-                <Users className="h-4 w-4 shrink-0 text-[#004B87]" />
+                <Users className="h-4 w-4 shrink-0 text-brand-secondary" />
                 {event.participation === "solo" ? "Individual event" : `Teams of ${event.min_team_size}–${event.max_team_size}`}
               </li>
               <li className="flex flex-wrap items-center gap-2">
@@ -404,7 +404,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
                   const fee = eventFeeNow(event);
                   const per = event.fee_scope === "per_team" ? "per team" : "per person";
                   return (
-                    <li className="font-semibold text-[#002147]">
+                    <li className="font-semibold text-brand-primary">
                       Fee:{" "}
                       {fee.early ? (
                         <>

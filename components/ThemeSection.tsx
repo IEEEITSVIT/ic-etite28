@@ -1,5 +1,6 @@
 import { conferenceData } from "@/data/conference";
 import { Compass, Network, Cpu, Users } from "lucide-react";
+import E from "@/components/cms/E";
 
 export default function ThemeSection() {
   const { theme } = conferenceData;
@@ -11,22 +12,20 @@ export default function ThemeSection() {
         {/* Section Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-px bg-[#c4622d]" />
-          <span className="font-mono text-[11px] tracking-widest uppercase text-[#c4622d]">
-            Conference Vision
-          </span>
+          <span className="font-mono text-[11px] tracking-widest uppercase text-[#c4622d]"><E f="c.ThemeSection">{"Conference Vision"}</E></span>
         </div>
 
         <div className="grid lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-14 items-start mb-12">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1a1714] tracking-tight leading-tight mb-4">
-              {theme.title}
+              <E f="c.ThemeSection">{theme.title}</E>
             </h2>
-            <p className="font-mono text-xs uppercase tracking-wider text-[#004B87] font-semibold">
-              {theme.tagline}
+            <p className="font-mono text-xs uppercase tracking-wider text-brand-secondary font-semibold">
+              <E f="c.ThemeSection">{theme.tagline}</E>
             </p>
           </div>
           <p className="text-sm sm:text-base text-[#6b6560] leading-relaxed">
-            {theme.description}
+            <E f="c.ThemeSection">{theme.description}</E>
           </p>
         </div>
 
@@ -37,21 +36,20 @@ export default function ThemeSection() {
             return (
               <div
                 key={pillar.title}
-                className="bg-white p-6 rounded-xl border border-[#e8e4dc] shadow-subtle hover:border-[#004B87]/30 transition-all flex flex-col justify-between"
+                className="bg-white p-6 rounded-xl border border-[#e8e4dc] shadow-subtle hover:border-brand-secondary/30 transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="w-9 h-9 rounded-lg bg-[#f7f5f0] flex items-center justify-center text-[#1a1714] mb-4 border border-[#e8e4dc]">
-                    <Icon className="w-4 h-4 text-[#004B87]" />
+                    <Icon className="w-4 h-4 text-brand-secondary" />
                   </div>
                   <h3 className="text-base font-bold text-[#1a1714] mb-2 leading-snug">
-                    {pillar.title}
+                    <E f="c.ThemeSection">{pillar.title}</E>
                   </h3>
                   <p className="text-xs text-[#6b6560] leading-relaxed">
-                    {pillar.desc}
+                    <E f="c.ThemeSection">{pillar.desc}</E>
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#f0ede7] font-mono text-[10px] text-[#9c968f] uppercase tracking-wider">
-                  Pillar 0{idx + 1}
+                <div className="mt-4 pt-3 border-t border-[#f0ede7] font-mono text-[10px] text-[#9c968f] uppercase tracking-wider"><E f="c.ThemeSection">{"Pillar 0"}</E>{idx + 1}
                 </div>
               </div>
             );

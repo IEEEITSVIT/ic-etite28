@@ -27,7 +27,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
       footer={
         <>
           New here?{" "}
-          <Link href={`/signup${qs}`} className="font-bold text-[#FFB81C] hover:underline">
+          <Link href={`/signup${qs}`} className="font-bold text-brand-accent hover:underline">
             Create an account
           </Link>
         </>
@@ -47,7 +47,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
           <input name="password" type="password" required autoComplete="current-password" className={inputCls} />
         </Field>
         <div className="flex items-center justify-between gap-3 pt-1">
-          <Link href="/forgot-password" className="text-sm font-semibold text-[#004B87] hover:underline">
+          <Link href="/forgot-password" className="text-sm font-semibold text-brand-secondary hover:underline">
             Forgot password?
           </Link>
           <SubmitButton pendingText="Logging in…">Log in</SubmitButton>
