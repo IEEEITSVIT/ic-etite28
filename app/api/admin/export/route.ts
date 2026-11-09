@@ -3,7 +3,7 @@ import JSZip from "jszip";
 import { all, first, parseJson } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth/session";
 import { toCsv } from "@/lib/portal/csv";
-import { getRounds, roundCriteria, roundLeaderboard, submissionFields, type EventRow } from "@/lib/portal/events";
+import { getRounds, roundCriteria, roundFields, roundLeaderboard, type EventRow } from "@/lib/portal/events";
 import { certificateRecipients } from "@/lib/certificates/server";
 import { rankLabel, safeFilename } from "@/lib/certificates/render";
 
@@ -72,10 +72,10 @@ async function exportEvent(zip: JSZip, e: EventRow) {
   const teamCols = ["team", "code", "lead_name", "lead_email", "lead_phone", "members", "member_names", "member_emails", "member_phones"];
   zip.file("teams.csv", toCsv([...teamCols, "final_rank", "created_at"], teams.map((t) => [...teamRow(t), t.final_rank, t.created_at])));
 
-  const fields = submissionFields(e);
   const teamName = new Map(teams.map((t) => [t.id, t.name]));
   for (const r of rounds) {
     const prefix = `round-${r.seq}`;
+    const fields = roundFields(r, e);
     const subs = await all<{ team_id: string; data: string; updated_at: string }>("SELECT team_id, data, updated_at FROM submissions WHERE round_id = ?", [r.id]);
     zip.file(
       `${prefix}-submissions.csv`,

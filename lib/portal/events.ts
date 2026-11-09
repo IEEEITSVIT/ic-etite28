@@ -4,11 +4,16 @@ import { newCode, newId } from "@/lib/portal/ids";
 import type { SessionUser } from "@/lib/auth/session";
 import { priceNow, type Prize } from "@/lib/pricing";
 
+export type SubmissionFieldType = "url" | "text" | "long";
+
 export interface SubmissionField {
   key: string;
   label: string;
   required: boolean;
+  type?: SubmissionFieldType; // default "url"
 }
+
+export const FIELD_LIMITS: Record<SubmissionFieldType, number> = { url: 500, text: 300, long: 3000 };
 
 export interface Criterion {
   key: string;
@@ -58,6 +63,7 @@ export interface RoundRow {
   submission_deadline: string | null;
   scores_published: number;
   aggregation: "average" | "sum";
+  submission_fields: string | null; // JSON; NULL = event default fields
 }
 
 export interface TeamRow {
@@ -93,6 +99,10 @@ export interface RegistrationRow {
 }
 
 export const submissionFields = (e: Pick<EventRow, "submission_fields">) => parseJson<SubmissionField[]>(e.submission_fields, []);
+// What a round asks teams to submit: its own fields, or the event's default fields.
+export const roundFields = (round: Pick<RoundRow, "submission_fields">, e: Pick<EventRow, "submission_fields">): SubmissionField[] =>
+  round.submission_fields == null ? submissionFields(e) : parseJson<SubmissionField[]>(round.submission_fields, []);
+
 export const eventPrizes = (e: Pick<EventRow, "prizes">) => parseJson<Prize[]>(e.prizes, []);
 
 // Fee charged if someone registers now (early-bird price until early_bird_ends_at).
@@ -327,11 +337,15 @@ export async function saveSubmission(e: EventRow, user: SessionUser, roundId: st
     throw new PortalError(round.seq === 1 ? `Your team needs at least ${e.min_team_size} member(s) to submit.` : "Your team has not qualified for this round.");
   }
   const data: Record<string, string> = {};
-  for (const f of submissionFields(e)) {
+  const fields = roundFields(round, e);
+  if (fields.length === 0) throw new PortalError("This round has no submission.");
+  for (const f of fields) {
+    const type = f.type ?? "url";
     const v = (values[f.key] ?? "").trim();
     if (f.required && !v) throw new PortalError(`${f.label} is required.`);
-    if (v && !/^https?:\/\/\S+$/i.test(v)) throw new PortalError(`${f.label} must be a valid link starting with http:// or https://`);
-    data[f.key] = v.slice(0, 500);
+    if (v && type === "url" && !/^https?:\/\/\S+$/i.test(v)) throw new PortalError(`${f.label} must be a valid link starting with http:// or https://`);
+    if (v.length > FIELD_LIMITS[type]) throw new PortalError(`${f.label} must be at most ${FIELD_LIMITS[type]} characters.`);
+    data[f.key] = v;
   }
   await run(
     `INSERT INTO submissions (team_id, round_id, data, submitted_by, updated_at) VALUES (?, ?, ?, ?, ?)

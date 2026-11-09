@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { all, first, parseJson } from "@/lib/db";
 import { requireRole } from "@/lib/auth/session";
-import { getEventById, getRounds, roundCriteria, submissionFields } from "@/lib/portal/events";
+import { getEventById, getRounds, roundCriteria, roundFields } from "@/lib/portal/events";
+import SubmissionValue from "@/components/portal/SubmissionValue";
 import { evaluatorQualifyAction, saveScoreAction } from "@/app/actions/evaluate";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Badge, Empty, Flash, PortalPage, btnSecondary, inputCls } from "@/components/portal/ui";
@@ -31,7 +32,7 @@ export default async function EvaluateEventPage({ params, searchParams }: { para
     );
   }
   const criteria = roundCriteria(round);
-  const fields = submissionFields(event);
+  const fields = roundFields(round, event);
   const like = sp.q ? `%${sp.q}%` : null;
 
   // Round 1 shows every team; later rounds only teams qualified in the previous round.
@@ -125,13 +126,7 @@ export default async function EvaluateEventPage({ params, searchParams }: { para
                         {fields.map((f) => (
                           <li key={f.key}>
                             <span className="font-semibold text-slate-700">{f.label}: </span>
-                            {sub[f.key] ? (
-                              <a href={sub[f.key]} target="_blank" rel="noopener noreferrer" className="break-all text-[#004B87] underline">
-                                {sub[f.key]}
-                              </a>
-                            ) : (
-                              "—"
-                            )}
+                            <SubmissionValue field={f} value={sub[f.key]} />
                           </li>
                         ))}
                       </ul>

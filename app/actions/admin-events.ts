@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/session";
 import { all, batch, batchChunked, first, now, run, type Statement } from "@/lib/db";
 import { bool, guarded, isEmail, istToIso, num, str } from "@/lib/portal/actions";
-import { PortalError, getEventById, getRounds, roundLeaderboard, type Criterion, type RoundRow, type SubmissionField } from "@/lib/portal/events";
+import { PortalError, getEventById, getRounds, roundLeaderboard, type Criterion, type RoundRow, type SubmissionField, type SubmissionFieldType } from "@/lib/portal/events";
 import { newId, slugify } from "@/lib/portal/ids";
 import { PAYMENT_STATUSES, applyPaymentStatus, type PaymentStatus } from "@/lib/payments";
 import { emailLayout, fillTemplate, outboxInsert, textToHtml } from "@/lib/email/mailer";
@@ -39,7 +39,13 @@ export async function saveEventAction(fd: FormData) {
     for (let i = 0; i < 6; i++) {
       const label = str(fd, `field_label_${i}`, 80);
       if (!label) continue;
-      fields.push({ key: str(fd, `field_key_${i}`, 40) || slugify(label).replace(/-/g, "_") || `link_${i + 1}`, label, required: bool(fd, `field_required_${i}`) });
+      const t = str(fd, `field_type_${i}`, 10);
+      fields.push({
+        key: str(fd, `field_key_${i}`, 40) || slugify(label).replace(/-/g, "_") || `link_${i + 1}`,
+        label,
+        required: bool(fd, `field_required_${i}`),
+        type: t === "text" || t === "long" ? t : "url",
+      });
     }
     const prizes = [];
     for (let i = 0; i < 10; i++) {
@@ -150,26 +156,37 @@ export async function saveRoundAction(fd: FormData) {
     if (criteria.length === 0) throw new PortalError("Add at least one scoring category.");
     const deadline = istToIso(str(fd, "deadline", 20));
     const aggregation = str(fd, "aggregation", 10) === "sum" ? "sum" : "average";
+    // Submission for this round: event default fields (NULL), none ([]), or its own fields.
+    const subMode = str(fd, "sub_mode", 10);
+    let roundFieldsJson: string | null = null;
+    if (subMode === "none") roundFieldsJson = "[]";
+    else if (subMode === "custom") {
+      const fields: SubmissionField[] = [];
+      const keys = new Set<string>();
+      for (let i = 0; i < 6; i++) {
+        const label = str(fd, `sub_label_${i}`, 80);
+        if (!label) continue;
+        let key = str(fd, `sub_key_${i}`, 40) || slugify(label).replace(/-/g, "_") || `field_${i + 1}`;
+        while (keys.has(key)) key = `${key}_${i + 1}`;
+        keys.add(key);
+        const t = str(fd, `sub_type_${i}`, 10);
+        const type: SubmissionFieldType = t === "text" || t === "long" ? t : "url";
+        fields.push({ key, label, required: bool(fd, `sub_required_${i}`), type });
+      }
+      if (fields.length === 0) throw new PortalError("Add at least one submission field, or choose 'No submission'.");
+      roundFieldsJson = JSON.stringify(fields);
+    }
     if (roundId) {
-      await run("UPDATE event_rounds SET name = ?, criteria = ?, submission_deadline = ?, aggregation = ? WHERE id = ? AND event_id = ?", [
-        name,
-        JSON.stringify(criteria),
-        deadline,
-        aggregation,
-        roundId,
-        eventId,
-      ]);
+      await run(
+        "UPDATE event_rounds SET name = ?, criteria = ?, submission_deadline = ?, aggregation = ?, submission_fields = ? WHERE id = ? AND event_id = ?",
+        [name, JSON.stringify(criteria), deadline, aggregation, roundFieldsJson, roundId, eventId]
+      );
     } else {
       const last = await first<{ seq: number }>("SELECT MAX(seq) AS seq FROM event_rounds WHERE event_id = ?", [eventId]);
-      await run("INSERT INTO event_rounds (id, event_id, seq, name, criteria, submission_deadline, aggregation) VALUES (?, ?, ?, ?, ?, ?, ?)", [
-        newId(),
-        eventId,
-        (last?.seq ?? 0) + 1,
-        name,
-        JSON.stringify(criteria),
-        deadline,
-        aggregation,
-      ]);
+      await run(
+        "INSERT INTO event_rounds (id, event_id, seq, name, criteria, submission_deadline, aggregation, submission_fields) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [newId(), eventId, (last?.seq ?? 0) + 1, name, JSON.stringify(criteria), deadline, aggregation, roundFieldsJson]
+      );
     }
     return "Round saved.";
   });
@@ -433,5 +450,28 @@ export async function deleteEvaluationAction(fd: FormData) {
     if (!round) throw new PortalError("Round not found.");
     await run("DELETE FROM scores WHERE round_id = ? AND team_id = ? AND evaluator_id = ?", [roundId, str(fd, "team_id", 40), str(fd, "evaluator_id", 40)]);
     return "Evaluation removed; the team's score was recalculated.";
+  });
+}
+
+// Creates rounds up to the requested number (existing rounds are kept; delete extras explicitly).
+export async function setRoundCountAction(fd: FormData) {
+  await requireAdmin();
+  const eventId = str(fd, "event_id", 40);
+  await guarded(`${base(eventId)}?tab=rounds`, async () => {
+    const target = Math.round(num(fd, "count", 0));
+    if (target < 1 || target > 10) throw new PortalError("Choose between 1 and 10 rounds.");
+    const rounds = await getRounds(eventId);
+    if (target < rounds.length) throw new PortalError(`This event already has ${rounds.length} rounds. Delete rounds from the last one to reduce the number.`);
+    const criteria = JSON.stringify([
+      { key: "innovation", label: "Innovation", max: 10 },
+      { key: "execution", label: "Execution", max: 10 },
+      { key: "presentation", label: "Presentation", max: 10 },
+    ]);
+    const stmts: Statement[] = [];
+    for (let seq = rounds.length + 1; seq <= target; seq++) {
+      stmts.push({ sql: "INSERT INTO event_rounds (id, event_id, seq, name, criteria) VALUES (?, ?, ?, ?, ?)", params: [newId(), eventId, seq, `Round ${seq}`, criteria] });
+    }
+    if (stmts.length) await batch(stmts);
+    return stmts.length ? `${stmts.length} round(s) added — now ${target}. Rename them and set each round's scoring and submission below.` : "No change.";
   });
 }

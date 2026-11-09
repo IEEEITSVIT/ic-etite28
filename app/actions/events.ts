@@ -11,7 +11,6 @@ import {
   registerForEvent,
   removeMember,
   saveSubmission,
-  submissionFields,
   transferLead,
   type EventRow,
 } from "@/lib/portal/events";
@@ -135,7 +134,8 @@ export async function submitAction(formData: FormData) {
   await guarded(path, async () => {
     const { event } = await load(formData);
     const values: Record<string, string> = {};
-    for (const f of submissionFields(event)) values[f.key] = str(formData, `field_${f.key}`, 500);
+    // Field validation (required, type, length) happens in saveSubmission against the round's fields.
+    for (const [k, v] of formData.entries()) if (k.startsWith("field_")) values[k.slice(6)] = String(v).slice(0, 3100);
     await saveSubmission(event, user, str(formData, "round_id", 40), values);
     return "Submission saved. You can update it until the round closes.";
   });

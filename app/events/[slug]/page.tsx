@@ -19,8 +19,9 @@ import {
   registrationWindow,
   roundAcceptsSubmissions,
   roundCriteria,
-  submissionFields,
+  roundFields,
 } from "@/lib/portal/events";
+import SubmissionValue from "@/components/portal/SubmissionValue";
 import { fmtIst } from "@/lib/portal/actions";
 import { formatMoney } from "@/lib/settings";
 import { rankLabel } from "@/lib/certificates/render";
@@ -66,7 +67,6 @@ export default async function EventPage({ params, searchParams }: { params: Para
   const team = reg?.team_id ? await getTeam(reg.team_id) : null;
   const [members, rounds] = await Promise.all([team ? getTeamMembers(team.id) : Promise.resolve([]), getRounds(event.id)]);
   const isLead = reg?.member_role === "lead";
-  const fields = submissionFields(event);
   const path = `/events/${slug}`;
 
   const allowlisted = user && event.registration_mode === "allowlist" ? await isAllowlisted(event.id, user.email) : true;
@@ -249,6 +249,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
                 <div id="submissions" className="space-y-4 scroll-mt-28">
                   {roundData.map(({ round, submission, submittedAt, eligible, result, scoreRows }) => {
                     const open = roundAcceptsSubmissions(round);
+                    const fields = roundFields(round, event);
                     const criteria = roundCriteria(round);
                     const avg = (xs: number[]) => combine(xs, round.aggregation);
                     const isSum = round.aggregation === "sum";
@@ -283,7 +284,19 @@ export default async function EventPage({ params, searchParams }: { params: Para
                             <input type="hidden" name="round_id" value={round.id} />
                             {fields.map((f) => (
                               <Field key={f.key} label={`${f.label}${f.required ? " *" : ""}`}>
-                                <input name={`field_${f.key}`} type="url" defaultValue={submission[f.key] ?? ""} required={f.required} placeholder="https://" className={inputCls} />
+                                {(f.type ?? "url") === "long" ? (
+                                  <textarea name={`field_${f.key}`} defaultValue={submission[f.key] ?? ""} required={f.required} rows={5} maxLength={3000} className={inputCls} />
+                                ) : (
+                                  <input
+                                    name={`field_${f.key}`}
+                                    type={(f.type ?? "url") === "url" ? "url" : "text"}
+                                    defaultValue={submission[f.key] ?? ""}
+                                    required={f.required}
+                                    maxLength={(f.type ?? "url") === "url" ? 500 : 300}
+                                    placeholder={(f.type ?? "url") === "url" ? "https://" : ""}
+                                    className={inputCls}
+                                  />
+                                )}
                               </Field>
                             ))}
                             <div className="flex flex-wrap items-center gap-3">
@@ -296,13 +309,7 @@ export default async function EventPage({ params, searchParams }: { params: Para
                             {fields.map((f) => (
                               <li key={f.key}>
                                 <span className="font-semibold text-slate-700">{f.label}: </span>
-                                {submission[f.key] ? (
-                                  <a href={submission[f.key]} target="_blank" rel="noopener noreferrer" className="break-all text-[#004B87] underline">
-                                    {submission[f.key]}
-                                  </a>
-                                ) : (
-                                  "—"
-                                )}
+                                <SubmissionValue field={f} value={submission[f.key]} />
                               </li>
                             ))}
                           </ul>

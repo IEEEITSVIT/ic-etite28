@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { all, first, parseJson } from "@/lib/db";
 import { fmtIst, isoToIstInput } from "@/lib/portal/actions";
-import { getEventById, getRounds, registrationWindow, roundCriteria, roundLeaderboard, submissionFields } from "@/lib/portal/events";
+import { getEventById, getRounds, registrationWindow, roundCriteria, roundFields, roundLeaderboard, submissionFields } from "@/lib/portal/events";
 import { PAYMENT_STATUSES } from "@/lib/payments";
 import { audienceOptions, PLACEHOLDERS } from "@/lib/portal/audience";
 import { certificateRecipients } from "@/lib/certificates/server";
@@ -22,6 +22,7 @@ import {
   saveAllowlistAction,
   saveRanksAction,
   saveRoundAction,
+  setRoundCountAction,
   setQualifiedAction,
   setRoundFlagAction,
 } from "@/app/actions/admin-events";
@@ -243,9 +244,13 @@ export default async function AdminEventPage({ params, searchParams }: { params:
       all<{ user_id: string }>("SELECT user_id FROM event_evaluators WHERE event_id = ?", [eventId]),
     ]);
     const assignedSet = new Set(assigned.map((a) => a.user_id));
+    const eventDefaults = submissionFields(event!);
     const roundForm = (r?: (typeof rounds)[number]) => {
       const criteria = r ? roundCriteria(r) : [];
       const rows = [...criteria, ...Array.from({ length: Math.max(2, 6 - criteria.length) }, () => null)].slice(0, 10);
+      const mode = !r || r.submission_fields == null ? "default" : r.submission_fields === "[]" ? "none" : "custom";
+      const own = r && mode === "custom" ? roundFields(r, event!) : [];
+      const subRows = [...own, ...Array.from({ length: 6 - own.length }, () => null)].slice(0, 6);
       return (
         <form action={saveRoundAction} className="space-y-3">
           <input type="hidden" name="event_id" value={eventId} />
@@ -276,6 +281,38 @@ export default async function AdminEventPage({ params, searchParams }: { params:
               ))}
             </div>
           </div>
+          <fieldset className="space-y-2 rounded-xl border border-slate-200 p-3">
+            <legend className="px-1 text-sm font-semibold text-slate-700">What teams submit in this round</legend>
+            <div className="flex flex-wrap gap-4 text-sm">
+              <label className="flex items-center gap-1.5">
+                <input type="radio" name="sub_mode" value="default" defaultChecked={mode === "default"} className="accent-[#002147]" /> Event default fields
+                <span className="text-xs text-slate-500">({eventDefaults.map((f) => f.label).join(", ") || "none set"})</span>
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input type="radio" name="sub_mode" value="custom" defaultChecked={mode === "custom"} className="accent-[#002147]" /> Fields for this round only
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input type="radio" name="sub_mode" value="none" defaultChecked={mode === "none"} className="accent-[#002147]" /> No submission (e.g. on-site judging)
+              </label>
+            </div>
+            <div className="grid gap-2">
+              {subRows.map((f, i) => (
+                <div key={i} className="grid gap-2 sm:grid-cols-12 sm:items-center">
+                  <input type="hidden" name={`sub_key_${i}`} defaultValue={f?.key ?? ""} />
+                  <input name={`sub_label_${i}`} defaultValue={f?.label ?? ""} placeholder={`Field ${i + 1} (e.g. ${["Idea PPT link", "Problem statement", "GitHub repository", "Demo video", "Approach", "Live demo"][i]})`} className={`${small} sm:col-span-6`} />
+                  <select name={`sub_type_${i}`} defaultValue={f?.type ?? "url"} className={`${small} sm:col-span-3`}>
+                    <option value="url">Link</option>
+                    <option value="text">Short text</option>
+                    <option value="long">Long text</option>
+                  </select>
+                  <label className="flex items-center gap-1.5 text-sm text-slate-600 sm:col-span-3">
+                    <input type="checkbox" name={`sub_required_${i}`} defaultChecked={f?.required ?? false} className="accent-[#002147]" /> Required
+                  </label>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-slate-500">These rows are used only when &quot;Fields for this round only&quot; is selected.</p>
+          </fieldset>
           <SubmitButton pendingText="Saving…">{r ? "Save round" : "Add round"}</SubmitButton>
         </form>
       );
@@ -283,6 +320,18 @@ export default async function AdminEventPage({ params, searchParams }: { params:
 
     return (
       <div className="space-y-6">
+        <Card title="Number of rounds">
+          <form action={setRoundCountAction} className="flex flex-wrap items-end gap-3">
+            <input type="hidden" name="event_id" value={eventId} />
+            <Field label="Rounds in this event">
+              <input name="count" type="number" min={Math.max(1, rounds.length)} max={10} defaultValue={Math.max(1, rounds.length)} className={`${small} !w-28`} />
+            </Field>
+            <SubmitButton pendingText="Saving…">Set</SubmitButton>
+            <p className="text-sm text-slate-500">
+              Currently {rounds.length}. Each round has its own scoring categories, submission fields, deadline and publish switch. Round 2 onwards is open only to teams that qualified in the previous round.
+            </p>
+          </form>
+        </Card>
         {rounds.map((r) => (
           <Card
             key={r.id}
@@ -363,7 +412,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
     const evalsByTeam = new Map<string, typeof evaluations>();
     for (const ev of evaluations) evalsByTeam.set(ev.team_id, [...(evalsByTeam.get(ev.team_id) ?? []), ev]);
     const criteria = roundCriteria(round);
-    const fields = submissionFields(event!);
+    const fields = roundFields(round, event!);
     const subMap = new Map(subs.map((s) => [s.team_id, parseJson<Record<string, string>>(s.data, {})]));
     const maxTotal = criteria.reduce((a, c) => a + c.max, 0);
     const isSum = round.aggregation === "sum";
@@ -424,12 +473,18 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                     <Td>{b.evaluations}</Td>
                     <Td>
                       {sub ? (
-                        <div className="flex flex-col gap-0.5 text-xs">
+                        <div className="flex max-w-xs flex-col gap-0.5 text-xs">
                           {fields.map((f) =>
                             sub[f.key] ? (
-                              <a key={f.key} href={sub[f.key]} target="_blank" rel="noopener noreferrer" className="text-[#004B87] underline">
-                                {f.label}
-                              </a>
+                              (f.type ?? "url") === "url" ? (
+                                <a key={f.key} href={sub[f.key]} target="_blank" rel="noopener noreferrer" className="text-[#004B87] underline">
+                                  {f.label}
+                                </a>
+                              ) : (
+                                <span key={f.key} title={sub[f.key]} className="truncate">
+                                  <strong>{f.label}:</strong> {sub[f.key]}
+                                </span>
+                              )
                             ) : null
                           )}
                         </div>

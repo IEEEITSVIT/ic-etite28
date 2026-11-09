@@ -45,6 +45,9 @@ All set from the admin portal — no code changes:
 
 An item's own early price wins; otherwise the default % applies; after the early-bird date the regular price applies. The amount is fixed when someone first registers, so editing a registration later keeps the early-bird price. Registrations outside the open/close window are refused (existing unpaid registrations can still be edited).
 
+### Rounds
+Events → *Rounds & evaluators*: set the **number of rounds** (1–10), then for each round set its name, **scoring categories** with max marks, how evaluators' scores combine (average/sum), the submission deadline, and **what teams submit**: the event's default fields, fields for that round only (up to 6, each a link, short text or long text, required or optional), or no submission (e.g. on-site judging). Open/close submissions and publish scores per round. Round 2 onwards is open only to teams qualified in the previous round.
+
 ### Scoring with several evaluators
 Every evaluator scores independently (they only see their own marks). Per round, choose whether a team's score is the **average** or the **sum** of its evaluators (Rounds & evaluators → *Combine evaluators' scores*); the leaderboard, qualification, team view and `{{score}}` in emails all follow it. Scores & qualification → *Evaluations by evaluator* shows each evaluator's category marks, total and comments per team, and lets an admin remove a single evaluation.
 

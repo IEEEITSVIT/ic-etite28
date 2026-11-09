@@ -2,9 +2,9 @@ import { saveEventAction } from "@/app/actions/admin-events";
 import SubmitButton from "@/components/portal/SubmitButton";
 import { Field, inputCls } from "@/components/portal/ui";
 import { isoToIstInput } from "@/lib/portal/actions";
-import { eventPrizes, submissionFields, type EventRow } from "@/lib/portal/events";
+import { eventPrizes, submissionFields, type EventRow, type SubmissionField } from "@/lib/portal/events";
 
-const DEFAULT_FIELDS = [
+const DEFAULT_FIELDS: SubmissionField[] = [
   { key: "github", label: "GitHub repository", required: true },
   { key: "demo_video", label: "Demo video (YouTube / Drive)", required: false },
   { key: "presentation", label: "Presentation (PPT / PDF link)", required: false },
@@ -88,12 +88,17 @@ export default function EventForm({ event }: { event?: EventRow }) {
       </fieldset>
 
       <fieldset className="space-y-3 rounded-2xl border border-slate-200 p-4">
-        <legend className="px-2 text-sm font-bold text-[#002147]">Submission links (up to 6)</legend>
-        <p className="text-sm text-slate-500">Teams submit these links for every round. Leave a label empty to remove the field.</p>
+        <legend className="px-2 text-sm font-bold text-[#002147]">Default submission fields (up to 6)</legend>
+        <p className="text-sm text-slate-500">Used by every round unless that round sets its own fields (Rounds &amp; evaluators). Leave a label empty to remove the field.</p>
         {rows.map((f, i) => (
           <div key={i} className="grid gap-2 sm:grid-cols-12 sm:items-center">
             <input type="hidden" name={`field_key_${i}`} defaultValue={f?.key ?? ""} />
-            <input name={`field_label_${i}`} defaultValue={f?.label ?? ""} placeholder={`Link ${i + 1} label`} className={`${inputCls} sm:col-span-9`} />
+            <input name={`field_label_${i}`} defaultValue={f?.label ?? ""} placeholder={`Field ${i + 1} label`} className={`${inputCls} sm:col-span-6`} />
+            <select name={`field_type_${i}`} defaultValue={f?.type ?? "url"} className={`${inputCls} sm:col-span-3`}>
+              <option value="url">Link</option>
+              <option value="text">Short text</option>
+              <option value="long">Long text</option>
+            </select>
             <label className="flex items-center gap-2 text-sm text-slate-600 sm:col-span-3">
               <input type="checkbox" name={`field_required_${i}`} defaultChecked={f?.required ?? false} className="accent-[#002147]" /> Required
             </label>
