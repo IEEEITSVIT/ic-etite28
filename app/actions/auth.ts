@@ -10,6 +10,7 @@ import { emailLayout, sendNow, textToHtml } from "@/lib/email/mailer";
 import { flash, guarded, isEmail, str } from "@/lib/portal/actions";
 import { PortalError } from "@/lib/portal/events";
 import { SITE_URL } from "@/lib/seo";
+import { LIMITS, clearHits, clientIp, isLimited, recordHit, takeToken } from "@/lib/auth/rateLimit";
 
 const safeNext = (v: string) => (v.startsWith("/") && !v.startsWith("//") ? v : "/dashboard");
 const withNext = (path: string, next: string) => (next && next !== "/dashboard" ? `${path}?next=${encodeURIComponent(next)}` : path);
@@ -55,6 +56,9 @@ export async function signupAction(formData: FormData) {
     if (await first("SELECT 1 FROM users WHERE email = ?", [email])) {
       throw new PortalError("An account with this email already exists. Log in instead, or reset your password.");
     }
+    if (!(await takeToken("signup-ip", await clientIp()))) {
+      throw new PortalError("Too many accounts have been created from this network recently. Please try again in an hour.");
+    }
     const id = newId();
     await run(
       `INSERT INTO users (id, email, password_hash, name, phone, institution, department, year_of_study, city, role, email_verified, created_at, updated_at)
@@ -86,11 +90,20 @@ export async function verifyEmailAction(formData: FormData) {
     const back = withNext("/verify-email", next);
     const user = await getCurrentUser();
     if (!user) redirect(withNext("/login", next));
+    if (await isLimited("verify-user", user.id)) {
+      // Too many wrong guesses: the current code is void; a new one must be requested.
+      await run("DELETE FROM auth_tokens WHERE user_id = ? AND purpose = 'verify'", [user.id]);
+      flash(back, "error", `Too many incorrect codes. Request a new code (you can try again in ${LIMITS["verify-user"].minutes} minutes).`);
+    }
     const code = str(formData, "code", 10).replace(/\D/g, "");
     const token = await first<{ expires_at: string }>("SELECT expires_at FROM auth_tokens WHERE id = ? AND purpose = 'verify'", [
       sha256(`${user.id}:${code}`),
     ]);
-    if (!token || token.expires_at < now()) flash(back, "error", "That code is incorrect or has expired. Request a new one.");
+    if (!token || token.expires_at < now()) {
+      await recordHit("verify-user", user.id);
+      flash(back, "error", "That code is incorrect or has expired. Request a new one.");
+    }
+    await clearHits("verify-user", user.id);
     await batch([
       { sql: "UPDATE users SET email_verified = 1, updated_at = ? WHERE id = ?", params: [now(), user.id] },
       { sql: "DELETE FROM auth_tokens WHERE user_id = ? AND purpose = 'verify'", params: [user.id] },
@@ -110,6 +123,9 @@ export async function resendCodeAction(formData: FormData) {
       [user.id]
     );
     if (last && Date.now() - new Date(last.created_at).getTime() < 60e3) flash(back, "error", "Please wait a minute before requesting another code.");
+    if (!(await takeToken("resend-user", user.id))) {
+      flash(back, "error", `You have requested ${LIMITS["resend-user"].max} codes in the last hour. Please check your spam folder, or try again later.`);
+    }
     await issueVerificationCode(user);
     flash(back, "ok", `A new code was sent to ${user.email}.`);
   });
@@ -128,10 +144,13 @@ export async function loginAction(formData: FormData) {
     const since = new Date(Date.now() - WINDOW_MIN * 60e3).toISOString();
     const attempts = await first<{ n: number }>("SELECT COUNT(*) AS n FROM login_attempts WHERE email = ? AND attempted_at > ?", [email, since]);
     if ((attempts?.n ?? 0) >= MAX_ATTEMPTS) flash(back, "error", `Too many attempts. Try again in ${WINDOW_MIN} minutes or reset your password.`);
+    const ip = await clientIp();
+    if (await isLimited("login-ip", ip)) flash(back, "error", `Too many failed logins from this network. Try again in ${LIMITS["login-ip"].minutes} minutes.`);
 
     const user = await first<{ id: string; password_hash: string; role: string }>("SELECT id, password_hash, role FROM users WHERE email = ?", [email]);
     if (!user || !(await verifyPassword(password, user.password_hash))) {
       await run("INSERT INTO login_attempts (email, attempted_at) VALUES (?, ?)", [email, now()]);
+      await recordHit("login-ip", ip);
       flash(back, "error", "Incorrect email or password.");
     }
     await run("DELETE FROM login_attempts WHERE email = ? OR attempted_at < ?", [email, since]);
@@ -149,7 +168,15 @@ export async function logoutAction() {
 export async function forgotPasswordAction(formData: FormData) {
   await guarded("/forgot-password", async () => {
     const email = str(formData, "email", 200).toLowerCase();
-    const user = isEmail(email) ? await first<{ id: string; name: string }>("SELECT id, name FROM users WHERE email = ?", [email]) : null;
+    if (!isEmail(email)) throw new PortalError("Please enter a valid email address.");
+    // Counted per address whether or not an account exists, so the limit reveals nothing.
+    const limited = (await isLimited("forgot-email", email)) || (await isLimited("forgot-ip", await clientIp()));
+    if (limited) {
+      throw new PortalError(`Too many password-reset requests. Check your inbox and spam folder for the last link, or try again in ${LIMITS["forgot-email"].minutes} minutes.`);
+    }
+    await recordHit("forgot-email", email);
+    await recordHit("forgot-ip", await clientIp());
+    const user = await first<{ id: string; name: string }>("SELECT id, name FROM users WHERE email = ?", [email]);
     if (user) {
       const token = randomBytes(32).toString("base64url");
       await batch([

@@ -14,6 +14,19 @@ It contains the public conference website plus a portal with accounts, an admin 
 - Sign up with email verification (6-digit code), log in, forgot / reset password.
 - Profile page.
 - Roles: participant, evaluator, admin.
+- Rate limits (`lib/auth/rateLimit.ts`):
+
+  | What | Limit |
+  | --- | --- |
+  | Failed logins per email | 8 per 15 min |
+  | Failed logins per network | 40 per 15 min |
+  | Password-reset emails per address | 3 per hour |
+  | Password-reset requests per network | 15 per hour |
+  | Signups per network | 30 per hour |
+  | Verification-code resends | 5 per hour, and 1 per minute |
+  | Wrong verification codes | 6 per 15 min, then the code is cancelled |
+
+  Network limits are generous because many students share one campus IP.
 
 **Admin CMS** (`/admin`). Admins can change all of these without touching code:
 - **Page content**: every text and image on every page as a form field, with a live preview (desktop / tablet / phone). Texts can be re-coloured, resized, bolded or hidden. Nothing changes until you click Publish.
