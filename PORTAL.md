@@ -43,7 +43,7 @@ How it works: `scripts/cms-codemod.mjs` wraps page text in `<E>` and swaps `next
 - **Events & BOLT** — per event: settings (visibility hidden/unlisted/public, open or invite-list registration, solo/team with min–max size, registration window, up to 6 submission link fields, fee per team/member, payment link, number of winners) and tabs for participants & teams (search, payment status, remove), rounds & evaluators (scoring categories, deadlines, open/close submissions), scores & qualification (leaderboard, qualify top N / by minimum score, publish scores to teams), results (auto-rank from final round or manual, announce + email winners), emails, certificates, export & purge.
 - **TechNext stalls** — review bookings (approve/reject emails the exhibitor), amount, payment status/reference, per-booking payment link, notes; emails, certificates, export.
 - **Conference registrations** — confirm delegates, reconcile payments; emails, certificates, export.
-- **Email & SMTP** — SMTP settings (password stored encrypted), test email, send queue (respects the daily limit), retry / cancel.
+- **Email & SMTP** — two SMTP accounts (main, and a separate *OTP & password-reset* account whose empty fields fall back to the main one; passwords stored encrypted), a test email for each, the send queue (each account's daily limit is respected separately), retry / cancel.
 
 ### Prize pools, deadlines and early-bird pricing
 All set from the admin portal — no code changes:
@@ -77,7 +77,7 @@ When a payment becomes **paid** — an admin marks it paid, or the payment gatew
 - Site content → *Scrolling announcement bar*: on/off, label, speed, whether visitors can close it, and the items (text, link, "New" tag). It scrolls above the navbar on public pages.
 
 ### Emails
-Compose in an event / TechNext / conference page, choose an audience (all, no team, payment due, qualified / not qualified in round N, winners, approved exhibitors, confirmed delegates…), use placeholders like `{{name}}`, `{{team}}`, `{{score}}`, `{{rank}}`, `{{portalUrl}}`, optionally attach a certificate, save as a draft, and queue. Then **Email & SMTP → Send queued emails**. Verification codes and password resets go out immediately.
+Compose in an event / TechNext / conference page, choose an audience (all, no team, payment due, qualified / not qualified in round N, winners, approved exhibitors, confirmed delegates…), use placeholders like `{{name}}`, `{{team}}`, `{{score}}`, `{{rank}}`, `{{portalUrl}}`, optionally attach a certificate, save as a draft, and queue. Then **Email & SMTP → Send queued emails**. Verification codes and password resets go out immediately through the OTP account, so bulk mail can never use up its quota; any that cannot be sent within 30 minutes are dropped (the user requests a new one) rather than delivered expired.
 
 ### Certificates
 Upload a template image (blank where the name goes), drag the name / team / position / date fields into place, preview, save, then **Release to recipients**. Participants download from their event page or dashboard; admins can download everything as one PDF or as ZIPs of individual PDFs (built in the browser), or email them as attachments. Nothing is stored except the template.

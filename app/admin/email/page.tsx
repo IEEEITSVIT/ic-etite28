@@ -1,6 +1,6 @@
 import { all, first } from "@/lib/db";
-import { getSmtpSettings, sentInLast24h } from "@/lib/email/mailer";
-import { clearOutboxAction, retryFailedAction, saveSmtpAction, sendTestEmailAction } from "@/app/actions/admin-email";
+import { getSmtpSettings, sentInLast24h, smtpConfig } from "@/lib/email/mailer";
+import { clearOutboxAction, retryFailedAction, saveOtpSmtpAction, saveSmtpAction, sendTestEmailAction } from "@/app/actions/admin-email";
 import { fmtIst } from "@/lib/portal/actions";
 import OutboxRunner from "@/components/admin/OutboxRunner";
 import { NOTIFICATION_DEFS, NOTIFICATION_KEYS, getNotificationTemplates } from "@/lib/notifications";
@@ -10,27 +10,37 @@ import { Card, Empty, Field, Flash, PortalPage, Stat, StatusBadge, Table, Td, bt
 
 export default async function AdminEmailPage({ searchParams }: { searchParams: Promise<{ ok?: string; error?: string }> }) {
   const { ok, error } = await searchParams;
-  const [smtp, sent24, counts, recent, notices] = await Promise.all([
+  const [smtp, otp, mainCfg, otpCfg, counts, recent, notices] = await Promise.all([
     getSmtpSettings(),
-    sentInLast24h(),
+    getSmtpSettings("otp"),
+    smtpConfig("main"),
+    smtpConfig("otp"),
     first<{ queued: number; failed: number; sent: number }>(
       "SELECT SUM(status = 'queued') AS queued, SUM(status = 'failed') AS failed, SUM(status = 'sent') AS sent FROM email_outbox"
     ),
-    all<{ id: string; to_email: string; subject: string; status: string; error: string | null; created_at: string; sent_at: string | null; attachment: string | null }>(
-      "SELECT id, to_email, subject, status, error, created_at, sent_at, attachment FROM email_outbox ORDER BY created_at DESC LIMIT 60"
+    all<{ id: string; to_email: string; subject: string; status: string; error: string | null; created_at: string; sent_at: string | null; attachment: string | null; channel: string }>(
+      "SELECT id, to_email, subject, status, error, created_at, sent_at, attachment, channel FROM email_outbox ORDER BY created_at DESC LIMIT 60"
     ),
     getNotificationTemplates(),
   ]);
+  const [sent24, otpSent24] = await Promise.all([sentInLast24h(mainCfg.user || undefined), sentInLast24h(otpCfg.user || undefined)]);
+  const otpEnv = Boolean(process.env.SMTP_OTP_USER && process.env.SMTP_OTP_PASS);
+  const otpOwn = !otpCfg.sharesMain;
   const envOverride = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
   const configured = envOverride || Boolean(smtp.user && smtp.passEnc);
-  const limit = Number(process.env.EMAIL_DAILY_LIMIT || smtp.dailyLimit);
+  const limit = mainCfg.dailyLimit;
 
   return (
     <PortalPage title="Email & SMTP" subtitle="All portal emails go through this queue so they stay within your Gmail sending limit." width="max-w-7xl">
       <Flash ok={ok} error={error} />
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5">
         <Stat label="Queued" value={counts?.queued ?? 0} />
-        <Stat label="Sent (24h)" value={`${sent24} / ${limit}`} hint="daily limit" />
+        <Stat label="Sent (24h) · main" value={`${sent24} / ${limit}`} hint="daily limit" />
+        <Stat
+          label="Sent (24h) · OTP"
+          value={otpOwn ? `${otpSent24} / ${otpCfg.dailyLimit}` : "shared"}
+          hint={otpOwn ? otpCfg.user : "same account as main"}
+        />
         <Stat label="Failed" value={counts?.failed ?? 0} />
         <Stat label="SMTP" value={configured ? "Ready" : "Not set"} hint={envOverride ? "from environment" : smtp.user || undefined} />
       </div>
@@ -38,7 +48,7 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
         <Card title="Send queue">
           <OutboxRunner queued={counts?.queued ?? 0} />
           <p className="mt-3 text-sm text-slate-500">
-            Verification codes and password resets are sent instantly. Bulk emails (qualification, results, certificates) wait here until you send them; anything over the daily limit goes out automatically the next day.
+            Verification codes and password resets are sent instantly through the OTP account (below). Bulk emails (qualification, results, certificates) wait here until you send them; anything over the daily limit goes out automatically the next day.
           </p>
           <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
             <form action={retryFailedAction}>
@@ -94,12 +104,75 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
             <Field label="Send a test email to">
               <input name="to" type="email" placeholder="you@example.com" className={`${inputCls} !w-64`} />
             </Field>
+            <input type="hidden" name="channel" value="main" />
             <SubmitButton className={btnSecondary} pendingText="Sending…">
               Send test
             </SubmitButton>
           </form>
         </Card>
       </div>
+
+      <Card title="OTP & password-reset SMTP" className="mt-6">
+        <p className="mb-3 text-sm text-slate-500">
+          Verification codes and password-reset links go out through this account only, so bulk emails can never use up its daily limit. Any field left empty uses the main
+          account&apos;s value (shown greyed out){otpOwn ? "." : " — right now OTP emails use the same account and password as the main SMTP."} Codes and links that cannot
+          be sent within 30 minutes are dropped (the user can request a new one) instead of arriving expired.
+        </p>
+        {otpEnv && <p className="mb-3 rounded-xl bg-sky-50 p-3 text-sm text-sky-800">SMTP_OTP_USER / SMTP_OTP_PASS are set in the environment and take priority over these fields.</p>}
+        <form action={saveOtpSmtpAction} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Field label="Host">
+            <input name="host" defaultValue={otp.host} placeholder={mainCfg.host} className={inputCls} />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Port">
+              <input name="port" type="number" defaultValue={otp.port || ""} placeholder={String(mainCfg.port)} className={inputCls} />
+            </Field>
+            <label className="flex items-center gap-2 pt-7 text-sm font-semibold">
+              <input type="checkbox" name="secure" defaultChecked={otp.host ? otp.secure : mainCfg.secure} className="accent-brand-primary" /> SSL
+            </label>
+          </div>
+          <Field label="Username (email)">
+            <input name="user" type="email" defaultValue={otp.user} placeholder={mainCfg.user || "same as main"} className={inputCls} />
+          </Field>
+          <Field label="App password" hint={otp.passEnc ? "Own password saved (encrypted). Leave blank to keep it." : "Empty: uses the main account's password."}>
+            <input name="pass" type="password" autoComplete="new-password" placeholder={otp.passEnc ? "••••••••••••••••" : "same as main"} className={inputCls} />
+          </Field>
+          <Field label="From name">
+            <input name="fromName" defaultValue={otp.fromName} placeholder={mainCfg.fromName} className={inputCls} />
+          </Field>
+          <Field label="From address">
+            <input name="fromEmail" type="email" defaultValue={otp.fromEmail} placeholder={otpCfg.fromEmail || "same as username"} className={inputCls} />
+          </Field>
+          <Field label="Daily sending limit" hint={otpOwn ? "This account's own limit." : "Shared with main while both use one account."}>
+            <input name="dailyLimit" type="number" min={0} defaultValue={otp.dailyLimit || ""} placeholder={String(mainCfg.dailyLimit)} className={inputCls} />
+          </Field>
+          <div className="flex flex-wrap items-end gap-2">
+            {otp.passEnc && (
+              <label className="flex items-center gap-2 pb-2 text-xs font-semibold text-slate-600">
+                <input type="checkbox" name="clearPass" className="accent-brand-primary" /> Use main password
+              </label>
+            )}
+            <SubmitButton pendingText="Saving…">Save OTP SMTP</SubmitButton>
+          </div>
+        </form>
+        <div className="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
+          <form action={sendTestEmailAction} className="flex flex-wrap items-end gap-2">
+            <Field label="Send an OTP-account test email to">
+              <input name="to" type="email" placeholder="you@example.com" className={`${inputCls} !w-64`} />
+            </Field>
+            <input type="hidden" name="channel" value="otp" />
+            <SubmitButton className={btnSecondary} pendingText="Sending…">
+              Send test
+            </SubmitButton>
+          </form>
+          <form action={saveOtpSmtpAction} className="ml-auto">
+            <input type="hidden" name="reset" value="1" />
+            <SubmitButton className={btnSecondary} confirm="Clear these fields so OTP emails use the main SMTP account?">
+              Use main account
+            </SubmitButton>
+          </form>
+        </div>
+      </Card>
 
       <Card title="Automatic notices" className="mt-6">
         <form id="notices" action={saveNotificationsAction} className="space-y-4 scroll-mt-28">
@@ -141,7 +214,8 @@ export default async function AdminEmailPage({ searchParams }: { searchParams: P
                 <Td>{m.to_email}</Td>
                 <Td>
                   {m.subject}
-                  {m.attachment && <span className="ml-1 text-xs text-slate-400">(certificate)</span>}
+                  {m.attachment && <span className="ml-1 text-xs text-slate-400">(attachment)</span>}
+                  {m.channel === "otp" && <span className="ml-1 rounded bg-slate-100 px-1 text-[10px] font-bold uppercase text-slate-500">OTP</span>}
                   {m.error && <div className="text-xs text-red-600">{m.error}</div>}
                 </Td>
                 <Td>
